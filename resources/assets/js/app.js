@@ -13,8 +13,11 @@ require('./bootstrap');
  * the application, or feel free to tweak this setup for your needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+Vue.component('accounts', require('./components/Accounts.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: {
+        'api': 'http://api.tapklik.com/v1/'
+    }
 });
