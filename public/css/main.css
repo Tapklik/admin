@@ -48,6 +48,7 @@ nav a {
 }
 
 main {
+    margin-bottom: 80px;
 }
 
 footer {
@@ -73,4 +74,8 @@ h1.title {
 
 .loader {
     padding: 20px;
+}
+
+.black {
+    color: #000;
 }
