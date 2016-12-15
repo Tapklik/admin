@@ -10,7 +10,24 @@ Route::get('accounts/{id}', [
 	'uses' => 'AccountsController@show'
 ]);
 
-Route::get('/', function () {
 
-	return view('design');
+Route::get('data/countries', function () {
+
+	$countries = json_decode(file_get_contents('./data/countries.json'), true);
+
+	return response()->json($countries);
+});
+
+Route::get('data/timezones', function () {
+
+	$timezones = json_decode(file_get_contents('./data/timezones.json'), true);
+
+	return response()->json($timezones);
+});
+
+Route::get('data/languages', function () {
+
+	$languages = json_decode(file_get_contents('./data/languages.json'), true);
+
+	return response()->json($languages);
 });
