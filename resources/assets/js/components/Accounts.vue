@@ -138,23 +138,23 @@
                                     <div class="col-xs-12 col-md-4">
                                         <label for="label-country">Country</label>
                                         <br/>
-                                        <select class="form-control" id="label-country">
-                                            <option v-for="country in countriesList.data" :value="country.code">{{ country.name
-                                                }}
+                                        <select class="form-control" id="label-country" v-model="account.country">
+                                            <option v-for="country in countriesList.data" :value="country.code">
+                                                {{ country.name }}
                                             </option>
                                         </select>
                                     </div>
 
                                     <div class="col-xs-12 col-md-4">
-                                    <label for="label-city">City</label>
-                                    <br/>
-                                    <input type="text" class="form-control" id="label-city"/>
-                                </div>
+                                        <label for="label-city">City</label>
+                                        <br/>
+                                        <input type="text" class="form-control" id="label-city" v-model="account.city" />
+                                    </div>
 
                                     <div class="col-xs-12 col-md-4">
                                         <label for="label-timezones">Time Zone</label>
                                         <br/>
-                                        <select class="form-control" id="label-timezones">
+                                        <select class="form-control" id="label-timezones" v-model="account.timezone">
                                             <option v-for="timezone in timezonesList.data" :value="timezone.utc">
                                                 {{ timezone.value }}
                                             </option>
@@ -166,11 +166,12 @@
                             <div class="form-group">
                                 <label for="label-languages">Language</label>
                                 <br/>
-                                <select class="form-control" id="label-languages">
-                                    <option v-for="language in languagesList.data" :value="language.abbr">
+                                <select class="form-control" id="label-languages" v-model="account.language">
+                                    <option v-for="language in languagesList.data" :value="language.abbr" v-model="account.language">
                                         {{ language.name }}
                                     </option>
                                 </select>
+                                <input type="hidden" :value="1" v-model="account.status" />
                             </div>
                         </div>
                     </div>
@@ -362,6 +363,7 @@
 
             createNewAccount: function () {
 
+console.log(this.account);
                 this.$http.post(this.$root.api + 'accounts', this.account).then(response => {
 
                     console.log(response);
