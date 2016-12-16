@@ -62,7 +62,10 @@
                     </a>
                 </td>
                 <td>
-                    <button class="btn btn-success">
+                    <button class="btn"
+                            :class="{ 'btn-success': account.status, 'btn-danger': !account.status }"
+                            :data-status="account.status"
+                            @click="toggleStatus(account.id, account.status)">
                         <i class="fa fa-check-circle-o"></i>
                     </button>
                 </td>
@@ -155,7 +158,7 @@
                                         <label for="label-timezones">Time Zone</label>
                                         <br/>
                                         <select class="form-control" id="label-timezones" v-model="account.timezone">
-                                            <option v-for="timezone in timezonesList.data" :value="timezone.utc">
+                                            <option v-for="timezone in timezonesList.data" :value="timezone.value">
                                                 {{ timezone.value }}
                                             </option>
                                         </select>
@@ -167,11 +170,13 @@
                                 <label for="label-languages">Language</label>
                                 <br/>
                                 <select class="form-control" id="label-languages" v-model="account.language">
-                                    <option v-for="language in languagesList.data" :value="language.abbr" v-model="account.language">
+                                    <option v-for="language in languagesList.data" :value="language.abbr">
                                         {{ language.name }}
                                     </option>
                                 </select>
-                                <input type="hidden" :value="1" v-model="account.status" />
+                                <input type="hidden" v-model="account.status" />
+                                <input type="hidden" v-model="account.currency" />
+                                <input type="hidden" v-model="account.value" />
                             </div>
                         </div>
                     </div>
@@ -246,7 +251,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-primary" :disabled="'loading == true' ? disabled : false">Update</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -268,7 +273,16 @@
 
             return {
                 accounts: {},
-                account: {},
+                account: {
+                    name: '',
+                    country: '',
+                    city: '',
+                    currency: 'USD',
+                    value: 0,
+                    timezone: 'UTC',
+                    language: 'en_US',
+                    status: 1
+                },
                 users: {},
                 search: '',
                 searchUsers: '',
@@ -362,13 +376,33 @@
             },
 
             createNewAccount: function () {
+                this.loading = true;
 
-console.log(this.account);
-                this.$http.post(this.$root.api + 'accounts', this.account).then(response => {
+                return this.$http.post(this.$root.api + 'accounts', this.account).then(response => {
 
-                    console.log(response);
+                    this.fetchAccounts();
+                    this.loading = false;
+
+                    this.closeModal();
                 }, error => {
 
+                    console.log(error);
+                    this.loading = false;
+                    this.closeModal();
+                });
+            },
+
+            closeModal() {
+                $('#_modal-create-new-account').modal('close');
+            },
+
+            toggleStatus(id, status) {
+
+                status = (1 == status) ? 0 : 1;
+
+                this.$http.put(this.$root.api + 'accounts/' + id, {status: status}).then(response => {
+                    this.fetchAccounts();
+                }, error => {
                     console.log(error);
                 });
             },

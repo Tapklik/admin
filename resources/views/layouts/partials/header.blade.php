@@ -13,7 +13,7 @@
                     </a>
                 </li>
                 <li class="selected">
-                    <a href="#">
+                    <a href="/accounts">
                         Accounts
                     </a>
                 </li>

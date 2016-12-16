@@ -18,4 +18,9 @@ class AccountsController extends Controller
 
 		return response([]);
 	}
+
+	public function noroute() {
+
+		return view('frontend.accounts.noroute');
+	}
 }

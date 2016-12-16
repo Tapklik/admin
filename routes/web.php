@@ -10,6 +10,15 @@ Route::get('accounts/{id}', [
 	'uses' => 'AccountsController@show'
 ]);
 
+Route::get('accounts/{id}/campaigns', [
+	'as'    => 'accounts.noroute',
+	'uses' => 'AccountsController@noroute'
+]);
+
+Route::get('accounts/{id}/creatives', [
+	'as'    => 'accounts.noroute',
+	'uses' => 'AccountsController@noroute'
+]);
 
 Route::get('data/countries', function () {
 
