@@ -40,7 +40,7 @@
                 </td>
             </tr>
 
-            <tr v-for="account in filterByAccounts">
+            <tr v-for="(account, index) in filterByAccounts">
                 <td>{{ account.id }}.</td>
                 <td>{{ account.name }}</td>
                 <td>1000{{ account.id }}</td>
@@ -65,7 +65,7 @@
                     <button class="btn"
                             :class="{ 'btn-success': account.status, 'btn-danger': !account.status }"
                             :data-status="account.status"
-                            @click="toggleStatus(account.id, account.status)">
+                            @click="toggleStatus(account.id, account.status, index)">
                         <i class="fa fa-check-circle-o"></i>
                     </button>
                 </td>
@@ -200,7 +200,7 @@
                         <h5>DETAILS</h5>
 
                         <div class="form-group">
-                            <label for="label-edit-name">Name</label>
+                            <label for="label-edit-name">Name {{ account.name }}</label>
                             <br/>
                             <input type="text" id="label-edit-name" class="form-control"/>
                         </div>
@@ -362,6 +362,7 @@
                 this.$http.get(this.$root.api + 'accounts/' + id).then(response => {
 
                     this.account = response.data;
+                    console.log(this.account);
                     this.loading = false;
 
                     $('#_modal-edit-account').modal();
@@ -396,9 +397,10 @@
                 $('#_modal-create-new-account').modal('close');
             },
 
-            toggleStatus(id, status) {
+            toggleStatus(id, status, index) {
 
                 status = (1 == status) ? 0 : 1;
+                this.accounts.data[index].status = status;
 
                 this.$http.put(this.$root.api + 'accounts/' + id, {status: status}).then(response => {
                     this.fetchAccounts();
