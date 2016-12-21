@@ -14,6 +14,7 @@ require('./bootstrap');
  */
 
 Vue.component('accounts', require('./components/Accounts.vue'));
+Vue.component('campaigns', require('./components/Campaigns.vue'));
 
 const app = new Vue({
     el: '#app',

@@ -1,5 +1,10 @@
 <?php
 
+Route::get('campaigns', [
+	'as' => 'campaigns.index',
+	'uses' => 'CampaignsController@index'
+]);
+
 Route::get('accounts', [
 	'as' => 'accounts.index',
 	'uses' => 'AccountsController@index'
