@@ -167,16 +167,39 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="label-languages">Language</label>
-                                <br/>
-                                <select class="form-control" id="label-languages" v-model="account.language">
-                                    <option v-for="language in languagesList.data" :value="language.abbr">
-                                        {{ language.name }}
-                                    </option>
-                                </select>
-                                <input type="hidden" v-model="account.status" />
-                                <input type="hidden" v-model="account.currency" />
-                                <input type="hidden" v-model="account.value" />
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-4">
+                                        <label for="label-languages">Language</label>
+                                        <br/>
+                                        <select class="form-control" id="label-languages" v-model="account.language">
+                                            <option v-for="language in languagesList.data" :value="language.abbr">
+                                                {{ language.name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-12 col-md-4">
+                                        <label for="label-currency">Currency</label>
+                                        <input type="text" class="form-control" id="label-currency" v-model="account.currency" />
+                                        <br/>
+                                    </div>
+                                    <div class="col-xs-12 col-md-4">
+                                        <label for="label-value">Value</label>
+                                        <br/>
+                                        <input type="text" class="form-control" id="label-value" v-model="account.value" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label for="label-approved">Approved</label>
+                                        <br/>
+                                        <select class="form-control" id="label-approved" v-model="account.status">
+                                            <option value="1">Approved</option>
+                                            <option value="0">Not Approved</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -200,9 +223,9 @@
                         <h5>DETAILS</h5>
 
                         <div class="form-group">
-                            <label for="label-edit-name">Name {{ account.name }}</label>
+                            <label for="label-edit-name">Name</label>
                             <br/>
-                            <input type="text" id="label-edit-name" class="form-control"/>
+                            <input type="text" id="label-edit-name" class="form-control" :value="account.data.name"/>
                         </div>
 
                         <div class="form-group">
@@ -213,9 +236,9 @@
                                     <div class="col-xs-12 col-md-4">
                                         <label for="label-edit-country">Country</label>
                                         <br/>
-                                        <select class="form-control" id="label-edit-country">
-                                            <option v-for="country in countriesList.data" :value="country.code">
-
+                                        <select class="form-control" id="label-edit-country" v-model="selectedCountry">
+                                            <option v-for="country in countriesList.data" :value="country.code" :selected="{'account.data.country == country.code': 'selected'}">
+                                                {{ country.name }}
                                             </option>
                                         </select>
                                     </div>
@@ -223,7 +246,7 @@
                                     <div class="col-xs-12 col-md-4">
                                     <label for="label-edit-city">City</label>
                                     <br/>
-                                    <input type="text" class="form-control" id="label-edit-city" />
+                                    <input type="text" class="form-control" id="label-edit-city"  :value="account.data.city"/>
                                 </div>
 
                                     <div class="col-xs-12 col-md-4">
@@ -242,7 +265,7 @@
                                 <label for="label-edit-languages">Language</label>
                                 <br/>
                                 <select class="form-control" id="label-edit-languages">
-                                    <option v-for="language in languagesList.data" :value="language.abbr">
+                                    <option v-for="language in languagesList.data" :value="language.abbr" :selected="{ 'selected' : language.abbr }">
                                         {{ language.name }}
                                     </option>
                                 </select>
@@ -274,14 +297,16 @@
             return {
                 accounts: {},
                 account: {
-                    name: '',
-                    country: '',
-                    city: '',
-                    currency: 'USD',
-                    value: 0,
-                    timezone: 'UTC',
-                    language: 'en_US',
-                    status: 1
+                    data: {
+                        name: '',
+                        country: '',
+                        city: 'miami',
+                        currency: 'USD',
+                        value: 0,
+                        timezone: 'UTC',
+                        language: 'en_US',
+                        status: 1
+                    }
                 },
                 users: {},
                 search: '',
@@ -362,7 +387,6 @@
                 this.$http.get(this.$root.api + 'accounts/' + id).then(response => {
 
                     this.account = response.data;
-                    console.log(this.account);
                     this.loading = false;
 
                     $('#_modal-edit-account').modal();

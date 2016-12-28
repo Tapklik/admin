@@ -24,7 +24,8 @@
                 <th>CTR URL</th>
                 <th>Budget</th>
                 <th>Daily</th>
-                <th>Status</th>
+                <th>Creatives</th>
+                <th>Approved</th>
             </tr>
             </thead>
             <tbody class="vcenter">
@@ -35,7 +36,7 @@
             </tr>
             <tr v-show="noresult">
                 <td colspan="9">
-                    Sorry but I can't find anything relating to <strong>{{ search }}</strong>
+                    Sorry but theres nothing here... yet :)
                 </td>
             </tr>
 
@@ -49,11 +50,15 @@
                 <td>${{ campaign.budget.data.total }}</td>
                 <td>${{ campaign.budget.data.daily.total }}</td>
                 <td>
-                    {{ campaign.status }}
+                    <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
+                        View
+                    </a>
+                </td>
+                <td>
                     <button class="btn"
-                            :class="{ 'btn-success': campaign.status, 'btn-danger': !campaign.status }"
+                            :class="{ 'btn-success': campaign.approved, 'btn-danger': !campaign.approved }"
                             :data-status="campaign.status"
-                            @click="toggleStatus(campaign.id, campaign.status, index)">
+                            @click="toggleStatus(campaign.id, campaign.approved, index)">
                         <i class="fa fa-check-circle-o"></i>
                     </button>
                 </td>
@@ -90,7 +95,7 @@
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'campaigns').then( response => {
+                this.$http.get(this.$root.api + 'accounts/' + obj.id + '/campaigns').then( response => {
                     this.campaigns = response.data;
                     this.loading = false;
                     console.log(this.campaigns);
@@ -104,7 +109,7 @@
                 status = (1 == status) ? 0 : 1;
                 this.campaigns.data[index].status = status;
 
-                this.$http.put(this.$root.api + 'campaigns/' + id, {status: status}).then(response => {
+                this.$http.put(this.$root.api + 'campaigns/' + id, {approved: status}).then(response => {
                     this.fetchCampaigns();
                 }, error => {
                     console.log(error);
@@ -122,11 +127,11 @@
                     break;
 
                     case 'creatives':
-                        endpoint += 'creatives';
+                        endpoint += '/campaigns/' + id + '/creatives';
                     break;
                 }
 
-                return '/accounts/' + id + '/' + endpoint;
+                return endpoint;
             }
         },
 

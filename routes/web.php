@@ -5,6 +5,11 @@ Route::get('campaigns', [
 	'uses' => 'CampaignsController@index'
 ]);
 
+Route::get('campaigns/{id}/creatives', [
+	'as' => 'campaigns.creatives.show',
+	'uses' => 'CampaignsCreativesController@show'
+]);
+
 Route::get('accounts', [
 	'as' => 'accounts.index',
 	'uses' => 'AccountsController@index'
@@ -16,8 +21,8 @@ Route::get('accounts/{id}', [
 ]);
 
 Route::get('accounts/{id}/campaigns', [
-	'as'    => 'accounts.noroute',
-	'uses' => 'AccountsController@noroute'
+	'as'    => 'accounts.campaigns.index',
+	'uses' => 'AccountCampaignsController@index'
 ]);
 
 Route::get('accounts/{id}/creatives', [

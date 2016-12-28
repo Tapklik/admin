@@ -2,14 +2,14 @@
     <div>
         <div class="row">
             <div class="col-md-8">
-                <h1 class="title pull-left">Accounts</h1>
+                <h1 class="title pull-left">Creatives for Campaign {{ campaign.data.name }}</h1>
 
                 <button class="btn btn-default pull-right" @click="openCreateAccount()">
-                    <i class="fa fa-plus"></i> Create new account
+                    <i class="fa fa-plus"></i> Create new creative
                 </button>
             </div>
             <div class="col-md-4">
-                <input type="search" class="form-control" placeholder="Search account name..." v-model="search"/>
+                <input type="search" class="form-control" placeholder="Search creative by name..." v-model="search"/>
             </div>
         </div>
         <hr/>
@@ -40,222 +40,43 @@
                 </td>
             </tr>
 
-            <tr v-for="(account, index) in filterByAccounts">
-                <td>{{ account.id }}.</td>
-                <td>{{ account.name }}</td>
-                <td>1000{{ account.id }}</td>
+            <tr v-for="(creative, index) in filterByCreatives">
+                <td>{{ creative.id }}.</td>
+                <td>{{ creative.name }}</td>
+                <td>1000{{ creative.id }}</td>
                 <td>rok@tapklik.com</td>
                 <td>
-                    <button class="btn btn-primary" @click="openUsers(account.id)">
+                    <button class="btn btn-primary" @click="openUsers(creative.id)">
                         View
                     </button>
                 </td>
-                <td>${{ account.budget.data.value }}</td>
+                <td>${{ creative.budget.data.value }}</td>
                 <td>
-                    <a :href="generateUri('campaigns', account.id)" class="btn btn-primary">
+                    <a :href="generateUri('campaigns', creative.id)" class="btn btn-primary">
                         View
                     </a>
                 </td>
                 <td>
-                    <a :href="generateUri('creatives', account.id)" class="btn btn-primary">
+                    <a :href="generateUri('creatives', creative.id)" class="btn btn-primary">
                         View
                     </a>
                 </td>
                 <td>
                     <button class="btn"
-                            :class="{ 'btn-success': account.status, 'btn-danger': !account.status }"
-                            :data-status="account.status"
-                            @click="toggleStatus(account.id, account.status, index)">
+                            :class="{ 'btn-success': creative.status, 'btn-danger': !creative.status }"
+                            :data-status="creative.status"
+                            @click="toggleStatus(creative.id, creative.status, index)">
                         <i class="fa fa-check-circle-o"></i>
                     </button>
                 </td>
                 <td>
-                    <button class="btn btn-default" @click="openSettings(account.id)">
+                    <button class="btn btn-default" @click="openSettings(creative.id)">
                         <i class="fa fa-cog"></i>
                     </button>
                 </td>
             </tr>
             </tbody>
         </table>
-
-        <div class="modal fade" id="_modal-users" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Account Users</h4>
-                    </div>
-                    <div class="modal-body">
-                        <input type="search" placeholder="Search user by name" class="form-control"
-                               v-model="searchUsers"/>
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Username</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="user in filterByUsers">
-                                <td>{{ user.id }}</td>
-                                <td>{{ user.first_name }} {{ user.last_name }}</td>
-                                <td class="text-right">
-                                    <a href="#" class="btn btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
-        <div class="modal fade" id="_modal-create-new-account" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Create New Account</h4>
-                    </div>
-                    <div class="modal-body">
-                        <h5>DETAILS</h5>
-                        <div class="form-group">
-                            <label for="label-name">Name</label>
-                            <br/>
-                            <input type="text" id="label-name" class="form-control" v-model="account.name"/>
-                        </div>
-
-                        <div class="form-group">
-                            <h5>LOCALIZATION</h5>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-country">Country</label>
-                                        <br/>
-                                        <select class="form-control" id="label-country" v-model="account.country">
-                                            <option v-for="country in countriesList.data" :value="country.code">
-                                                {{ country.name }}
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-city">City</label>
-                                        <br/>
-                                        <input type="text" class="form-control" id="label-city" v-model="account.city" />
-                                    </div>
-
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-timezones">Time Zone</label>
-                                        <br/>
-                                        <select class="form-control" id="label-timezones" v-model="account.timezone">
-                                            <option v-for="timezone in timezonesList.data" :value="timezone.value">
-                                                {{ timezone.value }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="label-languages">Language</label>
-                                <br/>
-                                <select class="form-control" id="label-languages" v-model="account.language">
-                                    <option v-for="language in languagesList.data" :value="language.abbr">
-                                        {{ language.name }}
-                                    </option>
-                                </select>
-                                <input type="hidden" v-model="account.status" />
-                                <input type="hidden" v-model="account.currency" />
-                                <input type="hidden" v-model="account.value" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="createNewAccount()">Create</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
-        <div class="modal fade" id="_modal-edit-account" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Edit </h4>
-                    </div>
-                    <div class="modal-body">
-                        <h5>DETAILS</h5>
-
-                        <div class="form-group">
-                            <label for="label-edit-name">Name {{ account.name }}</label>
-                            <br/>
-                            <input type="text" id="label-edit-name" class="form-control"/>
-                        </div>
-
-                        <div class="form-group">
-                            <h5>LOCALIZATION</h5>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-edit-country">Country</label>
-                                        <br/>
-                                        <select class="form-control" id="label-edit-country">
-                                            <option v-for="country in countriesList.data" :value="country.code">
-
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-xs-12 col-md-4">
-                                    <label for="label-edit-city">City</label>
-                                    <br/>
-                                    <input type="text" class="form-control" id="label-edit-city" />
-                                </div>
-
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-edit-timezones">Time Zone</label>
-                                        <br/>
-                                        <select class="form-control" id="label-edit-timezones">
-                                            <option v-for="timezone in timezonesList.data" :value="timezone.utc">
-                                                {{ timezone.value }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="label-edit-languages">Language</label>
-                                <br/>
-                                <select class="form-control" id="label-edit-languages">
-                                    <option v-for="language in languagesList.data" :value="language.abbr">
-                                        {{ language.name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" :disabled="'loading == true' ? disabled : false">Update</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
     </div>
 </template>
 
@@ -263,25 +84,17 @@
     export default {
         mounted() {
 
-            this.fetchCountries();
-            this.fetchTimezones();
-            this.fetchLanguages();
-            this.fetchAccounts();
+            this.fetchCampaign();
         },
 
         data: function () {
 
             return {
-                accounts: {},
-                account: {
-                    name: '',
-                    country: '',
-                    city: '',
-                    currency: 'USD',
-                    value: 0,
-                    timezone: 'UTC',
-                    language: 'en_US',
-                    status: 1
+                creatives: {},
+                campaign: {
+                    data: {
+                        name: ''
+                    }
                 },
                 users: {},
                 search: '',
@@ -299,12 +112,12 @@
 
         methods: {
 
-            fetchAccounts: function () {
-
+            fetchCampaign: function () {
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts').then( response => {
-                    this.accounts = response.data;
+                this.$http.get(this.$root.api + 'campaigns/' + obj.id).then( response => {
+                    this.campaign = response.data;
+                    this.creatives = this.campaign.creatives;
                     this.loading = false;
                 }, error => {
                     console.log(error);
@@ -430,13 +243,12 @@
 
         computed: {
 
-            filterByAccounts: function () {
+            filterByCreatives: function () {
 
-                if (typeof this.accounts.data == 'undefined') return;
-
+                if (typeof this.creatives == 'undefined') return;
                 var self = this;
 
-                var results = this.accounts.data.filter( function(item) {
+                var results = this.creatives.filter( function(item) {
 
                     return item.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1;
                 });
@@ -460,5 +272,6 @@
             }
         }
     }
+
 
 </script>
