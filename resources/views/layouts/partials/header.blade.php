@@ -8,7 +8,7 @@
         <nav>
             <ul>
                 <li>
-                    <a href="#">
+                    <a href="/dashboard">
                         Dashboard
                     </a>
                 </li>
@@ -18,27 +18,27 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/users">
                         Users
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/campaigns">
                         Campaigns
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/creatives">
                         Creatives
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/reports">
                         Reports
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/accounting">
                         Accounting
                     </a>
                 </li>

@@ -5,5 +5,5 @@
 @stop
 
 @section('content')
-<campaigns></campaigns>
+<campaigns-all></campaigns-all>
 @stop

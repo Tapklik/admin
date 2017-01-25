@@ -327,7 +327,7 @@
             fetchAccounts: function () {
 
                 this.loading = true;
-
+console.log(1);
                 this.$http.get(this.$root.api + 'accounts').then( response => {
                     this.accounts = response.data;
                     this.loading = false;
