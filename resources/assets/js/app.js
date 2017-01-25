@@ -22,6 +22,6 @@ Vue.component('creatives', require('./components/Creatives.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-        'api': 'http://local.api.tapklik.com/v1/'
+        'api': 'http://api.tapklik.com/v1/'
     }
 });

@@ -55,3 +55,10 @@ Route::get('data/languages', function () {
 
 	return response()->json($languages);
 });
+
+Route::get('data/categories', function () {
+
+	$categories = json_decode(file_get_contents('./data/categories.json'), true);
+
+	return response()->json($categories);
+});
