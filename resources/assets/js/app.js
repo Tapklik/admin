@@ -16,6 +16,7 @@ require('./bootstrap');
 Vue.component('accounts', require('./components/Accounts.vue'));
 Vue.component('campaigns', require('./components/Campaigns.vue'));
 Vue.component('campaigns-all', require('./components/CampaignsAll.vue'));
+Vue.component('campaigns-show', require('./components/CampaignsShow.vue'));
 Vue.component('creatives', require('./components/Creatives.vue'));
 
 const app = new Vue({

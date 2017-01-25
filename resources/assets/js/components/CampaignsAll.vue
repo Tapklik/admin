@@ -41,12 +41,24 @@
             </tr>
 
             <tr v-for="(campaign, index) in filterByCampaigns">
-                <td>{{ campaign.id }}.</td>
-                <td>{{ campaign.name }}</td>
+                <td>{{ campaign.id }}</td>
+                <td>
+                    <a :href="'campaigns/' + campaign.id">
+                        {{ campaign.name }}
+                    </a>
+                </td>
                 <td>{{ campaign.start_time }}</td>
                 <td>{{ campaign.end_time }}</td>
-                <td>{{ campaign.adomain }}</td>
-                <td>{{ campaign.ctrurl }}</td>
+                <td>
+                    <a :href="adomain" v-for="adomain in campaign.adomain" target="_blank">
+                        {{ adomain }}
+                    </a>
+                </td>
+                <td>
+                    <a :href="campaign.ctrurl" target="_blank">
+                        link
+                    </a>
+                </td>
                 <td>${{ campaign.budget.data.total }}</td>
                 <td>${{ campaign.budget.data.daily.total }}</td>
                 <td>
