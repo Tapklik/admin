@@ -175,7 +175,6 @@
                 this.$http.get(this.$root.api + 'accounts/' + id).then(response => {
 
                     this.account = response.data;
-                    console.log(this.account);
                     this.loading = false;
 
                     $('#_modal-edit-account').modal();

@@ -98,7 +98,6 @@
                 this.$http.get(this.$root.api + 'accounts/' + obj.id + '/campaigns').then( response => {
                     this.campaigns = response.data;
                     this.loading = false;
-                    console.log(this.campaigns);
                 }, error => {
                     console.log(error);
                 });

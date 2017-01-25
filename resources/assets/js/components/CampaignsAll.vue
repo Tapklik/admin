@@ -97,7 +97,6 @@
                 this.$http.get(this.$root.api + 'campaigns').then( response => {
                     this.campaigns = response.data;
                     this.loading = false;
-                    console.log(this.campaigns);
                 }, error => {
                     console.log(error);
                 });
