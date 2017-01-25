@@ -18,6 +18,10 @@ Vue.component('campaigns', require('./components/Campaigns.vue'));
 Vue.component('campaigns-all', require('./components/CampaignsAll.vue'));
 Vue.component('campaigns-show', require('./components/CampaignsShow.vue'));
 Vue.component('creatives', require('./components/Creatives.vue'));
+Vue.component('dashboard', require('./components/Dashboard.vue'));
+Vue.component('creatives-all', require('./components/CreativesAll.vue'));
+Vue.component('reports', require('./components/Reports.vue'));
+Vue.component('users', require('./components/Users.vue'));
 
 const app = new Vue({
     el: '#app',

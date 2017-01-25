@@ -7,37 +7,37 @@
     <div class="col-md-10">
         <nav>
             <ul>
-                <li>
+                <li class="{{ Request::is('dashboard') ? 'selected' : '' }}">
                     <a href="/dashboard">
                         Dashboard
                     </a>
                 </li>
-                <li class="selected">
+                <li class="{{ Request::is('accounts') ? 'selected' : '' }}">
                     <a href="/accounts">
                         Accounts
                     </a>
                 </li>
-                <li>
+                <li class="{{ Request::is('users') ? 'selected' : '' }}">
                     <a href="/users">
                         Users
                     </a>
                 </li>
-                <li>
+                <li class="{{ Request::is('campaigns') || Request::is('campaigns/*') ? 'selected' : '' }}">
                     <a href="/campaigns">
                         Campaigns
                     </a>
                 </li>
-                <li>
+                <li class="{{ Request::is('creatives') ? 'selected' : '' }}">
                     <a href="/creatives">
                         Creatives
                     </a>
                 </li>
-                <li>
+                <li class="{{ Request::is('reports') ? 'selected' : '' }}">
                     <a href="/reports">
                         Reports
                     </a>
                 </li>
-                <li>
+                <li class="{{ Request::is('accounting') ? 'selected' : '' }}">
                     <a href="/accounting">
                         Accounting
                     </a>

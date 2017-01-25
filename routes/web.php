@@ -1,5 +1,25 @@
 <?php
 
+Route::get('dashboard', [
+	'as' => 'dashboard.index',
+	'uses' => 'DashboardController@index'
+]);
+
+Route::get('creatives', [
+	'as' => 'creatives.index',
+	'uses' => 'CreativesController@index'
+]);
+
+Route::get('users', [
+	'as' => 'users.index',
+	'uses' => 'UsersController@index'
+]);
+
+Route::get('reports', [
+	'as' => 'reports.index',
+	'uses' => 'ReportsController@index'
+]);
+
 Route::get('campaigns', [
 	'as' => 'campaigns.index',
 	'uses' => 'CampaignsController@index'
