@@ -65,7 +65,7 @@
                 <div class="form-group">
                     <div class="col-xs-12 col-md-2" v-for="category in categories.body">
                         <label>
-                            <input type="checkbox" />
+                            <input type="checkbox" :value="category" v-model="campaign.cat.data" />
                             {{ category }}
                         </label>
                     </div>
@@ -81,7 +81,15 @@
                     <div class="col-md-6">
                         <label>Geolocation</label>
 
-                        <input class="form-control" />
+                        <input class="form-control"/>
+
+                        <ul class="list-unstyled">
+                            <li v-for="geo in campaign.geo.data" class="col-md-3">
+                                <a>
+                                    {{ geo.country }}
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="col-md-6">
 
@@ -91,11 +99,11 @@
                             <p class="clearfix"></p>
 
                             <label class="pull-left">
-                                <input type="checkbox" />
+                                <input type="checkbox"/>
                                 Male
                             </label>
                             <label class="pull-left">
-                                <input type="checkbox" />
+                                <input type="checkbox"/>
                                 Female
                             </label>
                         </div>
@@ -108,43 +116,43 @@
                             <ul class="list-inline">
                                 <li>
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox"/>
                                         1-11
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox"/>
                                         12-18
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox"/>
                                         19-25
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox"/>
                                         26-39
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox"/>
                                         40-55
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox"/>
                                         56-64
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox"/>
                                         65-120
                                     </label>
                                 </li>
@@ -161,33 +169,33 @@
                 <legend>4. Admin</legend>
                 <div class="form-group">
                     <div class="col-md-2">
-                        <label>Test</label> <br />
+                        <label>Test</label> <br/>
                         <select class="form-control">
                             <option value="true">TRUE</option>
                             <option value="false" selected>FALSE</option>
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <label>Status</label> <br />
+                        <label>Status</label> <br/>
                         <select class="form-control">
                             <option value="stopped">Running</option>
                             <option value="stopped" selected>Stopped</option>
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <label>Weight</label> <br />
-                        <input class="form-control" :value="campaign.weight" />
+                        <label>Weight</label> <br/>
+                        <input class="form-control" :value="campaign.weight"/>
                     </div>
                     <div class="col-md-2">
-                        <label>Exchange</label> <br />
-                        <input class="form-control" :value="campaign.exchange" />
+                        <label>Exchange</label> <br/>
+                        <input class="form-control" :value="campaign.exchange"/>
                     </div>
                     <div class="col-md-2">
-                        <label>Node</label> <br />
-                        <input class="form-control" :value="campaign.node" />
+                        <label>Node</label> <br/>
+                        <input class="form-control" :value="campaign.node"/>
                     </div>
                     <div class="col-md-2">
-                        <label>Pacing</label>  <br />
+                        <label>Pacing</label> <br/>
                         <select class="form-control">
                             <option value="true">Enabled</option>
                             <option value="false" selected>Disabled</option>
@@ -204,9 +212,9 @@
                         <div class="col-md-4">
                             <label>Mon</label>
                             <ul class="list-unstyled">
-                                <li v-for="i in days">
+                                <li v-for="(i, key) in mon">
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
                                         {{ i }}
                                     </label>
                                 </li>
@@ -215,9 +223,9 @@
                         <div class="col-md-4">
                             <label>Tue</label>
                             <ul class="list-unstyled">
-                                <li v-for="i in days">
+                                <li v-for="(i, key) in tue">
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
                                         {{ i }}
                                     </label>
                                 </li>
@@ -226,23 +234,23 @@
                         <div class="col-md-4">
                             <label>Wed</label>
                             <ul class="list-unstyled">
-                                <li v-for="i in days">
+                                <li v-for="(i, key) in wed">
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
                                         {{ i }}
                                     </label>
                                 </li>
                             </ul>
                         </div>
 
-                        <hr />
+                        <hr/>
 
                         <div class="col-md-4">
                             <label>Thu</label>
                             <ul class="list-unstyled">
-                                <li v-for="i in days">
+                                <li v-for="(i, key) in thu">
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
                                         {{ i }}
                                     </label>
                                 </li>
@@ -251,9 +259,9 @@
                         <div class="col-md-4">
                             <label>Fri</label>
                             <ul class="list-unstyled">
-                                <li v-for="i in days">
+                                <li v-for="(i, key) in fri">
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
                                         {{ i }}
                                     </label>
                                 </li>
@@ -262,23 +270,23 @@
                         <div class="col-md-4">
                             <label>Sat</label>
                             <ul class="list-unstyled">
-                                <li v-for="i in days">
+                                <li v-for="(i, key) in sat">
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
                                         {{ i }}
                                     </label>
                                 </li>
                             </ul>
                         </div>
 
-                        <hr />
+                        <hr/>
 
                         <div class="col-md-4">
                             <label>Sun</label>
                             <ul class="list-unstyled">
-                                <li v-for="i in days">
+                                <li v-for="(i, key) in sun">
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
                                         {{ i }}
                                     </label>
                                 </li>
@@ -318,12 +326,27 @@
                                 spend: 0
                             }
                         }
+                    },
+                    cat: {
+                        data: false
+                    },
+                    hourofweek: {
+                        data: false
+                    },
+                    geo: {
+                        data: false
                     }
                 },
                 categories: false,
                 loading: false,
                 noresult: false,
-                days: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+                mon: {1:1,2:2,3:3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24},
+                tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
+                wed: {49:1,50:2,51:3,52:4,53:5,54:6,55:7,56:8,57:9,58:10,59:11,60:12,61:13,62:14,63:15,64:16,65:17,66:18,67:19,68:20,69:21,70:22,71:23,72:24},
+                thu: {73:1,74:2,75:3,76:4,77:5,78:6,79:7,80:8,81:9,82:10,83:11,84:12,84:13,85:14,86:15,87:16,88:17,89:18,90:19,91:20,92:21,93:22,94:23,95:24},
+                fri: {96:1,97:2,98:3,99:4,100:5,101:6,102:7,103:8,104:9,105:10,106:11,107:12,108:13,109:14,110:15,111:16,112:17,113:18,114:19,115:20,116:21,117:22,118:23,119:24},
+                sat: {120:1,121:2,122:3,123:4,124:5,125:6,126:7,127:8,128:9,129:10,130:11,131:12,132:13,133:14,134:15,135:16,136:17,137:18,138:19,139:20,140:21,141:22,142:23,143:24},
+                sun: {144:1,145:2,146:3,147:4,148:5,149:6,150:7,160:8,161:9,162:10,163:11,164:12,165:13,166:14,167:15,168:16,169:17,170:18,171:19,172:20,173:21,174:22,175:23,176:24},
             }
         },
 
@@ -351,6 +374,7 @@
             }
         }
     }
+
 
 
 
