@@ -16,4 +16,16 @@ require('laravel-elixir-vue-2');
 elixir(mix => {
     mix.sass('app.scss')
        .webpack('app.js');
+
+    mix.copy('resources/components/jquery-search/jquery.searchabledropdown-1.0.8.min.js', 'resources/assets/js');
+    mix.copy('resources/components/template/js/main.js', 'resources/assets/js');
+    mix.copy('resources/components/select2/dist/css/select2.css', 'resources/assets/css');
+    mix.copy('resources/components/select2/dist/js/select2.full.js', 'resources/assets/js');
+
+    mix.styles(['select2.css']);
+
+    mix.scripts([
+        'select2.full.js',
+        'main.js',
+    ]);
 });

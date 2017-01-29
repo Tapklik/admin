@@ -79,18 +79,41 @@
                 <legend>3. Targeting</legend>
                 <div class="form-group">
                     <div class="col-md-6">
-                        <label>Geolocation</label>
+                        <div class="row">
+                            <div class="col-md-5">
+                            <label>Geo Country</label>
+                                <select class="form-control" placeholder="Type a country..." id="_search-countries">
+                                    <option v-for="country in this.countries" :value="country.code">
+                                        {{ country.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label>Geo City</label>
+                                <input class="form-control" placeholder="Type a city..."/>
+                            </div>
+                            <div class="col-md-2">
+                                <label>&nbsp; </label>
+                                <button class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
 
-                        <input class="form-control"/>
+                        <p class="clearfix">
+                            <span style="color: #fff;">wtf</span>
+                        </p>
 
                         <ul class="list-unstyled">
-                            <li v-for="geo in campaign.geo.data" class="col-md-3">
-                                <a>
-                                    {{ geo.country }}
+                            <li v-for="(geo, index) in campaign.geo.data" class="col-md-3">
+                                <a @click="removeCountry(index)" class="label label-default">
+                                    <i class="fa fa-minus"></i>
+                                    {{ geo.country }} - {{ geo.city }}
                                 </a>
                             </li>
                         </ul>
                     </div>
+
                     <div class="col-md-6">
 
                         <div class="col-md-6">
@@ -214,7 +237,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in mon">
                                     <label>
-                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
+                                        <input type="checkbox" :value="i" :checked="campaign.hourofweek.data[i]"/>
                                         {{ i }}
                                     </label>
                                 </li>
@@ -300,7 +323,7 @@
         <br/>
         <div class="row clearfix">
             <div class="col-md-12">
-                <button class="btn btn-primary pull-right">Update</button>
+                <button class="btn btn-primary pull-right" @click="update()">Update</button>
             </div>
         </div>
     </div>
@@ -312,6 +335,7 @@
 
             this.fetchCampaign();
             this.fetchCategories();
+            this.fetchCountries();
         },
 
         data: function () {
@@ -338,6 +362,7 @@
                     }
                 },
                 categories: false,
+                countries: false,
                 loading: false,
                 noresult: false,
                 mon: {1:1,2:2,3:3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24},
@@ -371,7 +396,24 @@
                 }, error => {
                     console.log(error);
                 });
+            },
+
+            fetchCountries: function () {
+                this.$http.get('/data/countries').then( response => {
+                    this.countries = response.data;
+                }, error => {
+                    console.log(error);
+                });
+            },
+
+            removeCountry: function (index) {
+
+                this.campaign.geo.data.splice(index, 1);
+            },
+
+            update: function () {
             }
+
         }
     }
 

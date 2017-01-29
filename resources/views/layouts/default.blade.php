@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/font-awesome.css" />
     <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/all.css" />
 
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet" />
 
@@ -31,6 +32,12 @@
 
     @include('layouts.partials.footer')
 
+    <script
+            src="http://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+
     <script src="/js/app.js"></script>
+    <script src="/js/all.js"></script>
 </body>
 </html>
