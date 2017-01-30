@@ -90,13 +90,21 @@
                             </div>
                             <div class="col-md-5">
                                 <label>Geo City</label>
-                                <input class="form-control" placeholder="Type a city..."/>
+                                <select class="form-control" placeholder="Type a city..." id="_search-cities">
+                                </select>
                             </div>
                             <div class="col-md-2">
                                 <label>&nbsp; </label>
                                 <button class="btn btn-primary">
                                     <i class="fa fa-plus"></i>
                                 </button>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-xs-12 col-md-4 text-center">
+                                    <span id="_geo_data" v-model="showgeo" />
+                                    {{ showgeo }}
+                                </div>
                             </div>
                         </div>
 
@@ -365,6 +373,7 @@
                 countries: false,
                 loading: false,
                 noresult: false,
+                showgeo: false,
                 mon: {1:1,2:2,3:3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24},
                 tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
                 wed: {49:1,50:2,51:3,52:4,53:5,54:6,55:7,56:8,57:9,58:10,59:11,60:12,61:13,62:14,63:15,64:16,65:17,66:18,67:19,68:20,69:21,70:22,71:23,72:24},
