@@ -8,9 +8,15 @@
         <hr/>
         <div class="row">
             <div class="col-md-12">
-                <legend>1. Information</legend>
+                <legend class="clearfix" @click="changeSetion(1)">
+                    1. Information
 
-                <div class="form-group">
+                    <button class="btn btn-primary pull-right">
+                        Update Information
+                    </button>
+                </legend>
+
+                <div class="form-group" v-show="openSection == 1">
                     <div class="col-md-3">
                         <label>Name</label>
                         <input class="form-control" :value="campaign.name"/>
@@ -41,7 +47,7 @@
         <br/>
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group">
+                <div class="form-group" v-show="openSection == 1">
                     <div class="col-md-4">
                         <label>Daily Budget</label>
                         <input class="form-control" :value="campaign.budget.data.total"/>
@@ -61,11 +67,18 @@
         <br/>
         <div class="row">
             <div class="col-md-12">
-                <legend>2. Categories</legend>
-                <div class="form-group">
+                <legend class="clearfix" @click="changeSetion(2)">
+                    2. Categories
+
+                    <button class="btn btn-primary pull-right">
+                        Update Categories
+                    </button>
+                </legend>
+
+                <div class="form-group" v-show="openSection == 2">
                     <div class="col-xs-12 col-md-2" v-for="category in categories.body">
                         <label>
-                            <input type="checkbox" :value="category" v-model="campaign.cat.data" />
+                            <input type="checkbox" :value="category" v-model="campaign.cat.data"/>
                             {{ category }}
                         </label>
                     </div>
@@ -76,12 +89,19 @@
         <br/>
         <div class="row">
             <div class="col-md-12">
-                <legend>3. Targeting</legend>
-                <div class="form-group">
+                <legend @click="changeSetion(3)">
+                    3. Targeting
+
+                    <button class="btn btn-primary pull-right">
+                        Update Targeting
+                    </button>
+                </legend>
+                <div class="form-group" v-show="openSection == 3">
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-5">
-                            <label>Geo Country</label>
+                                <label>Geo Country</label>
+                                {{ tempGeoHolder }}
                                 <select class="form-control" placeholder="Type a country..." id="_search-countries">
                                     <option v-for="country in this.countries" :value="country.code">
                                         {{ country.name }}
@@ -95,14 +115,14 @@
                             </div>
                             <div class="col-md-2">
                                 <label>&nbsp; </label>
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" @click="addGeoItem()">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
 
                             <div class="row clearfix">
                                 <div class="col-xs-12 col-md-4 text-center">
-                                    <span id="_geo_data" v-model="showgeo" />
+                                    <span id="_geo_data"/>
                                     {{ showgeo }}
                                 </div>
                             </div>
@@ -197,8 +217,14 @@
         <br/>
         <div class="row">
             <div class="col-md-12">
-                <legend>4. Admin</legend>
-                <div class="form-group">
+                <legend class="clearfix" @click="changeSetion(4)">
+                    4. Admin
+
+                    <button class="btn btn-primary pull-right">
+                        Update Admin
+                    </button>
+                </legend>
+                <div class="form-group" v-show="openSection == 4">
                     <div class="col-md-2">
                         <label>Test</label> <br/>
                         <select class="form-control">
@@ -235,7 +261,8 @@
                 </div>
 
                 <p class="clearfix"></p>
-                <div class="form-group">
+
+                <div class="form-group" v-show="openSection == 4">
                     <div class="col-xs-12">
                         <label>Hours Of Week</label>
                         <p class="clearfix"></p>
@@ -327,20 +354,13 @@
                 </div>
             </div>
         </div>
-
-        <br/>
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <button class="btn btn-primary pull-right" @click="update()">Update</button>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
     export default {
         mounted() {
-
+            this.init();
             this.fetchCampaign();
             this.fetchCategories();
             this.fetchCountries();
@@ -374,6 +394,8 @@
                 loading: false,
                 noresult: false,
                 showgeo: false,
+                openSection: 1,
+                tempGeoHolder: {},
                 mon: {1:1,2:2,3:3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24},
                 tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
                 wed: {49:1,50:2,51:3,52:4,53:5,54:6,55:7,56:8,57:9,58:10,59:11,60:12,61:13,62:14,63:15,64:16,65:17,66:18,67:19,68:20,69:21,70:22,71:23,72:24},
@@ -385,6 +407,51 @@
         },
 
         methods: {
+
+            init: function () {
+                $('#_search-countries').on('select2:select', function (evt) {
+
+                    $.ajax({
+                        url: '/data/countries/' + $('#_search-countries').val(),
+                        success: function (response) {
+
+                            var html = '';
+                            $.each(response[0].cities, function () {
+                                var item = this;
+                                html += '<option value="' + item.id + '">' + item.name + '</option>';
+                            });
+
+                            $('#_search-cities').html(html);
+                            $('#_search-cities').select2({
+                                placeholder: 'Type a country'
+                            });
+                        }
+                    });
+                });
+
+                var self = this;
+
+                $('#_search-cities').on('select2:select', function (evt) {
+
+                    $.ajax({
+                        url: '/data/countries/' + $('#_search-countries').val() + '/' + $('#_search-cities').val(),
+                        success: function (response) {
+
+                            self.tempGeoHolder = {"city": response.city, "country": response.country, "region": response.region, "region_name": response.region_name};
+                        }
+                    });
+
+                    console.log()
+                });
+            },
+
+            changeSetion: function (section) {
+                this.openSection = section;
+            },
+
+            addGeoItem: function () {
+                console.log(this.tempGeoHolder);
+            },
 
             fetchCampaign: function () {
 
@@ -425,6 +492,8 @@
 
         }
     }
+
+
 
 
 
