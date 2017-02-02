@@ -23,13 +23,16 @@ elixir(mix => {
     mix.copy('resources/components/select2/dist/css/select2.css', 'resources/assets/css');
     mix.copy('resources/components/datepicker/css/datepicker.css', 'resources/assets/css');
     mix.copy('resources/components/datepicker/js/bootstrap-datepicker.js', 'resources/assets/js');
+    mix.copy('resources/components/jsonformatter/source/jsonFormatter.min.js', 'resources/assets/js');
+    mix.copy('resources/components/jsonformatter/source/jsonFormatter-darkTheme.min.css', 'resources/assets/css');
     mix.copy('resources/components/select2/dist/js/select2.full.js', 'resources/assets/js');
 
-    mix.styles(['datepicker.css', 'select2.css', 'main.css']);
+    mix.styles(['datepicker.css', 'select2.css', 'main.css', 'jsonFormatter-darkTheme.min.css']);
 
     mix.scripts([
         'select2.full.js',
         'bootstrap-datepicker.js',
+        'jsonFormatter.min.js',
         'main.js'
     ]);
 });

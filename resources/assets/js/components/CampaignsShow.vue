@@ -469,21 +469,26 @@
                     'adomain': this.campaign.adomain[0],
                     'ctrurl': this.campaign.ctrurl,
                     'maxbid': this.campaign.maxbid,
+                    'exchange': this.campaign.exchange[0],
+                    'weight': this.campaign.weight,
+                    'status': this.campaign.status,
+                    'node': this.campaign.node,
+
                 };
 
                 var self = this;
 
                 this.$http.put(this.$root.api + 'campaigns/' + obj.id, data).then( response => {
-
-                    self.campaign = response;
+                    self.campaign = response.data.data;
                 }, error => {
-                    console.log(error);
+                    alert(error.error.message);
                 });
             },
 
             openJson: function () {
 
-                $('#_modal_json .modal-body').html(JSON.stringify(this.campaign));
+                $('#_modal_json .modal-body .jsonify').html(JSON.stringify(this.campaign));
+                $('.jsonify').jsonFormatter();
                 $('#_modal_json').modal();
                 return false;
             },
@@ -529,10 +534,6 @@
             removeCountry: function (index) {
 
                 this.campaign.geo.data.splice(index, 1);
-            },
-
-            update: function () {
-
             }
 
         }
