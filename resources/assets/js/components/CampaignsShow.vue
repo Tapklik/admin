@@ -3,6 +3,10 @@
         <div class="row">
             <div class="col-md-12">
                 <h1 class="title pull-left">Campaign {{ campaign.name }}</h1>
+
+                <button class="btn btn-primary pull-right" @click="updateCampaign(campaign.id)">
+                    UPDATE
+                </button>
             </div>
         </div>
         <hr/>
@@ -15,54 +19,71 @@
                         Update Information
                     </button>
                 </legend>
-
-                <div class="form-group" v-show="openSection == 1">
-                    <div class="col-md-3">
-                        <label>Name</label>
-                        <input class="form-control" :value="campaign.name"/>
-                    </div>
-                    <div class="col-md-3">
-
-                        <div class="col-md-6">
-                            <label>From</label>
-                            <input class="form-control" :value="campaign.start_time"/>
-                        </div>
-                        <div class="col-md-6">
-                            <label>To</label>
-                            <input class="form-control" :value="campaign.end_time"/>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label>Advertiser Domain</label>
-                        <input class="form-control" :value="campaign.adomain"/>
-                    </div>
-                    <div class="col-md-3">
-                        <label>CTR Url</label>
-                        <input class="form-control" :value="campaign.ctrurl"/>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <br/>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group" v-show="openSection == 1">
+        <br>
+
+
+        <form id="section-info">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group" v-show="openSection == 1">
+                        <div class="col-md-3">
+                            <label>Name</label>
+                            <input class="form-control" v-model="campaign.name" :value="campaign.name"/>
+                        </div>
+                        <div class="col-md-3">
+
+                            <div class="col-md-6">
+                                <label>From</label>
+                                <input class="form-control" v-model="campaign.start_time" :value="campaign.start_time" data-plugin="datepicker" />
+                            </div>
+                            <div class="col-md-6">
+                                <label>To</label>
+                                <input class="form-control" v-model="campaign.end_time" :value="campaign.end_time" data-plugin="datepicker" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Advertiser Domain</label>
+                            <input class="form-control" v-model="campaign.adomain" :value="campaign.adomain"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label>CTR Url</label>
+                            <input class="form-control" v-model="campaign.ctrurl" :value="campaign.ctrurl"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group" v-show="openSection == 1">
                     <div class="col-md-4">
                         <label>Daily Budget</label>
                         <input class="form-control" :value="campaign.budget.data.total"/>
                     </div>
                     <div class="col-md-4">
                         <label>Max Bid (CPM)</label>
-                        <input class="form-control" :value="campaign.bidmax"/>
+                        <input class="form-control" v-model="campaign.bidmax" name="bidmax" :value="campaign.bidmax"/>
                     </div>
                     <div class="col-md-4">
-                        <label>Daily Budget Pacing</label>
-                        <button class="btn btn-tapklik btn-block disabled" disabled>Set</button>
+
+                        <div class="col-md-6">
+                            <label>Daily Budget Pacing</label>
+                            <button class="btn btn-tapklik btn-block disabled" disabled>Set</button>
+                        </div>
+                        <div class="col-md-6">
+                            <label>JSON Output</label>
+                            <button class="btn btn-tapklik btn-block" @click="openJson(campaign)" onclick="return false;">View</button>
+                        </div>
                     </div>
                 </div>
+                </div>
             </div>
-        </div>
+        </form>
 
         <br/>
         <div class="row">
@@ -100,8 +121,7 @@
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-5">
-                                <label>Geo Country</label>
-                                {{ tempGeoHolder }}
+                                <label>Geo Country</label> <br />
                                 <select class="form-control" placeholder="Type a country..." id="_search-countries">
                                     <option v-for="country in this.countries" :value="country.code">
                                         {{ country.name }}
@@ -111,6 +131,7 @@
                             <div class="col-md-5">
                                 <label>Geo City</label>
                                 <select class="form-control" placeholder="Type a city..." id="_search-cities">
+                                    <option></option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -123,14 +144,9 @@
                             <div class="row clearfix">
                                 <div class="col-xs-12 col-md-4 text-center">
                                     <span id="_geo_data"/>
-                                    {{ showgeo }}
                                 </div>
                             </div>
                         </div>
-
-                        <p class="clearfix">
-                            <span style="color: #fff;">wtf</span>
-                        </p>
 
                         <ul class="list-unstyled">
                             <li v-for="(geo, index) in campaign.geo.data" class="col-md-3">
@@ -445,12 +461,40 @@
                 });
             },
 
+            updateCampaign: function (id) {
+                var data = {
+                    'name': this.campaign.name,
+                    'start_time': this.campaign.start_time,
+                    'end_time': this.campaign.end_time,
+                    'adomain': this.campaign.adomain[0],
+                    'ctrurl': this.campaign.ctrurl,
+                    'maxbid': this.campaign.maxbid,
+                };
+
+                var self = this;
+
+                this.$http.put(this.$root.api + 'campaigns/' + obj.id, data).then( response => {
+
+                    self.campaign = response;
+                }, error => {
+                    console.log(error);
+                });
+            },
+
+            openJson: function () {
+
+                $('#_modal_json .modal-body').html(JSON.stringify(this.campaign));
+                $('#_modal_json').modal();
+                return false;
+            },
+
             changeSetion: function (section) {
                 this.openSection = section;
             },
 
             addGeoItem: function () {
-                console.log(this.tempGeoHolder);
+                this.campaign.geo.data.push(this.tempGeoHolder);
+                this.tempGeoHolder = {};
             },
 
             fetchCampaign: function () {
@@ -488,6 +532,7 @@
             },
 
             update: function () {
+
             }
 
         }

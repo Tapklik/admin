@@ -19,13 +19,17 @@ elixir(mix => {
 
     mix.copy('resources/components/jquery-search/jquery.searchabledropdown-1.0.8.min.js', 'resources/assets/js');
     mix.copy('resources/components/template/js/main.js', 'resources/assets/js');
+    mix.copy('resources/components/template/css/main.css', 'resources/assets/css');
     mix.copy('resources/components/select2/dist/css/select2.css', 'resources/assets/css');
+    mix.copy('resources/components/datepicker/css/datepicker.css', 'resources/assets/css');
+    mix.copy('resources/components/datepicker/js/bootstrap-datepicker.js', 'resources/assets/js');
     mix.copy('resources/components/select2/dist/js/select2.full.js', 'resources/assets/js');
 
-    mix.styles(['select2.css']);
+    mix.styles(['datepicker.css', 'select2.css', 'main.css']);
 
     mix.scripts([
         'select2.full.js',
-        'main.js',
+        'bootstrap-datepicker.js',
+        'main.js'
     ]);
 });
