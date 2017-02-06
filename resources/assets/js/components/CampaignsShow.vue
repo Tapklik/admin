@@ -288,7 +288,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in mon">
                                     <label>
-                                        <input type="checkbox" :value="i" :checked="campaign.hourofweek.data[i]"/>
+                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -299,7 +299,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in tue">
                                     <label>
-                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
+                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -310,7 +310,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in wed">
                                     <label>
-                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
+                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -324,7 +324,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in thu">
                                     <label>
-                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
+                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -335,7 +335,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in fri">
                                     <label>
-                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
+                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -346,7 +346,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in sat">
                                     <label>
-                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
+                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -360,7 +360,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in sun">
                                     <label>
-                                        <input type="checkbox" :val="i" :checked="campaign.hourofweek.data[i]"/>
+                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -386,6 +386,29 @@
 
             return {
                 campaign: {
+                    name: '',
+                    adomain: '',
+                    ctrurl: '',
+                    bid: 0,
+                    bidmax: 0,
+                    weight: 0,
+                    exchange: '',
+                    node: '',
+                    start_time: {
+                        time: ''
+                    },
+                    end_time: {
+                        time: ''
+                    },
+                    cat: {
+                        data: []
+                    },
+                    geo: {
+                        data: [{}]
+                    },
+                    hourofweek: {
+                        data: []
+                    },
                     budget: {
                         data: {
                             total: 0,
@@ -395,15 +418,6 @@
                             }
                         }
                     },
-                    cat: {
-                        data: false
-                    },
-                    hourofweek: {
-                        data: false
-                    },
-                    geo: {
-                        data: false
-                    }
                 },
                 categories: false,
                 countries: false,
@@ -538,10 +552,4 @@
 
         }
     }
-
-
-
-
-
-
 </script>

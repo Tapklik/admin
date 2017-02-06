@@ -15,4 +15,9 @@ class CampaignsController extends Controller
 	{
 		return view('frontend.campaigns.show', compact('id'));
 	}
+
+	public function create () {
+
+		return view('frontend.campaigns.create');
+	}
 }

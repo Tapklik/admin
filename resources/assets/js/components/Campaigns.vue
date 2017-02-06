@@ -4,9 +4,9 @@
             <div class="col-md-8">
                 <h1 class="title pull-left">Campaigns</h1>
 
-                <button class="btn btn-default pull-right" @click="openCreateCampaign()">
+                <a href="/campaigns/create" class="btn btn-default pull-right">
                     <i class="fa fa-plus"></i> Create new campaign
-                </button>
+                </a>
             </div>
             <div class="col-md-4">
                 <input type="search" class="form-control" placeholder="Search campaign name..." v-model="search"/>

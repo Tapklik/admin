@@ -25,6 +25,11 @@ Route::get('campaigns', [
 	'uses' => 'CampaignsController@index'
 ]);
 
+Route::get('campaigns/create', [
+	'as'   => 'campaigns.create',
+	'uses' => 'CampaignsController@create'
+]);
+
 Route::get('campaigns/{id}', [
 	'as'   => 'campaigns.show',
 	'uses' => 'CampaignsController@show'
