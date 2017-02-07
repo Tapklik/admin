@@ -485,9 +485,9 @@
             createCampaign() {
 
                 this.$http.post(this.$root.api + 'campaigns', this.campaign).then(success => {
-                    console.log(success.data);
+                    swal('Great Successs', 'Campaign created successfully', 'success');
                 }, error => {
-                    alert(error);
+                    swal('Great Successs', error.response, 'error');
                 });
             },
 
