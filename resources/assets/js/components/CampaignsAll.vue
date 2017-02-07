@@ -25,6 +25,7 @@
                 <th>Budget</th>
                 <th>Daily</th>
                 <th>Creatives</th>
+                <th>JSON</th>
                 <th>Approved</th>
             </tr>
             </thead>
@@ -63,6 +64,11 @@
                 <td>${{ campaign.budget.data.daily.total }}</td>
                 <td>
                     <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
+                        View
+                    </a>
+                </td>
+                <td>
+                    <a :href="generateUri('api', campaign.id)"  class="btn btn-primary" target="_blank">
                         View
                     </a>
                 </td>
@@ -134,6 +140,10 @@
 
                     case 'campaigns':
                         endpoint += 'campaigns';
+                    break;
+
+                    case 'api':
+                        endpoint += '//api.tapklik.com/v1/campaigns/' + id;
                     break;
 
                     case 'creatives':

@@ -15,54 +15,72 @@
         <hr/>
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Adomain</th>
-                <th>CTR URL</th>
-                <th>Budget</th>
-                <th>Daily</th>
-                <th>Creatives</th>
-                <th>Approved</th>
-            </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Adomain</th>
+                    <th>CTR URL</th>
+                    <th>Budget</th>
+                    <th>Daily</th>
+                    <th>Creatives</th>
+                    <th>JSON</th>
+                    <th>Approved</th>
+                </tr>
             </thead>
             <tbody class="vcenter">
-            <tr v-show="loading == true">
-                <td colspan="9" class="loader text-center">
-                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                </td>
-            </tr>
-            <tr v-show="noresult">
-                <td colspan="9">
-                    Sorry but theres nothing here... yet :)
-                </td>
-            </tr>
+                <tr v-show="loading == true">
+                    <td colspan="9" class="loader text-center">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    </td>
+                </tr>
+                <tr v-show="noresult">
+                    <td colspan="9">
+                        Sorry but theres nothing here... yet :)
+                    </td>
+                </tr>
 
-            <tr v-for="(campaign, index) in filterByCampaigns">
-                <td>{{ campaign.id }}.</td>
-                <td>{{ campaign.name }}</td>
-                <td>{{ campaign.start_time }}</td>
-                <td>{{ campaign.end_time }}</td>
-                <td>{{ campaign.adomain }}</td>
-                <td>{{ campaign.ctrurl }}</td>
-                <td>${{ campaign.budget.data.total }}</td>
-                <td>${{ campaign.budget.data.daily.total }}</td>
-                <td>
-                    <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
-                        View
-                    </a>
-                </td>
-                <td>
-                    <button class="btn"
-                            :class="{ 'btn-success': campaign.approved, 'btn-danger': !campaign.approved }"
-                            :data-status="campaign.status"
-                            @click="toggleStatus(campaign.id, campaign.approved, index)">
-                        <i class="fa fa-check-circle-o"></i>
-                    </button>
-                </td>
-            </tr>
+                <tr v-for="(campaign, index) in filterByCampaigns">
+                    <td>{{ campaign.id }}</td>
+                    <td>
+                        <a :href="'campaigns/' + campaign.id">
+                            {{ campaign.name }}
+                        </a>
+                    </td>
+                    <td>{{ campaign.start_time }}</td>
+                    <td>{{ campaign.end_time }}</td>
+                    <td>
+                        <a :href="adomain" v-for="adomain in campaign.adomain" target="_blank">
+                            {{ adomain }}
+                        </a>
+                    </td>
+                    <td>
+                        <a :href="campaign.ctrurl" target="_blank">
+                            link
+                        </a>
+                    </td>
+                    <td>${{ campaign.budget.data.total }}</td>
+                    <td>${{ campaign.budget.data.daily.total }}</td>
+                    <td>
+                        <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
+                            View
+                        </a>
+                    </td>
+                    <td>
+                        <a :href="generateUri('api', campaign.id)"  class="btn btn-primary" target="_blank">
+                            View
+                        </a>
+                    </td>
+                    <td>
+                        <button class="btn"
+                                :class="{ 'btn-success': campaign.approved, 'btn-danger': !campaign.approved }"
+                                :data-status="campaign.status"
+                                @click="toggleStatus(campaign.id, campaign.approved, index)">
+                            <i class="fa fa-check-circle-o"></i>
+                        </button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -123,6 +141,10 @@
 
                     case 'campaigns':
                         endpoint += 'campaigns';
+                    break;
+
+                    case 'api':
+                        endpoint += '//api.tapklik.com/v1/campaigns/' + id;
                     break;
 
                     case 'creatives':

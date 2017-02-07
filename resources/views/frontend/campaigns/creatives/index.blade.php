@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('head_scripts')
-    var obj = {id: {!! $creatives['id'] !!}}
+    var obj = {id: '{!! $creatives['id'] !!}'}
 @stop
 
 @section('breadcrumbs')

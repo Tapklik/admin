@@ -84,7 +84,7 @@
     export default {
         mounted() {
 
-            this.fetchCampaign();
+            this.fetchCampaignCreatives();
         },
 
         data: function () {
@@ -112,12 +112,11 @@
 
         methods: {
 
-            fetchCampaign: function () {
+            fetchCampaignCreatives: function () {
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'campaigns/' + obj.id).then( response => {
-                    this.campaign = response.data;
-                    this.creatives = this.campaign.creatives;
+                this.$http.get(this.$root.api + 'campaigns/' + obj.id + '/creatives').then( response => {
+                    this.creatives = response.data;
                     this.loading = false;
                 }, error => {
                     console.log(error);
@@ -244,28 +243,15 @@
 
             filterByCreatives: function () {
 
-                if (typeof this.creatives == 'undefined') return;
+                if (typeof this.creatives.data == 'undefined') return;
                 var self = this;
 
-                var results = this.creatives.filter( function(item) {
+                var results = this.creatives.data.filter( function(item) {
 
-                    return item.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1;
+                    return item.crid.toLowerCase().indexOf(self.search.toLowerCase()) > -1;
                 });
 
                 this.noresult = (!results.length) ? true : false;
-
-                return results;
-            },
-
-            filterByUsers() {
-                if (typeof this.users.data == 'undefined') return;
-
-                var self = this;
-
-                var results = this.users.data.filter( function(item) {
-
-                    return item.first_name.toLowerCase().indexOf(self.searchUsers.toLowerCase()) > -1;
-                });
 
                 return results;
             }

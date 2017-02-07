@@ -16,14 +16,13 @@
                     1. Information
 
                     <button class="btn btn-primary pull-right">
-                        Update Information
+                        Information Section
                     </button>
                 </legend>
             </div>
         </div>
 
         <br>
-
 
         <form id="section-info">
             <div class="row">
@@ -37,16 +36,16 @@
 
                             <div class="col-md-6">
                                 <label>From</label>
-                                <tk-datepicker :date="campaign.start_time"></tk-datepicker>
+                                <!--<tk-datepicker :date="campaign.start_time"></tk-datepicker>-->
                             </div>
                             <div class="col-md-6">
                                 <label>To</label>
-                                <tk-datepicker :date="campaign.end_time"></tk-datepicker>
+                                <!--<tk-datepicker :date="campaign.end_time"></tk-datepicker>-->
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label>Advertiser Domain</label>
-                            <input class="form-control" v-model="campaign.adomain" :value="campaign.adomain"/>
+                            <input class="form-control" v-model="campaign.adomain" :value="adomainForUx"/>
                         </div>
                         <div class="col-md-3">
                             <label>CTR Url</label>
@@ -61,30 +60,29 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" v-show="openSection == 1">
-                    <div class="col-md-4">
-                        <label>Daily Budget</label>
-                        <input class="form-control" :value="campaign.budget.data.total"/>
-                    </div>
-                    <div class="col-md-4">
-                        <label>Max Bid (CPM)</label>
-                        <input class="form-control" v-model="campaign.bidmax" name="bidmax" :value="campaign.bidmax"/>
-                    </div>
-                    <div class="col-md-4">
+                        <div class="col-md-4">
+                            <label>Daily Budget</label>
+                            <input class="form-control" :value="campaign.budget.data.total"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Max Bid (CPM)</label>
+                            <input class="form-control" v-model="campaign.bidmax" name="bidmax" :value="campaign.bidmax"/>
+                        </div>
+                        <div class="col-md-4">
 
-                        <div class="col-md-6">
-                            <label>Daily Budget Pacing</label>
-                            <button class="btn btn-tapklik btn-block disabled" disabled>Set</button>
-                        </div>
-                        <div class="col-md-6">
-                            <label>JSON Output</label>
-                            <button class="btn btn-tapklik btn-block" @click="openJson(campaign)" onclick="return false;">View</button>
+                            <div class="col-md-6">
+                                <label>Daily Budget Pacing</label>
+                                <button class="btn btn-tapklik btn-block disabled" disabled>Set</button>
+                            </div>
+                            <div class="col-md-6">
+                                <label>JSON Output</label>
+                                <button class="btn btn-tapklik btn-block" @click="openJson(campaign)" onclick="return false;">View</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </form>
-
         <br/>
         <div class="row">
             <div class="col-md-12">
@@ -92,7 +90,7 @@
                     2. Categories
 
                     <button class="btn btn-primary pull-right">
-                        Update Categories
+                        Categories Sections
                     </button>
                 </legend>
 
@@ -114,7 +112,7 @@
                     3. Targeting
 
                     <button class="btn btn-primary pull-right">
-                        Update Targeting
+                        Targeting Section
                     </button>
                 </legend>
                 <div class="form-group" v-show="openSection == 3">
@@ -237,7 +235,7 @@
                     4. Admin
 
                     <button class="btn btn-primary pull-right">
-                        Update Admin
+                        Admin Section
                     </button>
                 </legend>
                 <div class="form-group" v-show="openSection == 4">
@@ -408,16 +406,16 @@
                     },
                     hourofweek: {
                         data: []
-                    }
-                },
-                budget: {
-                    data: {
-                        total: 0,
-                        daily: {
+                    },
+                    budget: {
+                        data: {
                             total: 0,
-                            spend: 0
+                            daily: {
+                                total: 0,
+                                spend: 0
+                            }
                         }
-                    }
+                    },
                 },
                 categories: false,
                 countries: false,
@@ -534,6 +532,21 @@
                 this.campaign.geo.data.splice(index, 1);
             }
 
+        },
+
+        computed: {
+
+            adomainForUx() {
+                var items = '';
+
+                for (var item in this.campaign.adomain) {
+
+                        items += this.campaign.adomain[item] + ',';
+                }
+
+console.log();
+                return items;
+            }
         }
     }
 </script>

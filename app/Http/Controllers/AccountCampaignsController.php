@@ -10,4 +10,9 @@ class AccountCampaignsController extends Controller
 		$campaigns = [];
 		return view('frontend.accounts.campaigns.index', compact('campaigns', 'account'));
 	}
+
+	public function show ($id, $cid) {
+
+		return view('frontend.accounts.campaigns.show', compact('cid'));
+	}
 }
