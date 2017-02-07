@@ -37,11 +37,11 @@
 
                             <div class="col-md-6">
                                 <label>From</label>
-                                <input class="form-control" v-model="campaign.start_time" :value="campaign.start_time" data-plugin="datepicker" />
+                                <tk-datepicker :date="campaign.start_time"></tk-datepicker>
                             </div>
                             <div class="col-md-6">
                                 <label>To</label>
-                                <input class="form-control" v-model="campaign.end_time" :value="campaign.end_time" data-plugin="datepicker" />
+                                <tk-datepicker :date="campaign.end_time"></tk-datepicker>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -382,7 +382,7 @@
             this.fetchCountries();
         },
 
-        data: function () {
+        data() {
 
             return {
                 campaign: {
@@ -408,16 +408,16 @@
                     },
                     hourofweek: {
                         data: []
-                    },
-                    budget: {
-                        data: {
+                    }
+                },
+                budget: {
+                    data: {
+                        total: 0,
+                        daily: {
                             total: 0,
-                            daily: {
-                                total: 0,
-                                spend: 0
-                            }
+                            spend: 0
                         }
-                    },
+                    }
                 },
                 categories: false,
                 countries: false,
@@ -438,13 +438,12 @@
 
         methods: {
 
-            init: function () {
+            init() {
                 $('#_search-countries').on('select2:select', function (evt) {
 
                     $.ajax({
                         url: '/data/countries/' + $('#_search-countries').val(),
                         success: function (response) {
-
                             var html = '';
                             $.each(response[0].cities, function () {
                                 var item = this;
@@ -453,7 +452,7 @@
 
                             $('#_search-cities').html(html);
                             $('#_search-cities').select2({
-                                placeholder: 'Type a country'
+                                placeholder: 'Type a city'
                             });
                         }
                     });
@@ -470,29 +469,14 @@
                             self.tempGeoHolder = {"city": response.city, "country": response.country, "region": response.region, "region_name": response.region_name};
                         }
                     });
-
-                    console.log()
                 });
             },
 
             updateCampaign: function (id) {
-                var data = {
-                    'name': this.campaign.name,
-                    'start_time': this.campaign.start_time,
-                    'end_time': this.campaign.end_time,
-                    'adomain': this.campaign.adomain[0],
-                    'ctrurl': this.campaign.ctrurl,
-                    'maxbid': this.campaign.maxbid,
-                    'exchange': this.campaign.exchange[0],
-                    'weight': this.campaign.weight,
-                    'status': this.campaign.status,
-                    'node': this.campaign.node,
-
-                };
 
                 var self = this;
 
-                this.$http.put(this.$root.api + 'campaigns/' + obj.id, data).then( response => {
+                this.$http.put(this.$root.api + 'campaigns/' + obj.id, campaign).then( response => {
                     self.campaign = response.data.data;
                 }, error => {
                     alert(error.error.message);
@@ -511,12 +495,12 @@
                 this.openSection = section;
             },
 
-            addGeoItem: function () {
+            addGeoItem() {
                 this.campaign.geo.data.push(this.tempGeoHolder);
                 this.tempGeoHolder = {};
             },
 
-            fetchCampaign: function () {
+            fetchCampaign() {
 
                 this.loading = true;
 

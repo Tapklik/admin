@@ -250,18 +250,28 @@
                     </div>
                     <div class="col-md-2">
                         <label>Status</label> <br/>
-                        <select class="form-control">
+                        <select class="form-control" v-model="campaign.status">
                             <option :value="'running'">Running</option>
                             <option :value="'stopped'">Stopped</option>
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <label>Weight</label> <br/>
-                        <input class="form-control" v-model="campaign.weight"/>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Weight</label> <br/>
+                                <input class="form-control" v-model="campaign.weight"/>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Exchange</label> <br/>
+                                <input class="form-control" v-model="campaign.exchange"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <label>Exchange</label> <br/>
-                        <input class="form-control" v-model="campaign.exchange"/>
+                        <label>Account</label> <br/>
+                        <select class="form-control" v-model="campaign.account_id">
+                            <option v-for="account in accounts" :value="account.id" >{{ account.name }}</option>
+                        </select>
                     </div>
                     <div class="col-md-2">
                         <label>Node</label> <br/>
@@ -379,6 +389,7 @@
             this.init();
             this.fetchCategories();
             this.fetchCountries();
+            this.fetchAccounts();
         },
 
         data() {
@@ -394,6 +405,8 @@
                     weight: 0,
                     exchange: '',
                     node: '',
+                    account_id: 1,
+                    status: '',
                     start_time: {
                         time: ''
                     },
@@ -408,7 +421,7 @@
                     },
                     hourofweek: {
                         data: []
-                    }
+                    },
                 },
                 budget: {
                     data: {
@@ -421,6 +434,7 @@
                 },
                 categories: false,
                 countries: false,
+                accounts: false,
                 tempGeoHolder: false,
                 mon: {1:1,2:2,3:3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24},
                 tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
@@ -489,6 +503,14 @@
             fetchCountries() {
                 this.$http.get('/data/countries').then( response => {
                     this.countries = response.data;
+                }, error => {
+                    console.log(error);
+                });
+            },
+
+            fetchAccounts() {
+                this.$http.get(this.$root.api + 'accounts').then( response => {
+                    this.accounts = response.data.data;
                 }, error => {
                     console.log(error);
                 });
