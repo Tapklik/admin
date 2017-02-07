@@ -402,8 +402,8 @@
                     ctrurl: '',
                     bid: 0,
                     bidmax: 0,
-                    weight: 0,
-                    exchange: '',
+                    weight: 1,
+                    exchange: 1,
                     node: '',
                     account_id: 1,
                     status: '',
@@ -417,7 +417,7 @@
                         data: []
                     },
                     geo: {
-                        data: [{}]
+                        data: []
                     },
                     hourofweek: {
                         data: []
