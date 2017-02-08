@@ -127,7 +127,7 @@ Route::get('test', function () {
 });
 
 Route::get('prepare', function () {
-	die;
+
 	$countries = collect(
 		json_decode(
 			file_get_contents(
