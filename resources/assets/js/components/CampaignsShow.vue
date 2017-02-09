@@ -30,26 +30,26 @@
                     <div class="form-group" v-show="openSection == 1">
                         <div class="col-md-3">
                             <label>Name</label>
-                            <input class="form-control" v-model="campaign.name" :value="campaign.name"/>
+                            <input class="form-control" v-model="campaignPayload.name" :value="campaign.name"/>
                         </div>
                         <div class="col-md-3">
 
                             <div class="col-md-6">
                                 <label>From</label>
-                                <!--<tk-datepicker :date="campaign.start_time"></tk-datepicker>-->
+                                <tk-datepicker :date="campaignPayload.start_time"></tk-datepicker>
                             </div>
                             <div class="col-md-6">
                                 <label>To</label>
-                                <!--<tk-datepicker :date="campaign.end_time"></tk-datepicker>-->
+                                <tk-datepicker :date="campaignPayload.end_time"></tk-datepicker>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label>Advertiser Domain</label>
-                            <input class="form-control" v-model="campaign.adomain" :value="adomainForUx"/>
+                            <input class="form-control" v-model="campaignPayload.adomain" :value="adomainForUx"/>
                         </div>
                         <div class="col-md-3">
                             <label>CTR Url</label>
-                            <input class="form-control" v-model="campaign.ctrurl" :value="campaign.ctrurl"/>
+                            <input class="form-control" v-model="campaignPayload.ctrurl" :value="campaign.ctrurl"/>
                         </div>
                     </div>
                 </div>
@@ -62,11 +62,11 @@
                     <div class="form-group" v-show="openSection == 1">
                         <div class="col-md-4">
                             <label>Daily Budget</label>
-                            <input class="form-control" :value="campaign.budget.data.total"/>
+                            <input class="form-control" v-model="campaignPayload.budget.data.total"/>
                         </div>
                         <div class="col-md-4">
                             <label>Max Bid (CPM)</label>
-                            <input class="form-control" v-model="campaign.bidmax" name="bidmax" :value="campaign.bidmax"/>
+                            <input class="form-control" v-model="campaignPayload.bidmax" name="bidmax" :value="campaign.bidmax"/>
                         </div>
                         <div class="col-md-4">
 
@@ -97,7 +97,7 @@
                 <div class="form-group" v-show="openSection == 2">
                     <div class="col-xs-12 col-md-2" v-for="category in categories.body">
                         <label>
-                            <input type="checkbox" :value="category" v-model="campaign.cat.data"/>
+                            <input type="checkbox" :value="category" v-model="campaignPayload.cat.data"/>
                             {{ category }}
                         </label>
                     </div>
@@ -255,15 +255,15 @@
                     </div>
                     <div class="col-md-2">
                         <label>Weight</label> <br/>
-                        <input class="form-control" :value="campaign.weight"/>
+                        <input class="form-control" v-model="campaignPayload.weight"/>
                     </div>
                     <div class="col-md-2">
                         <label>Exchange</label> <br/>
-                        <input class="form-control" :value="campaign.exchange"/>
+                        <input class="form-control" v-model="campaignPayload.exchange"/>
                     </div>
                     <div class="col-md-2">
                         <label>Node</label> <br/>
-                        <input class="form-control" :value="campaign.node"/>
+                        <input class="form-control" v-model="campaignPayload.node"/>
                     </div>
                     <div class="col-md-2">
                         <label>Pacing</label> <br/>
@@ -286,7 +286,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in mon">
                                     <label>
-                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
+                                        <input type="checkbox" :value="key" :checked="campaignPayload.hourofweek.data[i]" v-model="campaignPayload.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -297,7 +297,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in tue">
                                     <label>
-                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
+                                        <input type="checkbox" :value="key" :checked="campaignPayload.hourofweek.data[i]" v-model="campaignPayload.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -308,7 +308,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in wed">
                                     <label>
-                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
+                                        <input type="checkbox" :value="key" :checked="campaignPayload.hourofweek.data[i]" v-model="campaignPayload.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -322,7 +322,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in thu">
                                     <label>
-                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
+                                        <input type="checkbox" :value="key" :checked="campaignPayload.hourofweek.data[i]" v-model="campaignPayload.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -333,7 +333,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in fri">
                                     <label>
-                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
+                                        <input type="checkbox" :value="key" :checked="campaignPayload.hourofweek.data[i]" v-model="campaignPayload.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -344,7 +344,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in sat">
                                     <label>
-                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
+                                        <input type="checkbox" :value="key" :checked="campaignPayload.hourofweek.data[i]" v-model="campaignPayload.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -358,7 +358,7 @@
                             <ul class="list-unstyled">
                                 <li v-for="(i, key) in sun">
                                     <label>
-                                        <input type="checkbox" :value="key" :checked="campaign.hourofweek.data[i]" v-model="campaign.hourofweek.data" />
+                                        <input type="checkbox" :value="key" :checked="campaignPayload.hourofweek.data[i]" v-model="campaignPayload.hourofweek.data" />
                                         {{ i }}
                                     </label>
                                 </li>
@@ -384,6 +384,36 @@
 
             return {
                 campaign: {
+                    name: '',
+                    adomain: '',
+                    ctrurl: '',
+                    bid: 0,
+                    bidmax: 0,
+                    weight: 0,
+                    exchange: '',
+                    node: '',
+                    start_time: '',
+                    end_time: '',
+                    cat: {
+                        data: []
+                    },
+                    geo: {
+                        data: [{}]
+                    },
+                    hourofweek: {
+                        data: []
+                    },
+                    budget: {
+                        data: {
+                            total: 0,
+                            daily: {
+                                total: 0,
+                                spend: 0
+                            }
+                        }
+                    },
+                },
+                campaignPayload: {
                     name: '',
                     adomain: '',
                     ctrurl: '',
@@ -474,7 +504,8 @@
 
                 var self = this;
 
-                this.$http.put(this.$root.api + 'campaigns/' + obj.id, campaign).then( response => {
+                this.campaignPayload['account_id'] = 1;
+                this.$http.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload).then( response => {
                     self.campaign = response.data.data;
                 }, error => {
                     alert(error.error.message);
@@ -503,7 +534,14 @@
                 this.loading = true;
 
                 this.$http.get(this.$root.api + 'campaigns/' + obj.id).then( response => {
+                    var campaignData = response.data.data;
+
                     this.campaign = response.data.data;
+
+                    campaignData['start_time'] = {time:  this.campaign.start_time};
+                    campaignData['end_time'] = {time:  this.campaign.end_time};
+                    this.campaignPayload = campaignData;
+
                     this.loading = false;
                 }, error => {
                     console.log(error);
@@ -513,7 +551,7 @@
             fetchCategories: function () {
 
                 this.$http.get('/data/categories').then( response => {
-                    this.categories = response;
+                    this.categories = response.data;
                 }, error => {
                     console.log(error);
                 });
