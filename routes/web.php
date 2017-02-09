@@ -1,5 +1,9 @@
 <?php
 
+Route::get('/', function () {
+    return redirect('/campaigns');
+});
+
 Route::get('dashboard', [
 	'as'   => 'dashboard.index',
 	'uses' => 'DashboardController@index'
