@@ -95,7 +95,7 @@
                 </legend>
 
                 <div class="form-group" v-show="openSection == 2">
-                    <div class="col-xs-12 col-md-2" v-for="category in categories.body">
+                    <div class="col-xs-12 col-md-2" v-for="category in categories">
                         <label>
                             <input type="checkbox" :value="category" v-model="campaignPayload.cat.data"/>
                             {{ category }}
@@ -473,6 +473,7 @@
                         url: '/data/countries/' + $('#_search-countries').val(),
                         success: function (response) {
                             var html = '';
+                            console.log(response);
                             $.each(response[0].cities, function () {
                                 var item = this;
                                 html += '<option value="' + item.id + '">' + item.name + '</option>';
@@ -506,9 +507,10 @@
 
                 this.campaignPayload['account_id'] = 1;
                 this.$http.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload).then( response => {
-                    self.campaign = response.data.data;
+                console.log(response);
+                    self.campaign = response.data;
                 }, error => {
-                    alert(error.error.message);
+                    console.log(error);
                 });
             },
 
