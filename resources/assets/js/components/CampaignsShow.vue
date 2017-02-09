@@ -473,12 +473,10 @@
                         url: '/data/countries/' + $('#_search-countries').val(),
                         success: function (response) {
                             var html = '';
-                            console.log(response);
-                            $.each(response[0].cities, function () {
+                            $.each(response, function () {
                                 var item = this;
                                 html += '<option value="' + item.id + '">' + item.name + '</option>';
                             });
-
                             $('#_search-cities').html(html);
                             $('#_search-cities').select2({
                                 placeholder: 'Type a city'

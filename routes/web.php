@@ -1,5 +1,7 @@
 <?php
+
 Route::get('/', function () {
+
     return redirect('/campaigns');
 });
 
@@ -78,8 +80,12 @@ Route::get('data/countries', function () {
 Route::get('data/countries/{code}', function ($code) {
 
 	try {
-		$cities = \App\Country::with('cities')->where(['code' => $code])->get();
+	    $country = \App\Country::where(['iso2' => $code])->first();
+	    $geographies = \App\Geography::where(['country_id' => $country->id])->get();
+
+	    return response()->json($geographies);
 	} catch (Exception $e) {
+	    echo $e->getMessage();
 		$cities = [];
 	}
 
