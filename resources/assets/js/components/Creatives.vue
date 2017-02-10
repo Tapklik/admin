@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-md-8">
-                <h1 class="title pull-left">Creatives for Campaign {{ campaign.data.name }}</h1>
+                <h1 class="title pull-left">Creatives for Campaign</h1>
 
                 <button class="btn btn-default pull-right" @click="openCreateAccount()">
                     <i class="fa fa-plus"></i> Create new creative
@@ -40,8 +40,8 @@
                 </td>
             </tr>
 
-            <tr v-for="(creative, index) in filterByCreatives">
-                <td>{{ creative.id }}.</td>
+            <tr v-for="(creative, index) in creatives">
+                <td>{{ creative.crid }}</td>
                 <td>{{ creative.name }}</td>
                 <td>1000{{ creative.id }}</td>
                 <td>rok@tapklik.com</td>
@@ -50,7 +50,7 @@
                         View
                     </button>
                 </td>
-                <td>${{ creative.budget.data.value }}</td>
+                <td>$ </td>
                 <td>
                     <a :href="generateUri('campaigns', creative.id)" class="btn btn-primary">
                         View
@@ -90,21 +90,17 @@
         data: function () {
 
             return {
-                creatives: {},
-                campaign: {
+                creatives: {
                     data: {
-                        name: ''
+                        budget: {
+                            data: {}
+                        }
                     }
                 },
-                users: {},
                 search: '',
-                searchUsers: '',
                 urls: {
                     accounts: '/accounts/'
                 },
-                countriesList: {},
-                timezonesList: {},
-                languagesList: {},
                 loading: false,
                 noresult: false
             }
@@ -118,103 +114,7 @@
                 this.$http.get(this.$root.api + 'campaigns/' + obj.id + '/creatives').then( response => {
                     this.creatives = response.data;
                     this.loading = false;
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            fetchCountries: function () {
-
-                this.$http.get('/data/countries').then( response => {
-                    this.countriesList = response;
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            fetchTimezones: function () {
-
-                this.$http.get('/data/timezones').then( response => {
-                    this.timezonesList = response;
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            fetchLanguages: function () {
-
-                this.$http.get('/data/languages').then( response => {
-                    this.languagesList = response;
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            openUsers(id) {
-
-                this.loading = true;
-
-                this.$http.get(this.$root.api + 'accounts/' + id + '/users').then( response => {
-
-                    this.loading = false;
-
-                    this.users = response.data;
-
-                    $('#_modal-users').modal();
-
-                }, error => {
-                    alert(error);
-                });
-            },
-
-            openSettings(id) {
-
-                this.loading = true;
-
-                this.$http.get(this.$root.api + 'accounts/' + id).then(response => {
-
-                    this.account = response.data;
-                    this.loading = false;
-
-                    $('#_modal-edit-account').modal();
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            openCreateAccount() {
-
-                $('#_modal-create-new-account').modal();
-            },
-
-            createNewAccount: function () {
-                this.loading = true;
-
-                return this.$http.post(this.$root.api + 'accounts', this.account).then(response => {
-
-                    this.fetchAccounts();
-                    this.loading = false;
-
-                    this.closeModal();
-                }, error => {
-
-                    console.log(error);
-                    this.loading = false;
-                    this.closeModal();
-                });
-            },
-
-            closeModal() {
-                $('#_modal-create-new-account').modal('close');
-            },
-
-            toggleStatus(id, status, index) {
-
-                status = (1 == status) ? 0 : 1;
-                this.accounts.data[index].status = status;
-
-                this.$http.put(this.$root.api + 'accounts/' + id, {status: status}).then(response => {
-                    this.fetchAccounts();
+                    console.log(this.creatives);
                 }, error => {
                     console.log(error);
                 });
@@ -236,27 +136,7 @@
                 }
 
                 return '/accounts/' + id + '/' + endpoint;
-            }
+            },
         },
-
-        computed: {
-
-            filterByCreatives: function () {
-
-                if (typeof this.creatives.data == 'undefined') return;
-                var self = this;
-
-                var results = this.creatives.data.filter( function(item) {
-
-                    return item.crid.toLowerCase().indexOf(self.search.toLowerCase()) > -1;
-                });
-
-                this.noresult = (!results.length) ? true : false;
-
-                return results;
-            }
-        }
     }
-
-
 </script>
