@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-3">
                             <label>Advertiser Domain</label>
-                            <input class="form-control" v-model="campaignPayload.adomain" :value="adomainForUx"/>
+                            <input class="form-control" v-model="campaignPayload.adomain"/>
                         </div>
                         <div class="col-md-3">
                             <label>CTR Url</label>
@@ -248,9 +248,9 @@
                     </div>
                     <div class="col-md-2">
                         <label>Status</label> <br/>
-                        <select class="form-control">
-                            <option value="stopped">Running</option>
-                            <option value="stopped" selected>Stopped</option>
+                        <select class="form-control" v-model="campaignPayload.status">
+                            <option>Running</option>
+                            <option>Stopped</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -492,7 +492,7 @@
                     $.ajax({
                         url: '/data/countries/' + $('#_search-countries').val() + '/' + $('#_search-cities').val(),
                         success: function (response) {
-
+console.log(response);
                             self.tempGeoHolder = {"city": response.city, "country": response.country, "region": response.region, "region_name": response.region_name};
                         }
                     });
@@ -505,8 +505,8 @@
 
                 this.campaignPayload['account_id'] = 1;
                 this.$http.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload).then( response => {
-                console.log(response);
-                    self.campaign = response.data;
+                    self.campaign.data = response.data;
+                    swal('Success', 'Made it... all good... phewww', 'success');
                 }, error => {
                     console.log(error);
                 });

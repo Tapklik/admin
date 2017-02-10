@@ -95,13 +95,13 @@ Route::get('data/countries/{code}', function ($code) {
 Route::get('data/countries/{code}/{id}', function ($code, $id) {
 
 	try {
-		$city = \App\City::with(['country'])->findOrFail($id);
+		$city = \App\Geography::with(['country'])->findOrFail($id);
 	} catch (Exception $e) {
 		$city = [];
 	}
 
 	return response()->json([
-		"country"     => $city->country->code,
+		"country"     => $city->country->name,
 		"city"        => $city->name,
 		"region"      => $city->region,
 		"region_name" => $city->region_name,
