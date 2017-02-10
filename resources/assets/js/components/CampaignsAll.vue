@@ -31,12 +31,12 @@
             </thead>
             <tbody class="vcenter">
             <tr v-show="loading == true">
-                <td colspan="9" class="loader text-center">
+                <td colspan="11" class="loader text-center">
                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                 </td>
             </tr>
             <tr v-show="noresult">
-                <td colspan="9">
+                <td colspan="11">
                     Sorry but theres nothing here... yet :)
                 </td>
             </tr>
