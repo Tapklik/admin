@@ -38,12 +38,12 @@
                 </td>
                 <td>
                     <a :href="creative.ctrurl" class="btn btn-primary" target="_blank">
-                        Viev
+                        View
                     </a>
                 </td>
                 <td>
                     <a :href="creative.iurl" class="btn btn-primary" target="_blank">
-                        Viev
+                        View
                     </a>
                 </td>
                 <td>{{ creative.type }}</td>

@@ -125,7 +125,7 @@
                 status = (1 == status) ? 0 : 1;
                 this.campaigns.data[index].status = status;
 
-                this.$http.put(this.$root.api + 'campaigns/' + id, {approved: status}).then(response => {
+                this.$http.put(this.$root.api + 'campaigns/' + id + '/status', {approved: status}).then(response => {
                     this.fetchCampaigns();
                 }, error => {
                     console.log(error);
