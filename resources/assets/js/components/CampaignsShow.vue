@@ -66,7 +66,7 @@
                         </div>
                         <div class="col-md-3">
                             <label>Bid</label>
-                            <input class="form-control" v-model="campaignPayload.bid" name="bid" :value="campaign.bid"/>
+                            <input class="form-control" v-model="campaignPayload.bid" :name="bid" :value="campaign.bid"/>
                         </div>
                         <div class="col-md-3">
                             <label>Max Bid (CPM)</label>
