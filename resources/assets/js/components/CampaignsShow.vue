@@ -249,8 +249,8 @@
                     <div class="col-md-2">
                         <label>Status</label> <br/>
                         <select class="form-control" v-model="campaignPayload.status">
-                            <option>Running</option>
-                            <option>Stopped</option>
+                            <option>running</option>
+                            <option>stopped</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -467,10 +467,14 @@
         methods: {
 
             init() {
+                var self = this;
                 $('#_search-countries').on('select2:select', function (evt) {
 
                     $.ajax({
                         url: '/data/countries/' + $('#_search-countries').val(),
+                        beforeStart: function () {
+                            self.tempGeoHolder = {};
+                        },
                         success: function (response) {
                             var html = '';
                             $.each(response, function () {
@@ -481,6 +485,8 @@
                             $('#_search-cities').select2({
                                 placeholder: 'Type a city'
                             });
+
+                            self.tempGeoHolder = {"city": '', "country": response.country, "region": '', "region_name": ''};
                         }
                     });
                 });
@@ -492,7 +498,7 @@
                     $.ajax({
                         url: '/data/countries/' + $('#_search-countries').val() + '/' + $('#_search-cities').val(),
                         success: function (response) {
-console.log(response);
+
                             self.tempGeoHolder = {"city": response.city, "country": response.country, "region": response.region, "region_name": response.region_name};
                         }
                     });
