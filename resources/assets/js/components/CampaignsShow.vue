@@ -60,15 +60,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" v-show="openSection == 1">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>Daily Budget</label>
                             <input class="form-control" v-model="campaignPayload.budget.data.total"/>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label>Bid</label>
+                            <input class="form-control" v-model="campaignPayload.bid" name="bid" :value="campaign.bid"/>
+                        </div>
+                        <div class="col-md-3">
                             <label>Max Bid (CPM)</label>
                             <input class="form-control" v-model="campaignPayload.bidmax" name="bidmax" :value="campaign.bidmax"/>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
 
                             <div class="col-md-6">
                                 <label>Daily Budget Pacing</label>
