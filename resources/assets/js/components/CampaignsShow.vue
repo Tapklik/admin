@@ -124,17 +124,27 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <label>Geo Country</label> <br />
-                                <select class="form-control" placeholder="Type a country..." id="_search-countries">
-                                    <option v-for="country in this.countries" :value="country.code">
-                                        {{ country.name }}
-                                    </option>
-                                </select>
+                                <form>
+                                    <div class="typeahead__container">
+                                        <div class="typeahead__field">
+
+                                            <span class="typeahead__query">
+                                                <input class="js-typeahead-input"
+                                                       name="q"
+                                                       type="search"
+                                                       id="_search-countries"
+                                                       placeholder="Type a country..."
+                                                       autofocus
+                                                       autocomplete="off">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+
                             </div>
                             <div class="col-md-5">
                                 <label>Geo City</label>
-                                <select class="form-control" placeholder="Type a city..." id="_search-cities">
-                                    <option></option>
-                                </select>
+                                <input type="test" class="form-control" placeholder="Type a city..." id="_search-cities" v-model="tempGeoHolder.city">
                             </div>
                             <div class="col-md-2">
                                 <label>&nbsp; </label>
@@ -453,11 +463,16 @@
                 },
                 categories: false,
                 countries: false,
+                cities: [],
+                fullCityData: {},
                 loading: false,
                 noresult: false,
                 showgeo: false,
                 openSection: 1,
-                tempGeoHolder: {},
+                tempGeoHolder: {
+                    country: '',
+                    city: ''
+                },
                 mon: {1:1,2:2,3:3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24},
                 tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
                 wed: {49:1,50:2,51:3,52:4,53:5,54:6,55:7,56:8,57:9,58:10,59:11,60:12,61:13,62:14,63:15,64:16,65:17,66:18,67:19,68:20,69:21,70:22,71:23,72:24},
@@ -472,38 +487,45 @@
 
             init() {
                 var self = this;
-                $('#_search-countries').on('select2:select', function (evt) {
-
-                    $.ajax({
-                        url: '/data/countries/' + $('#_search-countries').val(),
-                        beforeStart: function () {
-                            self.tempGeoHolder = {};
+                $(function () {
+                    $.typeahead({
+                        input: '#_search-countries',
+                        order: "desc",
+                        source: {
+                            data: [
+                                "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
+                                "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
+                                "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia",
+                                "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma",
+                                "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad",
+                                "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic", "Congo, Republic of the",
+                                "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti",
+                                "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador",
+                                "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon",
+                                "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Greenland", "Grenada", "Guatemala", "Guinea",
+                                "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India",
+                                "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+                                "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Laos",
+                                "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+                                "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
+                                "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Mongolia", "Morocco", "Monaco",
+                                "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger",
+                                "Nigeria", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru",
+                                "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Samoa", "San Marino",
+                                "Sao Tome", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone",
+                                "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain",
+                                "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan",
+                                "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
+                                "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States",
+                                "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+                            ]
                         },
-                        success: function (response) {
-                            var html = '';
-                            $.each(response, function () {
-                                var item = this;
-                                html += '<option value="' + item.id + '">' + item.name + '</option>';
-                            });
-                            $('#_search-cities').html(html);
-                            $('#_search-cities').select2({
-                                placeholder: 'Type a city'
-                            });
-
-                            self.tempGeoHolder = {"city": '', "country": response.country, "region": '', "region_name": ''};
-                        }
-                    });
-                });
-
-                var self = this;
-
-                $('#_search-cities').on('select2:select', function (evt) {
-
-                    $.ajax({
-                        url: '/data/countries/' + $('#_search-countries').val() + '/' + $('#_search-cities').val(),
-                        success: function (response) {
-
-                            self.tempGeoHolder = {"city": response.city, "country": response.country, "region": response.region, "region_name": response.region_name};
+                        callback: {
+                            onInit: function (node) {
+                            },
+                            onClick(node, el, data) {
+                                self.tempGeoHolder.country = data.display.toLowerCase();
+                            }
                         }
                     });
                 });
@@ -535,8 +557,24 @@
             },
 
             addGeoItem() {
-                this.campaign.geo.data.push(this.tempGeoHolder);
-                this.tempGeoHolder = {};
+                //this.campaign.geo.data.push(this.tempGeoHolder);
+                //this.tempGeoHolder = {};
+                var self = this;
+
+                this.$http.put(this.$root.api + 'campaigns/' + obj.id + '/geography', {country: self.tempGeoHolder.country, city: self.tempGeoHolder.city}).then(response => {
+                    var data = {
+                        country: response.data.country,
+                        region: response.data.region,
+                        region_name: response.data.region_name,
+                        city: response.data.city,
+                    };
+
+                    self.campaignPayload.geo.data.push(data);
+                    self.tempGeoHolder = {country: '',city: ''};
+                    $('#_search-countries').val('');
+                }, error => {
+                    swal('Ooops', error.message, 'error');
+                });
             },
 
             fetchCampaign() {
@@ -592,7 +630,6 @@
                         items += this.campaign.adomain[item] + ',';
                 }
 
-console.log();
                 return items;
             }
         }

@@ -29,14 +29,17 @@ elixir(mix => {
     mix.copy('resources/components/sweetalert/dist/sweetalert.css', 'resources/assets/css');
     mix.copy('resources/components/sweetalert/dist/sweetalert.min.js ', 'resources/assets/js');
     mix.copy('resources/components/select2/dist/js/select2.full.js', 'resources/assets/js');
+    mix.copy('resources/components/typeahead/dist/jquery.typeahead.min.js', 'resources/assets/js');
+    mix.copy('resources/components/typeahead/dist/jquery.typeahead.min.css', 'resources/assets/css');
 
-    mix.styles(['datepicker.css', 'select2.css', 'main.css', 'jsonFormatter-darkTheme.min.css', 'sweetalert.css']);
+    mix.styles(['datepicker.css', 'select2.css', 'main.css', 'jsonFormatter-darkTheme.min.css', 'sweetalert.css', 'jquery.typeahead.min.css']);
 
     mix.scripts([
         'select2.full.js',
         'bootstrap-datepicker.js',
         'jsonFormatter.min.js',
         'sweetalert.min.js',
+        'jquery.typeahead.min.js',
         'main.js'
     ]);
 });

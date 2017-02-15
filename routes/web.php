@@ -92,6 +92,19 @@ Route::get('data/countries/{code}', function ($code) {
 	return response()->json($cities);
 });
 
+Route::get('search/geography/country', function () {
+
+    $country = \App\Country::where('name', 'LIKE', '%' . request('q') . '%')->get(['name']);
+
+    return response()->json(['data' => $country]);
+});
+
+Route::get('search/geography/city', function () {
+    $city = \App\Geography::where('name', 'LIKE', '%' . request('q') . '%')->get(['name']);
+
+    return response()->json($city);
+});
+
 Route::get('data/countries/{code}/{id}', function ($code, $id) {
 
 	try {
