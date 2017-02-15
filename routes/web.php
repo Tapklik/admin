@@ -174,8 +174,7 @@ Route::get('prepare', function () {
 			)
 		)
 	)->each(function ($region) use (&$regions) {
-		$parts = collect(explode(',', $region));
-		$parts->offsetUnset($parts->count() - 1);
+		$parts = collect(explode("\t", $region));
 
 		if ( !$parts->offsetExists(1)) {
 			return;
@@ -188,11 +187,13 @@ Route::get('prepare', function () {
 			];
 		} else {
 			$regions[$parts->offsetGet(1)]['cities'][] = [
-				'city'        => $parts->offsetGet(0),
+				'key'        => $parts->offsetGet(0),
+				'city'        => $parts->offsetGet(1),
 				'region'      => $parts->offsetGet(2),
 				'region_name' => $parts->offsetGet(3)
 			];
 		}
+
 	});
 
 	$prepared = $countries->flatMap(function ($country) use ($regions) {
@@ -217,7 +218,8 @@ Route::get('prepare', function () {
 
 			\App\City::create([
 				'country_id'  => $newCountry->id,
-				'name'        => $city['city'],
+				'key'        => $city['city'],
+				'city'        => $city['city'],
 				'region'      => $city['region'],
 				'region_name' => $city['region_name'],
 			]);

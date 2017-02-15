@@ -538,6 +538,8 @@
                 this.campaignPayload['account_id'] = 1;
                 this.$http.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload).then( response => {
                     self.campaign.data = response.data;
+                    console.log(self.campaign.data);
+
                     swal('Success', 'Made it... all good... phewww', 'success');
                 }, error => {
                     console.log(error);
@@ -557,11 +559,11 @@
             },
 
             addGeoItem() {
-                //this.campaign.geo.data.push(this.tempGeoHolder);
-                //this.tempGeoHolder = {};
                 var self = this;
 
                 this.$http.put(this.$root.api + 'campaigns/' + obj.id + '/geography', {country: self.tempGeoHolder.country, city: self.tempGeoHolder.city}).then(response => {
+                console.log(response);
+
                     var data = {
                         country: response.data.country,
                         region: response.data.region,
