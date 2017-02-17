@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-3">
                             <label>Advertiser Domain</label>
-                            <input class="form-control" v-model="campaignPayload.adomain"/>
+                            <input class="form-control" :value="transformAdomain" v-model="tempAdomain" />
                         </div>
                         <div class="col-md-3">
                             <label>CTR Url</label>
@@ -62,15 +62,15 @@
                     <div class="form-group" v-show="openSection == 1">
                         <div class="col-md-3">
                             <label>Daily Budget</label>
-                            <input class="form-control" v-model="campaignPayload.budget.data.total"/>
+                            <input class="form-control" v-model="campaignPayload.budget.data.total" :name="total" />
                         </div>
                         <div class="col-md-3">
                             <label>Bid</label>
-                            <input class="form-control" v-model="campaignPayload.bid" :name="bid" :value="campaign.bid"/>
+                            <input class="form-control" v-model="campaignPayload.bid" :name="bid" />
                         </div>
                         <div class="col-md-3">
                             <label>Max Bid (CPM)</label>
-                            <input class="form-control" v-model="campaignPayload.bidmax" name="bidmax" :value="campaign.bidmax"/>
+                            <input class="form-control" v-model="campaignPayload.bidmax" name="bidmax" />
                         </div>
                         <div class="col-md-3">
 
@@ -202,6 +202,36 @@
                             </ul>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <p>&nbsp;</p>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label>Make</label>
+                            <input type="text" placeholder="Make" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <label>Model</label>
+                            <input type="text" placeholder="Model" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <label>Operating System</label>
+                            <input type="text" placeholder="Os" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label>User Agent</label>
+                            <input type="text" placeholder="UA" class="form-control" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>&nbsp;</label>
+                            <a class="btn btn-primary">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -219,9 +249,9 @@
                 <div class="form-group" v-show="openSection == 4">
                     <div class="col-md-2">
                         <label>Test</label> <br/>
-                        <select class="form-control">
-                            <option value="true">TRUE</option>
-                            <option value="false" selected>FALSE</option>
+                        <select class="form-control" v-model="campaignPayload.test">
+                            <option>true</option>
+                            <option>false</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -237,7 +267,7 @@
                     </div>
                     <div class="col-md-2">
                         <label>Exchange</label> <br/>
-                        <input class="form-control" v-model="campaignPayload.exchange"/>
+                        <input class="form-control" :value="transformExchange" v-model="tempExchange" />
                     </div>
                     <div class="col-md-2">
                         <label>Node</label> <br/>
@@ -452,6 +482,8 @@
                 noresult: false,
                 showgeo: false,
                 openSection: 1,
+                tempAdomain: '',
+                tempExchange: '',
                 tempGeoHolder: {
                     country: '',
                     city: ''
@@ -520,6 +552,10 @@
 
                 this.campaignPayload['account_id'] = 1;
                 this.campaignPayload['demography'] = {gender: self.chosenGender, group: self.chosenDemography};
+
+                // Implode back the data
+                this.campaignPayload['adomain'] = this.tempAdomain.split(',');
+                this.campaignPayload['exchange'] = this.tempExchange.split(',');
 
                 this.$http.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload).then( response => {
                     self.campaign.data = response.data;
@@ -604,12 +640,12 @@
 
                 this.campaign.geo.data.splice(index, 1);
             }
-
         },
 
         computed: {
 
-            adomainForUx() {
+
+            transformAdomain() {
                 var items = '';
 
                 for (var item in this.campaign.adomain) {
@@ -617,6 +653,28 @@
                         items += this.campaign.adomain[item] + ',';
                 }
 
+                if (this.campaign.adomain.length == 1) {
+                    items = items.substring(0, items.length - 1);
+                }
+
+                this.tempAdomain = items;
+
+                return items;
+            },
+
+            transformExchange() {
+                var items = '';
+
+                for (var item in this.campaign.exchange) {
+
+                        items += this.campaign.exchange[item] + ',';
+                }
+
+                if (this.campaign.exchange.length == 1) {
+                    items = items.substring(0, items.length - 1);
+                }
+
+                this.tempExchange = items;
                 return items;
             }
         }
