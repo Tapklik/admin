@@ -10,4 +10,9 @@ class CreativesController extends Controller
 	{
 		return view('frontend.creatives.index');
 	}
+
+	public function show ($id)
+    {
+        return view('frontend.creatives.show', compact('id'));
+    }
 }

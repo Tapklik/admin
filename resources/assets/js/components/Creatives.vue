@@ -32,7 +32,11 @@
             </tr>
 
             <tr v-for="(creative, index) in creatives.data">
-                <td>{{ creative.crid }}</td>
+                <td>
+                    <a :href="creativeUri(creative.crid)">
+                        {{ creative.crid }}
+                    </a>
+                </td>
                 <td>
                     <img :src="creative.iurl" style="max-height: 20px;" />
                 </td>
@@ -117,6 +121,11 @@
 
                 return '/accounts/' + id + '/' + endpoint;
             },
+
+            creativeUri(crid) {
+
+                return '/creatives/' + crid;
+            }
         },
     }
 </script>

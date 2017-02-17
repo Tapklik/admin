@@ -15,6 +15,11 @@ Route::get('creatives', [
 	'uses' => 'CreativesController@index'
 ]);
 
+Route::get('creatives/{id}', [
+   'as' => 'creatives.show',
+    'uses' => 'CreativesController@show'
+]);
+
 Route::get('users', [
 	'as'   => 'users.index',
 	'uses' => 'UsersController@index'
