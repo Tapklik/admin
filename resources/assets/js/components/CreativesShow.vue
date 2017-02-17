@@ -117,7 +117,7 @@
                 payload['btype'] = this.tempBtype;
                  
                 this.$http.put(this.$root.api + 'creatives/' + obj.id, payload).then(response => {
-                    
+                   swal('Success', 'Done. Updated. B000M!', 'success');
                 }, error => {
                     console.log(error);
                 });
