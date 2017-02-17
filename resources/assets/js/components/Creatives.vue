@@ -53,9 +53,9 @@
                 <td>{{ creative.type }}</td>
                 <td>
                     <button class="btn"
-                            :class="{ 'btn-success': creative.status, 'btn-danger': !creative.status }"
-                            :data-status="creative.status"
-                            @click="toggleStatus(creative.id, creative.status, index)">
+                            :class="{ 'btn-success': creative.approved, 'btn-danger': !creative.approved }"
+                            :data-status="creative.approved"
+                            @click="toggleStatus(creative.crid, creative.approved, index)">
                         <i class="fa fa-check-circle-o"></i>
                     </button>
                 </td>
@@ -77,9 +77,7 @@
             return {
                 creatives: {
                     data: {
-                        budget: {
-                            data: {}
-                        }
+
                     }
                 },
                 search: '',
@@ -99,7 +97,22 @@
                 this.$http.get(this.$root.api + 'campaigns/' + obj.id + '/creatives').then( response => {
                     this.creatives = response.data;
                     this.loading = false;
-                }, error => {z
+                }, error => {
+                    console.log(error);
+                });
+            },
+
+            toggleStatus: function(id, status, index) {
+                this.loading = true;
+
+                var state = (status) ? 0 : 1;
+
+                var self = this;
+                this.$http.put(this.$root.api + 'creatives/' + id + '/status', {status: state}).then( response => {
+
+                   self.fetchCampaignCreatives();
+                    this.loading = false;
+                }, error => {
                     console.log(error);
                 });
             },

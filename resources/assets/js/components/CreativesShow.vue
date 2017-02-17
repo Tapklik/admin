@@ -33,11 +33,11 @@
             <div class="row">
                 <div class="col-md-3">
                     <label>Btype</label>
-                    <input type="text" :value="transformType" class="form-control" />
+                    <input type="text" v-model="tempBtype" :value="transformType" class="form-control" />
                 </div>
                 <div class="col-md-3">
                     <label>Attr</label>
-                    <input type="text" :value="transformAttr" class="form-control" />
+                    <input type="text" v-model="tempAttr" :value="transformAttr" class="form-control" />
                 </div>
                 <div class="col-md-3">
                     <label>Pos</label>
@@ -56,7 +56,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-xs-12">
-                    <button class="btn btn-primary pull-right">
+                    <button class="btn btn-primary pull-right" @click="updateCreative()">
                         Update
                     </button>
                 </div>
@@ -85,7 +85,7 @@
                     btype: [],
                     attr: [],
                     pos: '',
-                    approved: ''
+                    approved: 1
                 },
                 tempAttr: '',
                 tempBtype: ''
@@ -99,6 +99,7 @@
 
                 this.$http.get(this.$root.api + 'creatives/' + obj.id).then( response => {
                     this.creative = response.data.data;
+
                     this.loading = false;
                 }, error => {
                     console.log(error);
@@ -108,6 +109,18 @@
             creativeUri(crid) {
 
                 return '/creatives/' + crid;
+            },
+
+            updateCreative() {
+                var payload = this.creative;
+                payload['attr'] = this.tempAttr;
+                payload['btype'] = this.tempBtype;
+                 
+                this.$http.put(this.$root.api + 'creatives/' + obj.id, payload).then(response => {
+                    
+                }, error => {
+                    console.log(error);
+                });
             }
         },
 
