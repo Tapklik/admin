@@ -208,7 +208,11 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label>Type ID</label>
+                            <input type="text" placeholder="Type" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
                             <label>Make</label>
                             <input type="text" placeholder="Make" class="form-control" />
                         </div>
@@ -220,7 +224,7 @@
                             <label>Operating System</label>
                             <input type="text" placeholder="Os" class="form-control" />
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label>User Agent</label>
                             <input type="text" placeholder="UA" class="form-control" />
                         </div>
