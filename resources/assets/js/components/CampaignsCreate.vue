@@ -61,15 +61,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" v-show="currentOpenSection == 1">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label>Daily Budget</label>
+                            <input class="form-control" v-model="campaign.budget.data.total" :name="total" />
+                        </div>
+                        <div class="col-md-3">
                             <label>Daily Budget</label>
                             <input class="form-control" v-model="campaign.bid" name="bid" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>Max Bid (CPM)</label>
                             <input class="form-control" v-model="campaign.bidmax" name="bidmax" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
 
                             <div class="col-md-6">
                                 <label>Daily Budget Pacing</label>
@@ -435,15 +439,15 @@
 125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,160,161,162,163, 164,165,166,
 167,168,169,170,171,172,173,174,175,176]
                     },
-                },
-                budget: {
-                    data: {
-                        total: 0,
-                        daily: {
+                    budget: {
+                        data: {
                             total: 0,
-                            spend: 0
+                            daily: {
+                                total: 0,
+                                spend: 0
+                            }
                         }
-                    }
+                    },
                 },
                 categories: false,
                 countries: false,
