@@ -24,11 +24,10 @@
                 formData.append("_token", window.Laravel.csrfToken);
             },
             success(xhr, response) {
-                console.log(xhr);
-                console.log(response);
+                swal('Success', 'Uploaded', 'success');
             },
             complete(d) {
-                console.log(d);
+
             }
         });
 
