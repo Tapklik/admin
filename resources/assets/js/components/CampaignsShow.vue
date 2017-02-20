@@ -675,18 +675,6 @@
             },
 
             addDevice() {
-                if(
-                    !this.tempDeviceHolder.type_id.length ||
-                    !this.tempDeviceHolder.make.length ||
-                    !this.tempDeviceHolder.model.length ||
-                    !this.tempDeviceHolder.os.length ||
-                    !this.tempDeviceHolder.ua.length
-                ) {
-
-                    swal('Error', 'Please fill out device fields', 'error');
-                    throw 'Invalid form fill';
-                }
-
                 this.campaignPayload.device.data.push(this.tempDeviceHolder);
                 this.tempDeviceHolder = {
                     'type_id': '',
