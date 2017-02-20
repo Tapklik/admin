@@ -210,32 +210,48 @@
                     <div class="form-group">
                         <div class="col-md-2">
                             <label>Type ID</label>
-                            <input type="text" placeholder="Type" class="form-control" />
+                            <input type="text" placeholder="Type" class="form-control" v-model="tempDeviceHolder.type_id" />
                         </div>
                         <div class="col-md-2">
                             <label>Make</label>
-                            <input type="text" placeholder="Make" class="form-control" />
+                            <input type="text" placeholder="Make" class="form-control" v-model="tempDeviceHolder.make" />
                         </div>
                         <div class="col-md-2">
                             <label>Model</label>
-                            <input type="text" placeholder="Model" class="form-control" />
+                            <input type="text" placeholder="Model" class="form-control" v-model="tempDeviceHolder.model" />
                         </div>
                         <div class="col-md-2">
                             <label>Operating System</label>
-                            <input type="text" placeholder="Os" class="form-control" />
+                            <input type="text" placeholder="Os" class="form-control" v-model="tempDeviceHolder.os" />
                         </div>
                         <div class="col-md-2">
                             <label>User Agent</label>
-                            <input type="text" placeholder="UA" class="form-control" />
+                            <input type="text" placeholder="UA" class="form-control" v-model="tempDeviceHolder.ua" />
                         </div>
 
                         <div class="col-md-2">
                             <label>&nbsp;</label>
-                            <a class="btn btn-primary">
+                            <a class="btn btn-primary" @click="addDevice">
                                 <i class="fa fa-plus"></i>
                             </a>
                         </div>
                     </div>
+
+                    <div class="form-group" id="devices-holder">
+                        <p class="clearfix"></p>
+                        <div class="col-md-3">
+                            <ul class="list-inline">
+                                <li v-for="(item, index) in campaignPayload.device.data" class="col-md-3">
+                                    <label>
+                                        <a @click="removeDevice(index)" class="label label-default">
+                                        <i class="fa fa-minus"></i>
+                                        {{ item.make }} {{ item.model }} {{ item.os }}
+                                        </a>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    <div>
                 </div>
             </div>
         </div>
@@ -415,6 +431,9 @@
                     hourofweek: {
                         data: []
                     },
+                    device: {
+                        data: {}
+                    },
                     budget: {
                         data: {
                             total: 0,
@@ -448,6 +467,9 @@
                     },
                     hourofweek: {
                         data: []
+                    },
+                    device: {
+                        data: {}
                     },
                     budget: {
                         data: {
@@ -491,6 +513,13 @@
                 tempGeoHolder: {
                     country: '',
                     city: ''
+                },
+                tempDeviceHolder: {
+                    'type_id': '',
+                    'make': '',
+                    'model': '',
+                    'os': '',
+                    'ua': '',
                 },
                 mon: {1:1,2:2,3:3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24},
                 tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
@@ -643,6 +672,36 @@
             removeCountry: function (index) {
 
                 this.campaign.geo.data.splice(index, 1);
+            },
+
+            addDevice() {
+                if(
+                    !this.tempDeviceHolder.type_id.length ||
+                    !this.tempDeviceHolder.make.length ||
+                    !this.tempDeviceHolder.model.length ||
+                    !this.tempDeviceHolder.os.length ||
+                    !this.tempDeviceHolder.ua.length
+                ) {
+
+                    swal('Error', 'Please fill out device fields', 'error');
+                    throw 'Invalid form fill';
+                }
+
+                this.campaign.device.data.push(this.tempDeviceHolder);
+                this.campaignPayload.device.data.push(this.tempDeviceHolder);
+                this.tempDeviceHolder = {
+                    'type_id': '',
+                    'make': '',
+                    'model': '',
+                    'os': '',
+                    'ua': '',
+                };
+            },
+
+            removeDevice: function (index) {
+
+                this.campaign.device.data.splice(index, 1);
+                this.campaignPayload.device.data.splice(index, 1);
             }
         },
 
