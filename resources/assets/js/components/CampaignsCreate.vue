@@ -66,7 +66,7 @@
                             <input class="form-control" v-model="campaign.budget.data.total" :name="total" />
                         </div>
                         <div class="col-md-3">
-                            <label>Daily Budget</label>
+                            <label>Bid</label>
                             <input class="form-control" v-model="campaign.bid" name="bid" />
                         </div>
                         <div class="col-md-3">
@@ -179,11 +179,11 @@
                             <p class="clearfix"></p>
 
                             <label class="pull-left">
-                                <input type="checkbox"/>
+                                <input type="checkbox" :value="'m'" v-model="chosenGender" />
                                 Male
                             </label>
                             <label class="pull-left">
-                                <input type="checkbox"/>
+                                <input type="checkbox" :value="'f'" v-model="chosenGender" />
                                 Female
                             </label>
                         </div>
@@ -194,46 +194,10 @@
                             <p class="clearfix"></p>
 
                             <ul class="list-inline">
-                                <li>
+                                <li v-for="group in demographyGroups">
                                     <label>
-                                        <input type="checkbox"/>
-                                        1-11
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="checkbox"/>
-                                        12-18
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="checkbox"/>
-                                        19-25
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="checkbox"/>
-                                        26-39
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="checkbox"/>
-                                        40-55
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="checkbox"/>
-                                        56-64
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="checkbox"/>
-                                        65-120
+                                        <input type="checkbox" :value="group" v-model="chosenDemography"/>
+                                        {{ group }}
                                     </label>
                                 </li>
                             </ul>
@@ -464,6 +428,25 @@
                     'os': '',
                     'ua': '',
                 },
+                demographyGroupsData: [
+                    {key: 2, group: '1-11', gender: 'm'},
+                    {key: 3, group: '12-18', gender: 'm'},
+                    {key: 4, group: '19-25', gender: 'm'},
+                    {key: 5, group: '26-39', gender: 'm'},
+                    {key: 6, group: '40-55', gender: 'm'},
+                    {key: 7, group: '56-64', gender: 'm'},
+                    {key: 8, group: '65-120', gender: 'm'},
+                    {key: 10, group: '1-11', gender: 'f'},
+                    {key: 11, group: '12-18', gender: 'f'},
+                    {key: 12, group: '19-25', gender: 'f'},
+                    {key: 13, group: '26-39', gender: 'f'},
+                    {key: 14, group: '40-55', gender: 'f'},
+                    {key: 15, group: '56-64', gender: 'f'},
+                    {key: 16, group: '65-120', gender: 'f'},
+                ],
+                demographyGroups: ['1-11','12-18','19-25','26-39','40-55','56-64','65-120'],
+                chosenDemography: [],
+                chosenGender: [],
                 mon: {1:1,2:2,3:3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24},
                 tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
                 wed: {49:1,50:2,51:3,52:4,53:5,54:6,55:7,56:8,57:9,58:10,59:11,60:12,61:13,62:14,63:15,64:16,65:17,66:18,67:19,68:20,69:21,70:22,71:23,72:24},
@@ -523,10 +506,11 @@
 
             createCampaign() {
 
-                this.$http.post(this.$root.api + 'campaigns', this.campaign).then(success => {
+                this.$http.post(this.$root.api + 'campaigns', this.campaign).then(response => {
                     swal('Great Successs', 'Campaign created successfully', 'success');
+                    console.log(response);
                 }, error => {
-                    swal('Great Successs', error.response, 'error');
+                    console.log(error);
                 });
             },
 
