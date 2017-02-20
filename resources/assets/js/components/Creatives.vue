@@ -5,6 +5,9 @@
                 <h1 class="title pull-left">Creatives for Campaign</h1>
             </div>
             <div class="col-md-4">
+                <a :href="uploadUri" class="btn btn-primary pull-right">
+                    Upload creatives
+                </a>
             </div>
         </div>
         <hr/>
@@ -144,6 +147,12 @@
                 return this.$root.path + file;
             }
         },
+
+        computed: {
+            uploadUri() {
+                return '/campaigns/' + obj.id + '/creatives/upload';
+            }
+        }
 
     }
 </script>
