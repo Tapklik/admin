@@ -687,7 +687,6 @@
                     throw 'Invalid form fill';
                 }
 
-                this.campaign.device.data.push(this.tempDeviceHolder);
                 this.campaignPayload.device.data.push(this.tempDeviceHolder);
                 this.tempDeviceHolder = {
                     'type_id': '',
