@@ -38,7 +38,7 @@
                     </a>
                 </td>
                 <td>
-                    <img :src="creative.iurl" style="max-height: 20px;" />
+                    <img :src="getImage(creative.iurl)" style="max-height: 20px;" />
                 </td>
                 <td>
                     <a :href="creative.ctrurl" class="btn btn-primary" target="_blank">
@@ -138,7 +138,12 @@
             creativeUri(crid) {
 
                 return '/creatives/' + crid;
+            },
+
+            getImage(file) {
+                return this.$root.path + file;
             }
         },
+
     }
 </script>

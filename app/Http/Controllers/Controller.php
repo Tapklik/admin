@@ -12,11 +12,12 @@ class Controller extends BaseController
 
     protected $http;
 
-    const API = 'http://api.tapklik.com/v1/';
+    protected $API;
 
     public function __construct (Client $http)
     {
+        $this->API = env('API');
 
-    	$this->http = $http;
+    	    $this->http = $http;
     }
 }

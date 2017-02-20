@@ -50,6 +50,16 @@ Route::get('campaigns/{id}/creatives', [
 	'uses' => 'CampaignsCreativesController@show'
 ]);
 
+Route::get('campaigns/{id}/creatives/upload', [
+    'as' => 'campaigns.creatives.create',
+    'uses' => 'CreativesController@create'
+]);
+
+Route::post('campaigns/{id}/creatives/upload', [
+    'as' => 'campaigns.creatives.upload',
+    'uses' => 'CreativesController@upload'
+]);
+
 Route::get('accounts', [
 	'as'   => 'accounts.index',
 	'uses' => 'AccountsController@index'
