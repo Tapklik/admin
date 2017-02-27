@@ -144,7 +144,24 @@
                             </div>
                             <div class="col-md-5">
                                 <label>Geo City</label>
-                                <input type="test" class="form-control" placeholder="Type a city..." id="_search-cities" v-model="tempGeoHolder.city">
+                                <!-- <input type="test" class="form-control" placeholder="Type a city..." id="_search-cities" v-model="tempGeoHolder.city"> -->
+                                <form>
+                                    <div class="typeahead__container">
+                                        <div class="typeahead__field">
+
+                                            <span class="typeahead__query">
+                                                <input class="js-typeahead-input"
+                                                       name="q"
+                                                       type="search"
+                                                       id="_search-cities"
+                                                       placeholder="Type a city..."
+                                                       autofocus
+                                                       autocomplete="off"
+                                                       v-model="tempGeoHolder.city">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="col-md-2">
                                 <label>&nbsp; </label>
@@ -536,6 +553,32 @@
             init() {
                 var self = this;
                 $(function () {
+                   $.typeahead({
+                       input: '#_search-cities',
+                       order: "desc",
+                       source: {
+                           cities: {
+                                ajax: function (query) {
+                                    return {
+                                        type: 'GET',
+                                        url: '/search/geography/city',
+                                        path: 'data.city',
+                                        data: {
+                                            q: '{{query}}'
+                                        }
+                                    }
+                                }
+                           }
+                       },
+                       callback: {
+                           onInit: function (node) {
+                           },
+                           onClick(node, el, data) {
+
+                           }
+                       }
+                   });
+
                     $.typeahead({
                         input: '#_search-countries',
                         order: "desc",

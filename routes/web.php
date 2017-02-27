@@ -117,7 +117,15 @@ Route::get('search/geography/country', function () {
 Route::get('search/geography/city', function () {
     $city = \App\Geography::where('name', 'LIKE', '%' . request('q') . '%')->get(['name']);
 
-    return response()->json($city);
+    $payload = [
+        'status' => true,
+        'error' => null,
+        'data' => [
+            'city' => $city->pluck(['name'])
+        ]
+    ];
+
+    return response()->json($payload);
 });
 
 Route::get('data/countries/{code}/{id}', function ($code, $id) {
