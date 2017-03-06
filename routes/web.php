@@ -115,7 +115,10 @@ Route::get('search/geography/country', function () {
 });
 
 Route::get('search/geography/city', function () {
-    $city = \App\Geography::where('name', 'LIKE', '%' . request('q') . '%')->get(['name']);
+	$fragments = explode('&c=', request('q'));
+
+	$country = \App\Country::where('name', 'LIKE', '%' . $fragments[1] . '%')->first();
+    $city = \App\Geography::where('name', 'LIKE', '%' . $fragments[0] . '%')->where(['country_id' => $country->id])->get(['name']);
 
     $payload = [
         'status' => true,

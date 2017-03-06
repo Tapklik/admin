@@ -144,7 +144,9 @@
                             </div>
                             <div class="col-md-5">
                                 <label>Geo City</label>
-                                <!-- <input type="test" class="form-control" placeholder="Type a city..." id="_search-cities" v-model="tempGeoHolder.city"> -->
+                                <div v-show="!tempGeoHolder.country">
+                                    <input type="text" class="form-control" readonly placeholder="Please choose a country first" />
+                                </div>
                                 <form>
                                     <div class="typeahead__container">
                                         <div class="typeahead__field">
@@ -157,7 +159,8 @@
                                                        placeholder="Type a city..."
                                                        autofocus
                                                        autocomplete="off"
-                                                       v-model="tempGeoHolder.city">
+                                                       v-model="tempGeoHolder.city"
+                                                       v-show="tempGeoHolder.country">
                                             </span>
                                         </div>
                                     </div>
@@ -564,7 +567,7 @@
                                         url: '/search/geography/city',
                                         path: 'data.city',
                                         data: {
-                                            q: '{{query}}'
+                                            q: '{{query}}' + '&c=' + $('#_search-countries').val()
                                         }
                                     }
                                 }
@@ -574,7 +577,7 @@
                            onInit: function (node) {
                            },
                            onClick(node, el, data) {
-
+                            console.log(data);
                            }
                        }
                    });
