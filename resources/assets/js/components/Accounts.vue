@@ -16,14 +16,8 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>#</th>
                 <th>Acc. Name</th>
                 <th>Acc. Id</th>
-                <th>Acc. Manager</th>
-                <th>Users</th>
-                <th>Budget</th>
-                <th>Campaigns</th>
-                <th>Creatives</th>
                 <th>Status</th>
                 <th>Settings</th>
             </tr>
@@ -39,83 +33,27 @@
                     Sorry but I can't find anything relating to <strong>{{ search }}</strong>
                 </td>
             </tr>
-
-            <tr v-for="(account, index) in filterByAccounts">
-                <td>{{ account.id }}.</td>
-                <td>{{ account.name }}</td>
-                <td>1000{{ account.id }}</td>
-                <td>rok@tapklik.com</td>
+            <tr v-for="account in accounts">
                 <td>
-                    <button class="btn btn-primary" @click="openUsers(account.id)">
-                        View
-                    </button>
-                </td>
-                <td>${{ account.budget.data.value }}</td>
-                <td>
-                    <a :href="generateUri('campaigns', account.id)" class="btn btn-primary">
-                        View
+                    <a :href="'/accounts/' + account.id">
+                        {{ account.name }}
                     </a>
                 </td>
                 <td>
-                    <a :href="generateUri('creatives', account.id)" class="btn btn-primary">
-                        View
-                    </a>
+                    {{ account.id }}
                 </td>
                 <td>
-                    <button class="btn"
-                            :class="{ 'btn-success': account.status, 'btn-danger': !account.status }"
-                            :data-status="account.status"
-                            @click="toggleStatus(account.id, account.status, index)">
-                        <i class="fa fa-check-circle-o"></i>
-                    </button>
+                    <i class="fa fa-check" v-show="account.status == 1"></i>
+                    <i class="fa fa-ban" v-show="!account.status"></i>
                 </td>
                 <td>
-                    <button class="btn btn-default" @click="openSettings(account.id)">
+                    <button class="btn">
                         <i class="fa fa-cog"></i>
                     </button>
                 </td>
             </tr>
             </tbody>
         </table>
-
-        <div class="modal fade" id="_modal-users" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Account Users</h4>
-                    </div>
-                    <div class="modal-body">
-                        <input type="search" placeholder="Search user by name" class="form-control"
-                               v-model="searchUsers"/>
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Username</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="user in filterByUsers">
-                                <td>{{ user.id }}</td>
-                                <td>{{ user.first_name }} {{ user.last_name }}</td>
-                                <td class="text-right">
-                                    <a href="#" class="btn btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
 
         <div class="modal fade" id="_modal-create-new-account" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -138,7 +76,7 @@
 
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-xs-12 col-md-4">
+                                    <div class="col-xs-12 col-md-3">
                                         <label for="label-country">Country</label>
                                         <br/>
                                         <select class="form-control" id="label-country" v-model="account.country">
@@ -148,13 +86,13 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-xs-12 col-md-4">
+                                    <div class="col-xs-12 col-md-3">
                                         <label for="label-city">City</label>
                                         <br/>
                                         <input type="text" class="form-control" id="label-city" v-model="account.city" />
                                     </div>
 
-                                    <div class="col-xs-12 col-md-4">
+                                    <div class="col-xs-12 col-md-3">
                                         <label for="label-timezones">Time Zone</label>
                                         <br/>
                                         <select class="form-control" id="label-timezones" v-model="account.timezone">
@@ -163,12 +101,8 @@
                                             </option>
                                         </select>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-4">
+                                    <div class="col-xs-12 col-md-3">
                                         <label for="label-languages">Language</label>
                                         <br/>
                                         <select class="form-control" id="label-languages" v-model="account.language">
@@ -177,18 +111,9 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-currency">Currency</label>
-                                        <input type="text" class="form-control" id="label-currency" v-model="account.currency" />
-                                        <br/>
-                                    </div>
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-value">Value</label>
-                                        <br/>
-                                        <input type="text" class="form-control" id="label-value" v-model="account.value" />
-                                    </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-xs-12">
@@ -210,75 +135,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
-        <div class="modal fade" id="_modal-edit-account" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Edit </h4>
-                    </div>
-                    <div class="modal-body">
-                        <h5>DETAILS</h5>
-
-                        <div class="form-group">
-                            <label for="label-edit-name">Name</label>
-                            <br/>
-                            <input type="text" id="label-edit-name" class="form-control" :value="account.data.name"/>
-                        </div>
-
-                        <div class="form-group">
-                            <h5>LOCALIZATION</h5>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-edit-country">Country</label>
-                                        <br/>
-                                        <select class="form-control" id="label-edit-country" v-model="selectedCountry">
-                                            <option v-for="country in countriesList.data" :value="country.code" :selected="{'account.data.country == country.code': 'selected'}">
-                                                {{ country.name }}
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-xs-12 col-md-4">
-                                    <label for="label-edit-city">City</label>
-                                    <br/>
-                                    <input type="text" class="form-control" id="label-edit-city"  :value="account.data.city"/>
-                                </div>
-
-                                    <div class="col-xs-12 col-md-4">
-                                        <label for="label-edit-timezones">Time Zone</label>
-                                        <br/>
-                                        <select class="form-control" id="label-edit-timezones">
-                                            <option v-for="timezone in timezonesList.data" :value="timezone.utc">
-                                                {{ timezone.value }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="label-edit-languages">Language</label>
-                                <br/>
-                                <select class="form-control" id="label-edit-languages">
-                                    <option v-for="language in languagesList.data" :value="language.abbr" :selected="{ 'selected' : language.abbr }">
-                                        {{ language.name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" :disabled="'loading == true' ? disabled : false">Update</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
     </div>
 </template>
 
@@ -289,46 +145,36 @@
             this.fetchCountries();
             this.fetchTimezones();
             this.fetchLanguages();
-            this.fetchAccounts();
         },
 
         data: function () {
 
             return {
                 accounts: {},
-                account: {
-                    data: {
-                        name: '',
-                        country: '',
-                        city: 'miami',
-                        currency: 'USD',
-                        value: 0,
-                        timezone: 'UTC',
-                        language: 'en_US',
-                        status: 1
-                    }
-                },
-                users: {},
-                search: '',
-                searchUsers: '',
-                urls: {
-                    accounts: '/accounts/'
-                },
+                account: {},
                 countriesList: {},
                 timezonesList: {},
                 languagesList: {},
                 loading: false,
-                noresult: false
+                noresult: false,
+                token: false
             }
         },
 
         methods: {
 
-            fetchAccounts: function () {
+            fetchAccounts: function (token) {
 
                 this.loading = true;
-                this.$http.get(this.$root.api + 'accounts').then( response => {
-                    this.accounts = response.data;
+                var self = this;
+
+                this.$http.get(this.$root.api + 'accounts', {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then( response => {
+                    this.accounts = response.data.data;
+
                     this.loading = false;
                 }, error => {
                     console.log(error);
@@ -402,15 +248,18 @@
             createNewAccount: function () {
                 this.loading = true;
 
-                return this.$http.post(this.$root.api + 'accounts', this.account).then(response => {
+                return this.$http.post(this.$root.api + 'accounts', this.account, {
+                    headers: {
+                        'Authorization': 'Bearer ' + this.token
+                    }
+                }).then(response => {
 
                     this.fetchAccounts();
                     this.loading = false;
-
+                    this.account = false;
                     this.closeModal();
                 }, error => {
 
-                    console.log(error);
                     this.loading = false;
                     this.closeModal();
                 });
@@ -453,22 +302,6 @@
 
         computed: {
 
-            filterByAccounts: function () {
-
-                if (typeof this.accounts.data == 'undefined') return;
-
-                var self = this;
-
-                var results = this.accounts.data.filter( function(item) {
-
-                    return item.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1;
-                });
-
-                this.noresult = (!results.length) ? true : false;
-
-                return results;
-            },
-
             filterByUsers() {
                 if (typeof this.users.data == 'undefined') return;
 
@@ -480,6 +313,12 @@
                 });
 
                 return results;
+            }
+        },
+
+        watch: {
+            token: function (value) {
+                this.fetchAccounts();
             }
         }
     }

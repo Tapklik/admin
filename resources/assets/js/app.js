@@ -29,8 +29,35 @@ Vue.component('users', require('./components/Users.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-        'api': 'http://api.tapklik.com/v1/',
-        'path': '//api.tapklik.com/'
+        'api': 'http://local.api.tapklik.com/v1/',
+        'path': '//api.tapklik.com/',
+        'token': ''
+    },
+
+    mounted () {
+        this.getApiToken();
+    },
+
+    methods: {
+
+        getApiToken () {
+
+            this.$http.post(this.api + 'auth', {
+                'email': 'rok@fantasyrock.com',
+                'password': 'root'
+            }).then(response => {
+                this.token = atob(response.data.token);
+            }, error => {
+                alert('Error');
+            });
+
+        }
+    },
+
+    watch: {
+        token(value) {
+            this.$children[0].token = value;
+        }
     }
 });
 
