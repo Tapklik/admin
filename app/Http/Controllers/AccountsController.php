@@ -14,9 +14,8 @@ class AccountsController extends Controller
 
 	public function show ($id)
 	{
-		$accounts = Account::all();
 
-		return response([]);
+		return view('frontend.accounts.show', compact($id));
 	}
 
 	public function noroute() {

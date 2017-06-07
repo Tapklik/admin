@@ -15,6 +15,7 @@ require('./bootstrap');
 
 Vue.component('tk-datepicker', require('vue-datepicker'));
 Vue.component('accounts', require('./components/Accounts.vue'));
+Vue.component('accounts-show', require('./components/AccountsShow.vue'));
 Vue.component('campaigns', require('./components/Campaigns.vue'));
 Vue.component('campaign-create', require('./components/CampaignsCreate.vue'));
 Vue.component('campaigns-all', require('./components/CampaignsAll.vue'));
