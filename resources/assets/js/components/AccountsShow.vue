@@ -244,14 +244,14 @@
 
             createNewUser: function () {
                 this.loading = true;
-                
+
                 return this.$http.post(this.$root.api + 'accounts/' + this.account.id + '/users', this.user, {
                     headers: {
                         'Authorization': 'Bearer ' + this.token
                     }
                 }).then(response => {
 
-                    this.fetchAccount();
+                    this.fetchUsers();
                     this.loading = false;
                     this.account = false;
                     this.closeModal();

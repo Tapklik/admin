@@ -30,7 +30,7 @@ Vue.component('users', require('./components/Users.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-        'api': 'http://local.api.tapklik.com/v1/',
+        'api': 'http://api.tapklik.com/v1/',
         'path': '//api.tapklik.com/',
         'token': ''
     },
