@@ -13,7 +13,7 @@ require('./bootstrap');
  * the application, or feel free to tweak this setup for your needs.
  */
 
-Vue.component('tk-datepicker', require('vue-datepicker'));
+/*Vue.component('tk-datepicker', require('vue-datepicker'));*/
 Vue.component('accounts', require('./components/Accounts.vue'));
 Vue.component('accounts-show', require('./components/AccountsShow.vue'));
 Vue.component('campaigns', require('./components/Campaigns.vue'));
@@ -44,7 +44,7 @@ const app = new Vue({
         getApiToken () {
 
             this.$http.post(this.api + 'auth', {
-                'email': 'rok@fantasyrock.com',
+                'email': 'root',
                 'password': 'root'
             }).then(response => {
                 this.token = atob(response.data.token);

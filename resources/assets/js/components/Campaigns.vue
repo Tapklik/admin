@@ -111,9 +111,24 @@
 
             fetchCampaigns: function () {
 
+            /*    axios.get(this.$root.uri + '/campaigns', {
+                    headers: {
+                        'Authorization': 'Bearer ' + this.token
+                    }
+                }).then(response => {
+                    this.campaignList = response.data.data;
+                }, error => {
+                    swal('Error', error, 'error');
+                })
+            }, */
+
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + obj.id + '/campaigns').then( response => {
+                this.$http.get(this.$root.api + 'accounts/' + obj.id + '/campaigns', {
+                    headers: {
+                        'Authorization': 'Bearer' + this.token
+                    }
+                }).then( response => {
                     this.campaigns = response.data;
                     this.loading = false;
                 }, error => {

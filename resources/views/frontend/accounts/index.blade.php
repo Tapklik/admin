@@ -5,5 +5,5 @@ Manage accounts
 @stop
 
 @section('content')
-<accounts></accounts>
+
 @stop

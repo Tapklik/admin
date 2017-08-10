@@ -103,22 +103,30 @@
                     campaigns: '/campaigns/'
                 },
                 loading: false,
-                noresult: false
+                noresult: false,
+                token: this.token
             }
         },
 
         methods: {
 
-            fetchCampaigns: function () {
-
+            fetchCampaigns() {
+                
                 this.loading = true;
-                this.$http.get(this.$root.api + 'campaigns').then( response => {
+            
+                this.$http.get(this.$root.api + 'campaigns', {
+                    headers: {
+                        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIiwianRpIjoiMTIzNDUifQ.eyJpc3MiOiJodHRwOlwvXC9hcGkudGFwa2xpay5jb20iLCJhdWQiOiJodHRwOlwvXC9hcGkudGFwa2xpay5jb20iLCJqdGkiOiIxMjM0NSIsImlhdCI6MTUwMTEzOTQ5MSwiZXhwIjoxNTAzNzMxNDkxLCJlbWFpbCI6InJvb3QiLCJpZCI6MSwidXVpZCI6IjM0M2Q5M2ZjLTcyMDctMTFlNy05NzM3LTBlMGVlOTk4YmM2MyIsImFjY291bnRJZCI6MSwiYWNjb3VudFV1SWQiOiIzNDExZmVjYy03MjA3LTExZTctOWM1NS0wZTBlZTk5OGJjNjMiLCJuYW1lIjoiSm9zZXBoaW5lIEFsdGVud2VydGgiLCJjYW1wYWlnbnMiOlsxLDIsM119.'
+                    }
+                }).then(response => {
                     this.campaigns = response.data;
                     this.loading = false;
                 }, error => {
-                    console.log(error);
-                });
+                    console.log("heeey")
+                    swal('Error', error, 'error');
+                })
             },
+
 
             toggleStatus(id, status, index) {
 
@@ -171,6 +179,12 @@
                 this.noresult = (!results.length) ? true : false;
 
                 return results;
+            }
+        },
+
+        watch: {
+            token(value) {
+                this.fetchCampaigns()
             }
         }
     }
