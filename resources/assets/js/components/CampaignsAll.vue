@@ -60,8 +60,8 @@
                         link
                     </a>
                 </td>
-                <td>${{ campaign.budget.data.total }}</td>
-                <td>${{ campaign.budget.data.daily.total }}</td>
+                <td>${{ campaign.budget.data.amount }}</td>
+                <td>${{ campaign.bid }}</td>
                 <td>
                     <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
                         View
@@ -114,9 +114,9 @@
                 
                 this.loading = true;
             
-                this.$http.get(this.$root.api + 'campaigns', {
+                axios.get(this.$root.api + 'campaigns', {
                     headers: {
-                        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIiwianRpIjoiMTIzNDUifQ.eyJpc3MiOiJodHRwOlwvXC9hcGkudGFwa2xpay5jb20iLCJhdWQiOiJodHRwOlwvXC9hcGkudGFwa2xpay5jb20iLCJqdGkiOiIxMjM0NSIsImlhdCI6MTUwMTEzOTQ5MSwiZXhwIjoxNTAzNzMxNDkxLCJlbWFpbCI6InJvb3QiLCJpZCI6MSwidXVpZCI6IjM0M2Q5M2ZjLTcyMDctMTFlNy05NzM3LTBlMGVlOTk4YmM2MyIsImFjY291bnRJZCI6MSwiYWNjb3VudFV1SWQiOiIzNDExZmVjYy03MjA3LTExZTctOWM1NS0wZTBlZTk5OGJjNjMiLCJuYW1lIjoiSm9zZXBoaW5lIEFsdGVud2VydGgiLCJjYW1wYWlnbnMiOlsxLDIsM119.'
+                        'Authorization': 'Bearer ' + this.token
                     }
                 }).then(response => {
                     this.campaigns = response.data;
@@ -133,7 +133,7 @@
                 status = (1 == status) ? 0 : 1;
                 this.campaigns.data[index].status = status;
 
-                this.$http.put(this.$root.api + 'campaigns/' + id + '/approve', {approved: status}).then(response => {
+                axios.put(this.$root.api + 'campaigns/' + id + '/approve', {approved: status}).then(response => {
                     this.fetchCampaigns();
                 }, error => {
                     console.log(error);
