@@ -89,11 +89,10 @@
 <script>
     export default {
         mounted() {
-
             this.fetchCampaigns();
         },
 
-        data: function () {
+        data() {
 
             return {
                 campaigns: {},

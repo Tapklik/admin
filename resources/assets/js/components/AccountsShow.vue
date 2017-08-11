@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-xs-12">
-                <h1 class="title pull-left">Accounts {{ account.name }}</h1>
+                <h1 class="title pull-left">{{ account.name }}</h1>
 
                 <button class="btn btn-default pull-right" @click="openCreateAccount()">
                     <i class="fa fa-plus"></i> Create new user
@@ -10,6 +10,49 @@
             </div>
         </div>
         <hr/>
+        <div class="row">
+            <div class="col-sm-5">
+                        <table class="table" style="margin-top:10px;">
+                            <tr>
+                                <td class="col-sm-3">
+                                    <b> Id: </b> 
+                                </td>
+                                <td class="col-sm-9 pull-right">
+                                    {{account.id}}
+                                </td>
+                            </tr>
+                            <br>
+                            <tr>
+                                <td class="col-sm-3">
+                                    <b>Status:</b> 
+                                </td>
+                                <td class="col-sm-9 pull-right">
+                                    {{account.status}}
+                                </td>
+                            </tr>
+                            <br>
+                            <tr>
+                                <td class="col-sm-3">
+                                    <b>Location:</b> 
+                                </td>
+                                <td class="col-sm-9 pull-right">
+                                    {{account.localization.country}} {{account.localization.city}} <br>
+                                    ({{account.localization.timezone}})
+                                </td>
+                            </tr>
+                            <br>
+                            <tr>
+                                <td class="col-sm-3">
+                                    <b>Language</b>
+                                </td>
+                                <td class="col-sm-9 pull-right">
+                                    {{account.localization.language}}
+                                </td>
+                            </tr>
+                        </table>
+                </div>
+            
+        <div class="col-sm-7 pull-right">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -45,7 +88,28 @@
                 </tr>
             </tbody>
         </table>
-
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 style="margin-left: 10px;">Graphs</h3>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Balance </h4>
+            <div id="chartdiv" style="height: 300px;"></div>
+        </div>
+        <div class="col-md-4">
+            <h4> In-Flight </h4>
+            <div id="chartdiv2" style="height: 300px;"></div>
+        </div>
+        <div class="col-md-4">
+            <h4>Total Spend</h4>
+            <div id="chartdiv3" style="height: 300px;"></div>
+        </div>
+    </div>
+    </div>
         <div class="modal fade" id="_modal-create-new-user" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -112,7 +176,7 @@
 <script>
     export default {
         mounted() {
-
+            this.generateCharts();
             this.fetchCountries();
             this.fetchTimezones();
             this.fetchLanguages();
@@ -135,7 +199,10 @@
                 languagesList: {},
                 loading: false,
                 noresult: false,
-                token: false
+                token: false,
+                balanceList: [],
+                flightList:[],
+                spendList:[]
             }
         },
 
@@ -275,6 +342,123 @@
                     this.fetchAccounts();
                 }, error => {
                     swal('Error', error, 'error');
+                });
+            },
+
+            createChart(target, dataset) {
+
+                var chart = AmCharts.makeChart( target, {
+                  "type": "serial",
+                  "theme": "light",
+                  "zoomOutButton": {
+                    "backgroundColor": '#000000',
+                    "backgroundAlpha": 0.15
+                  },
+                  "dataProvider": dataset,
+                  "categoryField": "date",
+                  "categoryAxis": {
+                    "parseDates": true,
+                    "minPeriod": "ss",
+                    "dashLength": 1,
+                    "gridAlpha": 0.15,
+                    "axisColor": "#DADADA"
+                  },
+                  "graphs": [ {
+                    "id": "g1",
+                    "valueField": "balance",
+                    "bullet": "round",
+                    "bulletBorderColor": "#FFFFFF",
+                    "bulletBorderThickness": 2,
+                    "lineThickness": 2,
+                    "lineColor": "#b5030d",
+                    "negativeLineColor": "#0352b5",
+                    "hideBulletsCount": 50
+                  } ],
+                  "chartCursor": {
+                    "cursorPosition": "mouse"
+                  },
+                  "chartScrollbar": {
+                    "graph": "g1",
+                    "scrollbarHeight": 40,
+                    "color": "#FFFFFF",
+                    "autoGridCount": true
+                  }
+                } )
+                
+            },
+            generateCharts() {
+                var self = this
+                setInterval(function(){
+                    self.getBalanceData();
+                    self.getFlightData();
+                    self.getSpendData();
+                    self.createChart('chartdiv', self.balanceList)
+                    self.createChart('chartdiv2', self.flightList)
+                    self.createChart('chartdiv3', self.spendList)
+                }, 5000); 
+            },
+
+            getBalanceData(){
+                var self = this;
+                var time = new Date()
+
+                var mainBalance = self.getBankerBalance('main')
+                var flightBalance = self.getBankerBalance('flight')
+
+                var accountBalance = mainBalance + flightBalance
+
+                if (self.balanceList.length >= 30) {
+                        self.balanceList.splice(0,1)
+                    }
+                    self.balanceList.push({
+                        "date": time,
+                        "balance": accountBalance
+                    }) 
+               
+                
+            },
+
+            getFlightData() {
+                var self = this;
+                var time = new Date()
+
+                var flightBalance = self.getBankerBalance('flight')
+
+                if (self.flightList.length >= 30) {
+                        self.flightList.splice(0,1)
+                    }
+                    self.flightList.push({
+                        "date": time,
+                        "balance": flightBalance
+                    })
+            },
+
+            getSpendData() {
+                var self = this;
+                var time = new Date()
+
+                var spendBalance = self.getBankerBalance('spend')
+                console.log(spendBalance)
+                if (self.spendList.length >= 30) {
+                    self.spendList.splice(0,1)
+                }
+                    self.spendList.push({
+                        "date": time,
+                        "balance": spendBalance
+                    })
+            },
+
+            getBankerBalance(banker) {
+                var self = this
+                var accountId = window.location.pathname.replace('\/accounts\/', '');
+                 axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/' + banker + '?query=balance', {
+                    headers: {
+                        'Authorization' : self.token
+                    }
+                }).then( response => {
+                    return response.data.data.balance
+                }, error => {
+                    console.log(error);
                 });
             },
 

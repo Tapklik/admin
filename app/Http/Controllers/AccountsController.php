@@ -12,7 +12,8 @@ class AccountsController extends Controller
 
 	public function show ($id)
 	{
-
+	
+		return view('frontend.accounts.show', compact('id'));
 		
 	}
 
