@@ -202,7 +202,9 @@
                 token: false,
                 balanceList: [],
                 flightList:[],
-                spendList:[]
+                spendList:[],
+                a: 0,
+                b: 0
             }
         },
 
@@ -399,20 +401,44 @@
             },
 
             getBalanceData(){
+                
                 var self = this;
                 var time = new Date()
+                var main = 'main'
 
-                var mainBalance = self.getBankerBalance('main')
-                var flightBalance = self.getBankerBalance('flight')
+                var accountId = window.location.pathname.replace('\/accounts\/', '');
+                
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', {
+                    headers: {
+                        'Authorization' : self.token
+                    }
+                }).then( response => {
+                    self.a = response.data.data.balance
+                }, error => {
+                    console.log(error);
+                });
 
-                var accountBalance = mainBalance + flightBalance
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', {
+                    headers: {
+                        'Authorization' : self.token
+                    }
+                }).then( response => {
+                    self.b = response.data.data.balance
+                }, error => {
+                    console.log(error);
+                });
+                console.log(self.a)
+                console.log(self.b)
+                var c = self.a + self.b
+
+                console.log(c)
 
                 if (self.balanceList.length >= 30) {
                         self.balanceList.splice(0,1)
                     }
                     self.balanceList.push({
                         "date": time,
-                        "balance": accountBalance
+                        "balance": c
                     }) 
                
                 
@@ -421,42 +447,46 @@
             getFlightData() {
                 var self = this;
                 var time = new Date()
+                var flight = 'flight'
 
-                var flightBalance = self.getBankerBalance('flight')
-
-                if (self.flightList.length >= 30) {
-                        self.flightList.splice(0,1)
+                var accountId = window.location.pathname.replace('\/accounts\/', '');
+                
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', {
+                    headers: {
+                        'Authorization' : self.token
                     }
+                }).then( response => {
+                    if (self.flightList.length >= 30) {
+                    self.flightList.splice(0,1)
+                }
                     self.flightList.push({
                         "date": time,
-                        "balance": flightBalance
+                        "balance": response.data.data.balance
                     })
+                }, error => {
+                    console.log(error);
+                });
             },
 
             getSpendData() {
                 var self = this;
                 var time = new Date()
+                var spend = 'spend'
 
-                var spendBalance = self.getBankerBalance('spend')
-                console.log(spendBalance)
-                if (self.spendList.length >= 30) {
-                    self.spendList.splice(0,1)
-                }
-                    self.spendList.push({
-                        "date": time,
-                        "balance": spendBalance
-                    })
-            },
-
-            getBankerBalance(banker) {
-                var self = this
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
-                 axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/' + banker + '?query=balance', {
+                
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', {
                     headers: {
                         'Authorization' : self.token
                     }
                 }).then( response => {
-                    return response.data.data.balance
+                    if (self.spendList.length >= 30) {
+                    self.spendList.splice(0,1)
+                }
+                    self.spendList.push({
+                        "date": time,
+                        "balance": response.data.data.balance
+                    })
                 }, error => {
                     console.log(error);
                 });
