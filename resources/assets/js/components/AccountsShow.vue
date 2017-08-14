@@ -1,175 +1,186 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h1 class="title pull-left">{{ account.name }}</h1>
+        <div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="title">{{ account.name }}</h1>
 
-                <button class="btn btn-default pull-right" @click="openCreateAccount()">
-                    <i class="fa fa-plus"></i> Create new user
-                </button>
+                    <button class="btn btn-default pull-right" @click="openCreateAccount()">
+                        <i class="fa fa-plus"></i> Create new user
+                    </button>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-sm-5">
+                    <table class="table">
+                        <tr>
+                            <td class="col-sm-3">
+                                <b> Id: </b> 
+                            </td>
+                            <td class="col-sm-9">
+                                <span class="muted">{{account.id}}</span>
+                            </td>
+                        </tr>
+                        <br>
+                        <tr>
+                            <td class="col-sm-3">
+                                <b>Status:</b> 
+                            </td>
+                            <td class="col-sm-9">
+                                <span v-if="account.status === 1" class="label label-success">Active</span>
+                                <span v-else class="label label-success">Active</span>
+                            </td>
+                        </tr>
+                        <br>
+                        <tr>
+                            <td class="col-sm-3">
+                                <b>Location:</b> 
+                            </td>
+                            <td class="col-sm-9">
+                                <span>{{account.localization.country}} {{account.localization.city}}</span> <br>
+                                <span>({{account.localization.timezone}})</span>
+                            </td>
+                        </tr>
+                        <br>
+                        <tr>
+                            <td class="col-sm-3">
+                                <b>Language</b>
+                            </td>
+                            <td class="col-sm-9">
+                                <span>{{account.localization.language}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-sm-7">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Phone
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="user in users">
+                                <td>
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </td>
+                                <td>
+                                    {{ user.email }}
+                                </td>
+                                <td>
+                                    {{ user.phone ? user.phone : 'N/A' }}
+                                </td>
+                                <td>
+                                    <i class="fa fa-check" v-show="user.status == 1"></i>
+                                    <i class="fa fa-ban" v-show="!user.status"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <hr/>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>Budget</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="col-md-12 panel panel-default">
+                        <h4>Balance </h4>
+                        <div id="chartdiv" style="height: 300px;"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-12 panel panel-default">
+                        <h4> In-Flight </h4>
+                        <div id="chartdiv2" style="height: 300px;"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-12 panel panel-default">
+                        <h4>Total Spend</h4>
+                        <div id="chartdiv3" style="height: 300px;"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <hr/>
-        <div class="row">
-            <div class="col-sm-5">
-                        <table class="table" style="margin-top:10px;">
-                            <tr>
-                                <td class="col-sm-3">
-                                    <b> Id: </b> 
-                                </td>
-                                <td class="col-sm-9 pull-right">
-                                    {{account.id}}
-                                </td>
-                            </tr>
-                            <br>
-                            <tr>
-                                <td class="col-sm-3">
-                                    <b>Status:</b> 
-                                </td>
-                                <td class="col-sm-9 pull-right">
-                                    {{account.status}}
-                                </td>
-                            </tr>
-                            <br>
-                            <tr>
-                                <td class="col-sm-3">
-                                    <b>Location:</b> 
-                                </td>
-                                <td class="col-sm-9 pull-right">
-                                    {{account.localization.country}} {{account.localization.city}} <br>
-                                    ({{account.localization.timezone}})
-                                </td>
-                            </tr>
-                            <br>
-                            <tr>
-                                <td class="col-sm-3">
-                                    <b>Language</b>
-                                </td>
-                                <td class="col-sm-9 pull-right">
-                                    {{account.localization.language}}
-                                </td>
-                            </tr>
-                        </table>
-                </div>
-            
-        <div class="col-sm-7 pull-right">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Email
-                </th>
-                <th>
-                    Phone
-                </th>
-                <th>
-                    Status
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr v-for="user in users">
-                    <td>
-                        {{ user.first_name }} {{ user.last_name }}
-                    </td>
-                    <td>
-                        {{ user.email }}
-                    </td>
-                    <td>
-                        {{ user.phone ? user.phone : 'N/A' }}
-                    </td>
-                    <td>
-                        <i class="fa fa-check" v-show="user.status == 1"></i>
-                        <i class="fa fa-ban" v-show="!user.status"></i>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <h3 style="margin-left: 10px;">Graphs</h3>
-        </div>
-    </div>
-    <hr/>
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Balance </h4>
-            <div id="chartdiv" style="height: 300px;"></div>
-        </div>
-        <div class="col-md-4">
-            <h4> In-Flight </h4>
-            <div id="chartdiv2" style="height: 300px;"></div>
-        </div>
-        <div class="col-md-4">
-            <h4>Total Spend</h4>
-            <div id="chartdiv3" style="height: 300px;"></div>
-        </div>
-    </div>
-    </div>
         <div class="modal fade" id="_modal-create-new-user" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Create New User</h4>
-                    </div>
-                    <div class="modal-body">
-                        <h5>DETAILS</h5>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6">
-                                    <label for="label-first-name">First Name</label>
-                                    <br/>
-                                    <input type="text" id="label-first-name" class="form-control" v-model="user.first_name"/>
-                                </div>
-                                <div class="col-xs-12 col-md-6">
-                                    <label for="label-last-name">Last Name</label>
-                                    <br/>
-                                    <input type="text" id="label-last-name" class="form-control" v-model="user.last_name"/>
-                                </div>
-                            </div>
+                            aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Create New User</h4>
                         </div>
-
-                        <div class="form-group">
+                        <div class="modal-body">
+                            <h5>DETAILS</h5>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-xs-12 col-md-6">
-                                        <label for="label-email">E-mail</label>
+                                        <label for="label-first-name">First Name</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-email" v-model="user.email"/>
+                                        <input type="text" id="label-first-name" class="form-control" v-model="user.first_name"/>
                                     </div>
-
                                     <div class="col-xs-12 col-md-6">
-                                        <label for="label-phone-number">Phone number</label>
+                                        <label for="label-last-name">Last Name</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-phone-number" v-model="user.phone" />
+                                        <input type="text" id="label-last-name" class="form-control" v-model="user.last_name"/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <label for="label-password">Password</label>
-                                        <br/>
-                                        <input type="password" class="form-control" id="label-password" v-model="user.password"/>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6">
+                                            <label for="label-email">E-mail</label>
+                                            <br/>
+                                            <input type="text" class="form-control" id="label-email" v-model="user.email"/>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-6">
+                                            <label for="label-phone-number">Phone number</label>
+                                            <br/>
+                                            <input type="text" class="form-control" id="label-phone-number" v-model="user.phone" />
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <label for="label-password">Password</label>
+                                            <br/>
+                                            <input type="password" class="form-control" id="label-password" v-model="user.password"/>
+                                        </div>
+                                    </div>                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="createNewUser()">Create</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" @click="createNewUser()">Create</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div>
     </div>
 </template>
 
@@ -355,17 +366,17 @@
                   "zoomOutButton": {
                     "backgroundColor": '#000000',
                     "backgroundAlpha": 0.15
-                  },
-                  "dataProvider": dataset,
-                  "categoryField": "date",
-                  "categoryAxis": {
+                },
+                "dataProvider": dataset,
+                "categoryField": "date",
+                "categoryAxis": {
                     "parseDates": true,
                     "minPeriod": "ss",
                     "dashLength": 1,
                     "gridAlpha": 0.15,
                     "axisColor": "#DADADA"
-                  },
-                  "graphs": [ {
+                },
+                "graphs": [ {
                     "id": "g1",
                     "valueField": "balance",
                     "bullet": "round",
@@ -375,21 +386,14 @@
                     "lineColor": "#b5030d",
                     "negativeLineColor": "#0352b5",
                     "hideBulletsCount": 50
-                  } ],
-                  "chartCursor": {
-                    "cursorPosition": "mouse"
-                  },
-                  "chartScrollbar": {
-                    "graph": "g1",
-                    "scrollbarHeight": 40,
-                    "color": "#FFFFFF",
-                    "autoGridCount": true
-                  }
-                } )
-                
+                } ]
+            } )
+
             },
+
             generateCharts() {
                 var self = this
+
                 setInterval(function(){
                     self.getBalanceData();
                     self.getFlightData();
@@ -397,17 +401,17 @@
                     self.createChart('chartdiv', self.balanceList)
                     self.createChart('chartdiv2', self.flightList)
                     self.createChart('chartdiv3', self.spendList)
-                }, 5000); 
+                }, 10000); 
             },
 
             getBalanceData(){
-                
+
                 var self = this;
                 var time = new Date()
                 var main = 'main'
 
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
-                
+
                 axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', {
                     headers: {
                         'Authorization' : self.token
@@ -429,19 +433,18 @@
                 });
                 console.log(self.a)
                 console.log(self.b)
-                var c = self.a + self.b
+                var c = ((self.a + self.b)/1000000).toFixed(2)
 
-                console.log(c)
 
                 if (self.balanceList.length >= 30) {
-                        self.balanceList.splice(0,1)
-                    }
-                    self.balanceList.push({
-                        "date": time,
-                        "balance": c
-                    }) 
-               
-                
+                    self.balanceList.splice(0,1)
+                }
+                self.balanceList.push({
+                    "date": time,
+                    "balance": c
+                }) 
+
+
             },
 
             getFlightData() {
@@ -450,18 +453,18 @@
                 var flight = 'flight'
 
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
-                
+
                 axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', {
                     headers: {
                         'Authorization' : self.token
                     }
                 }).then( response => {
                     if (self.flightList.length >= 30) {
-                    self.flightList.splice(0,1)
-                }
+                        self.flightList.splice(0,1)
+                    }
                     self.flightList.push({
                         "date": time,
-                        "balance": response.data.data.balance
+                        "balance": (response.data.data.balance/1000000).toFixed(2)
                     })
                 }, error => {
                     console.log(error);
@@ -474,18 +477,18 @@
                 var spend = 'spend'
 
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
-                
+
                 axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', {
                     headers: {
                         'Authorization' : self.token
                     }
                 }).then( response => {
                     if (self.spendList.length >= 30) {
-                    self.spendList.splice(0,1)
-                }
+                        self.spendList.splice(0,1)
+                    }
                     self.spendList.push({
                         "date": time,
-                        "balance": response.data.data.balance
+                        "balance": (response.data.data.balance/1000000).toFixed(2)
                     })
                 }, error => {
                     console.log(error);
@@ -499,11 +502,11 @@
                 switch(type) {
 
                     case 'campaigns':
-                        endpoint += 'campaigns';
+                    endpoint += 'campaigns';
                     break;
 
                     case 'creatives':
-                        endpoint += 'creatives';
+                    endpoint += 'creatives';
                     break;
                 }
 
