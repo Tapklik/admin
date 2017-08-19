@@ -188,6 +188,13 @@
 
                 return results;
             }
+        },
+
+        watch: {
+
+            token(value) {
+                this.fetchCampaigns()
+            }
         }
     }
 

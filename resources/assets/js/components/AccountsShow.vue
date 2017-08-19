@@ -214,8 +214,8 @@
                 balanceList: [],
                 flightList:[],
                 spendList:[],
-                a: 0,
-                b: 0
+                a: null,
+                b: null
             }
         },
 
@@ -226,7 +226,7 @@
                 var self = this;
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                this.$http.get(this.$root.api + 'accounts/' + accountId + '/users', {
+                this.$http.get(this.$root.api + '/accounts/' + accountId + '/users', {
                     headers: {
                         'Authorization': 'Bearer ' + self.token
                     }
