@@ -132,7 +132,11 @@
                 status = (1 == status) ? 0 : 1;
                 this.campaigns.data[index].status = status;
 
-                axios.put(this.$root.api + 'campaigns/' + id + '/approve', {approved: status}).then(response => {
+                axios.put(this.$root.api + 'campaigns/' + id + '/approve', {approved: status}, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then(response => {
                     this.fetchCampaigns();
                 }, error => {
                     console.log(error);

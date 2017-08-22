@@ -212,7 +212,11 @@
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + id + '/users').then( response => {
+                this.$http.get(this.$root.api + 'accounts/' + id + '/users', {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then( response => {
 
                     this.loading = false;
 
@@ -229,7 +233,11 @@
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + id).then(response => {
+                this.$http.get(this.$root.api + 'accounts/' + id, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then(response => {
 
                     this.account = response.data;
                     this.loading = false;
@@ -274,7 +282,11 @@
                 status = (1 == status) ? 0 : 1;
                 this.accounts.data[index].status = status;
 
-                this.$http.put(this.$root.api + 'accounts/' + id, {status: status}).then(response => {
+                this.$http.put(this.$root.api + 'accounts/' + id, {status: status}, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then(response => {
                     this.fetchAccounts();
                 }, error => {
                     console.log(error);

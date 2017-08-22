@@ -97,7 +97,11 @@
             fetchCreative() {
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'creatives/' + obj.id).then( response => {
+                this.$http.get(this.$root.api + 'creatives/' + obj.id, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then( response => {
                     this.creative = response.data.data;
 
                     this.loading = false;
@@ -116,7 +120,11 @@
                 payload['attr'] = this.tempAttr;
                 payload['btype'] = this.tempBtype;
                  
-                this.$http.put(this.$root.api + 'creatives/' + obj.id, payload).then(response => {
+                this.$http.put(this.$root.api + 'creatives/' + obj.id, payload, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then(response => {
                    swal('Success', 'Done. Updated. B000M!', 'success');
                 }, error => {
                     console.log(error);

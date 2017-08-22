@@ -638,7 +638,11 @@ updateCampaign: function (id) {
                 this.campaignPayload['adomain'] = this.tempAdomain.split(',');
                 this.campaignPayload['exchange'] = this.tempExchange.split(',');
 
-                this.$http.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload).then( response => {
+                this.$http.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then( response => {
                     self.campaign.data = response.data;
                     console.log(self.campaign.data);
 
@@ -663,7 +667,11 @@ updateCampaign: function (id) {
             addGeoItem() {
                 var self = this;
 
-                this.$http.put(this.$root.api + 'campaigns/' + obj.id + '/geography', {country: self.tempGeoHolder.country, city: self.tempGeoHolder.city}).then(response => {
+                this.$http.put(this.$root.api + 'campaigns/' + obj.id + '/geography', {country: self.tempGeoHolder.country, city: self.tempGeoHolder.city}, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then(response => {
                     console.log(response);
 
                     var data = {
@@ -685,7 +693,11 @@ updateCampaign: function (id) {
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'campaigns/' + obj.id).then( response => {
+                this.$http.get(this.$root.api + 'campaigns/' + obj.id, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then( response => {
                     var campaignData = response.data.data;
 
                     this.campaign = response.data.data;

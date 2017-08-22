@@ -506,7 +506,11 @@
 
             createCampaign() {
 
-                this.$http.post(this.$root.api + 'campaigns', this.campaign).then(response => {
+                this.$http.post(this.$root.api + 'campaigns', this.campaign, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then(response => {
                     swal('Great Successs', 'Campaign created successfully', 'success');
                     console.log(response);
                 }, error => {
@@ -532,7 +536,11 @@
             },
 
             fetchAccounts() {
-                this.$http.get(this.$root.api + 'accounts').then( response => {
+                this.$http.get(this.$root.api + 'accounts', {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then( response => {
                     this.accounts = response.data.data;
                 }, error => {
                     console.log(error);

@@ -141,7 +141,11 @@
                 status = (1 == status) ? 0 : 1;
                 this.campaigns.data[index].status = status;
 
-                this.$http.put(this.$root.api + 'campaigns/' + id, {approved: status}).then(response => {
+                this.$http.put(this.$root.api + 'campaigns/' + id, {approved: status}, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then(response => {
                     this.fetchCampaigns();
                 }, error => {
                     console.log(error);
@@ -187,13 +191,6 @@
                 this.noresult = (!results.length) ? true : false;
 
                 return results;
-            }
-        },
-
-        watch: {
-
-            token(value) {
-                this.fetchCampaigns()
             }
         }
     }

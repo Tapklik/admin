@@ -226,7 +226,7 @@
                 var self = this;
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                this.$http.get(this.$root.api + '/accounts/' + accountId + '/users', {
+                this.$http.get(this.$root.api + 'accounts/' + accountId + '/users', {
                     headers: {
                         'Authorization': 'Bearer ' + self.token
                     }
@@ -289,7 +289,11 @@
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + id + '/users').then( response => {
+                this.$http.get(this.$root.api + 'accounts/' + id + '/users', {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then( response => {
 
                     this.loading = false;
 
@@ -306,7 +310,11 @@
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + id).then(response => {
+                this.$http.get(this.$root.api + 'accounts/' + id, {
+                    headers: {
+                        'Authorization': 'Bearer ' + self.token
+                    }
+                }).then(response => {
 
                     this.account = response.data;
                     this.loading = false;
