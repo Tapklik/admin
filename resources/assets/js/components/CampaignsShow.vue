@@ -421,210 +421,210 @@
     </div>
 </template>
 
-        <script>
-            export default {
-                mounted() {
-                    this.init();
-                    this.fetchCampaign();
-                    this.fetchCategories();
-                    this.fetchCountries();
-                },
+<script>
+    export default {
+        mounted() {
+            this.init();
+            this.fetchCampaign();
+            this.fetchCategories();
+            this.fetchCountries();
+        },
 
-                data() {
+        data() {
 
-                    return {
-                        campaign: {
-                            name: '',
-                            adomain: '',
-                            ctrurl: '',
-                            bid: 0,
-                            bidmax: 0,
-                            weight: 0,
-                            exchange: '',
-                            node: '',
-                            start_time: '',
-                            end_time: '',
-                            cat: {
-                                data: []
-                            },
-                            geo: {
-                                data: [{}]
-                            },
-                            hourofweek: {
-                                data: []
-                            },
-                            device: {
-                                data: {}
-                            },
-                            budget: {
-                                data: {
-                                    total: 0,
-                                    daily: {
-                                        total: 0,
-                                        spend: 0
-                                    }
-                                }
-                            },
-                        },
-                        campaignPayload: {
-                            name: '',
-                            adomain: '',
-                            ctrurl: '',
-                            bid: 0,
-                            bidmax: 0,
-                            weight: 0,
-                            exchange: '',
-                            node: '',
-                            start_time: {
-                                time: ''
-                            },
-                            end_time: {
-                                time: ''
-                            },
-                            cat: {
-                                data: []
-                            },
-                            geo: {
-                                data: [{}]
-                            },
-                            hourofweek: {
-                                data: []
-                            },
-                            device: {
-                                data: {}
-                            },
-                            budget: {
-                                data: {
-                                    total: 0,
-                                    daily: {
-                                        total: 0,
-                                        spend: 0
-                                    }
-                                }
-                            }
-                        },
-                        demographyGroupsData: [
-                        {key: 2, group: '1-11', gender: 'm'},
-                        {key: 3, group: '12-18', gender: 'm'},
-                        {key: 4, group: '19-25', gender: 'm'},
-                        {key: 5, group: '26-39', gender: 'm'},
-                        {key: 6, group: '40-55', gender: 'm'},
-                        {key: 7, group: '56-64', gender: 'm'},
-                        {key: 8, group: '65-120', gender: 'm'},
-                        {key: 10, group: '1-11', gender: 'f'},
-                        {key: 11, group: '12-18', gender: 'f'},
-                        {key: 12, group: '19-25', gender: 'f'},
-                        {key: 13, group: '26-39', gender: 'f'},
-                        {key: 14, group: '40-55', gender: 'f'},
-                        {key: 15, group: '56-64', gender: 'f'},
-                        {key: 16, group: '65-120', gender: 'f'},
-                        ],
-                        demographyGroups: ['1-11','12-18','19-25','26-39','40-55','56-64','65-120'],
-                        chosenDemography: [],
-                        chosenGender: [],
-                        categories: false,
-                        countries: false,
-                        cities: [],
-                        fullCityData: {},
-                        loading: false,
-                        noresult: false,
-                        showgeo: false,
-                        openSection: 1,
-                        tempAdomain: '',
-                        tempExchange: '',
-                        tempGeoHolder: {
-                            country: '',
-                            city: ''
-                        },
-                        tempDeviceHolder: {
-                            'type_id': '',
-                            'make': '',
-                            'model': '',
-                            'os': '',
-                            'ua': '',
-                        },
-                        mon: {1:1,2:2,3:3,4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:11, 12:12, 13:13, 14:14, 15:15, 16:16, 17:17, 18:18, 19:19, 20:20, 21:21, 22:22, 23:23, 24:24},
-                        tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
-                        wed: {49:1,50:2,51:3,52:4,53:5,54:6,55:7,56:8,57:9,58:10,59:11,60:12,61:13,62:14,63:15,64:16,65:17,66:18,67:19,68:20,69:21,70:22,71:23,72:24},
-                        thu: {73:1,74:2,75:3,76:4,77:5,78:6,79:7,80:8,81:9,82:10,83:11,84:12,85:13,86:14,87:15,88:16,89:17,90:18,91:19,92:20,93:21,94:22,95:23,96:24},
-                        fri: {97:1,98:2,99:3,100:4,101:5,102:6,103:7,104:8,105:9,106:10,107:11,108:12,109:13,110:14,111:15,112:16,113:17,114:18,115:19,116:20,117:21,118:22,119:23,120:24},
-                        sat: {121:1,122:2,123:3,124:4,125:5,126:6,127:7,128:8,129:9,130:10,131:11,132:12,133:13,134:14,135:15,136:16,137:17,138:18,139:19,140:20,141:21,142:22,143:23,144:24},
-                        sun: {145:1,146:2,147:3,148:4,149:5,150:6,151:7,152:8,153:9,154:10,155:11,156:12,157:13,158:14,159:15,160:16,161:17,162:18,163:19,164:20,165:21,166:22,167:23,168:24},
-                    }
-                },
-
-                methods: {
-
-                    init() {
-                        var self = this;
-                        $(function () {
-                           $.typeahead({
-                               input: '#_search-cities',
-                               order: "desc",
-                               source: {
-                                   cities: {
-                                    ajax: function (query) {
-                                        return {
-                                            type: 'GET',
-                                            url: '/search/geography/city',
-                                            path: 'data.city',
-                                            data: {
-                                                q: '{{query}}' + '&c=' + $('#_search-countries').val()
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            callback: {
-                               onInit: function (node) {
-                               },
-                               onClick(node, el, data) {
-                                console.log(data);
+            return {
+                campaign: {
+                    name: '',
+                    adomain: '',
+                    ctrurl: '',
+                    bid: 0,
+                    bidmax: 0,
+                    weight: 0,
+                    exchange: '',
+                    node: '',
+                    start_time: '',
+                    end_time: '',
+                    cat: {
+                        data: []
+                    },
+                    geo: {
+                        data: [{}]
+                    },
+                    hourofweek: {
+                        data: []
+                    },
+                    device: {
+                        data: {}
+                    },
+                    budget: {
+                        data: {
+                            total: 0,
+                            daily: {
+                                total: 0,
+                                spend: 0
                             }
                         }
-                    });
+                    },
+                },
+                campaignPayload: {
+                    name: '',
+                    adomain: '',
+                    ctrurl: '',
+                    bid: 0,
+                    bidmax: 0,
+                    weight: 0,
+                    exchange: '',
+                    node: '',
+                    start_time: {
+                        time: ''
+                    },
+                    end_time: {
+                        time: ''
+                    },
+                    cat: {
+                        data: []
+                    },
+                    geo: {
+                        data: [{}]
+                    },
+                    hourofweek: {
+                        data: []
+                    },
+                    device: {
+                        data: {}
+                    },
+                    budget: {
+                        data: {
+                            total: 0,
+                            daily: {
+                                total: 0,
+                                spend: 0
+                            }
+                        }
+                    }
+                },
+                demographyGroupsData: [
+                {key: 2, group: '1-11', gender: 'm'},
+                {key: 3, group: '12-18', gender: 'm'},
+                {key: 4, group: '19-25', gender: 'm'},
+                {key: 5, group: '26-39', gender: 'm'},
+                {key: 6, group: '40-55', gender: 'm'},
+                {key: 7, group: '56-64', gender: 'm'},
+                {key: 8, group: '65-120', gender: 'm'},
+                {key: 10, group: '1-11', gender: 'f'},
+                {key: 11, group: '12-18', gender: 'f'},
+                {key: 12, group: '19-25', gender: 'f'},
+                {key: 13, group: '26-39', gender: 'f'},
+                {key: 14, group: '40-55', gender: 'f'},
+                {key: 15, group: '56-64', gender: 'f'},
+                {key: 16, group: '65-120', gender: 'f'},
+                ],
+                demographyGroups: ['1-11','12-18','19-25','26-39','40-55','56-64','65-120'],
+                chosenDemography: [],
+                chosenGender: [],
+                categories: false,
+                countries: false,
+                cities: [],
+                fullCityData: {},
+                loading: false,
+                noresult: false,
+                showgeo: false,
+                openSection: 1,
+                tempAdomain: '',
+                tempExchange: '',
+                tempGeoHolder: {
+                    country: '',
+                    city: ''
+                },
+                tempDeviceHolder: {
+                    'type_id': '',
+                    'make': '',
+                    'model': '',
+                    'os': '',
+                    'ua': '',
+                },
+                mon: {1:1,2:2,3:3,4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:11, 12:12, 13:13, 14:14, 15:15, 16:16, 17:17, 18:18, 19:19, 20:20, 21:21, 22:22, 23:23, 24:24},
+                tue: {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8,33:9,34:10,35:11,36:12,37:13,38:14,39:15,40:16,41:17,42:18,43:19,44:20,45:21,46:22,47:23,48:24},
+                wed: {49:1,50:2,51:3,52:4,53:5,54:6,55:7,56:8,57:9,58:10,59:11,60:12,61:13,62:14,63:15,64:16,65:17,66:18,67:19,68:20,69:21,70:22,71:23,72:24},
+                thu: {73:1,74:2,75:3,76:4,77:5,78:6,79:7,80:8,81:9,82:10,83:11,84:12,85:13,86:14,87:15,88:16,89:17,90:18,91:19,92:20,93:21,94:22,95:23,96:24},
+                fri: {97:1,98:2,99:3,100:4,101:5,102:6,103:7,104:8,105:9,106:10,107:11,108:12,109:13,110:14,111:15,112:16,113:17,114:18,115:19,116:20,117:21,118:22,119:23,120:24},
+                sat: {121:1,122:2,123:3,124:4,125:5,126:6,127:7,128:8,129:9,130:10,131:11,132:12,133:13,134:14,135:15,136:16,137:17,138:18,139:19,140:20,141:21,142:22,143:23,144:24},
+                sun: {145:1,146:2,147:3,148:4,149:5,150:6,151:7,152:8,153:9,154:10,155:11,156:12,157:13,158:14,159:15,160:16,161:17,162:18,163:19,164:20,165:21,166:22,167:23,168:24},
+            }
+        },
 
-                           $.typeahead({
-                            input: '#_search-countries',
-                            order: "desc",
-                            source: {
-                                data: [
-                                "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
-                                "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
-                                "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia",
-                                "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma",
-                                "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad",
-                                "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic", "Congo, Republic of the",
-                                "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti",
-                                "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador",
-                                "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon",
-                                "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Greenland", "Grenada", "Guatemala", "Guinea",
-                                "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India",
-                                "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
-                                "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Laos",
-                                "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
-                                "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
-                                "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Mongolia", "Morocco", "Monaco",
-                                "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger",
-                                "Nigeria", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru",
-                                "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Samoa", "San Marino",
-                                "Sao Tome", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone",
-                                "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain",
-                                "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan",
-                                "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
-                                "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States",
-                                "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
-                                ]
-                            },
-                            callback: {
-                                onInit: function (node) {
-                                },
-                                onClick(node, el, data) {
-                                    self.tempGeoHolder.country = data.display.toLowerCase();
+        methods: {
+
+            init() {
+                var self = this;
+                $(function () {
+                 $.typeahead({
+                     input: '#_search-cities',
+                     order: "desc",
+                     source: {
+                         cities: {
+                            ajax: function (query) {
+                                return {
+                                    type: 'GET',
+                                    url: '/search/geography/city',
+                                    path: 'data.city',
+                                    data: {
+                                        q: '{{query}}' + '&c=' + $('#_search-countries').val()
+                                    }
                                 }
                             }
-                        });
-                       });
+                        }
+                    },
+                    callback: {
+                     onInit: function (node) {
+                     },
+                     onClick(node, el, data) {
+                        console.log(data);
+                    }
+                }
+            });
+
+                 $.typeahead({
+                    input: '#_search-countries',
+                    order: "desc",
+                    source: {
+                        data: [
+                        "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
+                        "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
+                        "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia",
+                        "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma",
+                        "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad",
+                        "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic", "Congo, Republic of the",
+                        "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti",
+                        "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador",
+                        "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon",
+                        "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Greenland", "Grenada", "Guatemala", "Guinea",
+                        "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India",
+                        "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+                        "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Laos",
+                        "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+                        "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
+                        "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Mongolia", "Morocco", "Monaco",
+                        "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger",
+                        "Nigeria", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru",
+                        "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Samoa", "San Marino",
+                        "Sao Tome", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone",
+                        "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain",
+                        "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan",
+                        "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
+                        "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States",
+                        "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+                        ]
+                    },
+                    callback: {
+                        onInit: function (node) {
+                        },
+                        onClick(node, el, data) {
+                            self.tempGeoHolder.country = data.display.toLowerCase();
+                        }
+                    }
+                });
+             });
 },
 
 updateCampaign: function (id) {
@@ -638,11 +638,7 @@ updateCampaign: function (id) {
                 this.campaignPayload['adomain'] = this.tempAdomain.split(',');
                 this.campaignPayload['exchange'] = this.tempExchange.split(',');
 
-                this.$http.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                axios.put(this.$root.api + 'campaigns/' + obj.id, this.campaignPayload, this.$root.config).then( response => {
                     self.campaign.data = response.data;
                     console.log(self.campaign.data);
 
@@ -667,11 +663,7 @@ updateCampaign: function (id) {
             addGeoItem() {
                 var self = this;
 
-                this.$http.put(this.$root.api + 'campaigns/' + obj.id + '/geography', {country: self.tempGeoHolder.country, city: self.tempGeoHolder.city}, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then(response => {
+                axios.put(this.$root.api + 'campaigns/' + obj.id + '/geography', {country: self.tempGeoHolder.country, city: self.tempGeoHolder.city}, this.$root.config).then(response => {
                     console.log(response);
 
                     var data = {
@@ -693,11 +685,7 @@ updateCampaign: function (id) {
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'campaigns/' + obj.id, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                axios.get(this.$root.api + 'campaigns/' + obj.id, this.$root.config).then( response => {
                     var campaignData = response.data.data;
 
                     this.campaign = response.data.data;
@@ -714,7 +702,7 @@ updateCampaign: function (id) {
 
             fetchCategories: function () {
 
-                this.$http.get('/data/categories').then( response => {
+                axios.get('/data/categories').then( response => {
                     this.categories = response.data;
                 }, error => {
                     console.log(error);
@@ -722,7 +710,7 @@ updateCampaign: function (id) {
             },
 
             fetchCountries: function () {
-                this.$http.get('/data/countries').then( response => {
+                axios.get('/data/countries').then( response => {
                     this.countries = response.data;
                 }, error => {
                     console.log(error);

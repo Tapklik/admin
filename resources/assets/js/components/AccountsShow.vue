@@ -226,11 +226,7 @@
                 var self = this;
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                this.$http.get(this.$root.api + 'accounts/' + accountId + '/users', {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                this.$http.get(this.$root.api + 'accounts/' + accountId + '/users', this.$root.config).then( response => {
                     this.users = response.data.data;
 
                     this.loading = false;
@@ -245,11 +241,7 @@
                 var self = this;
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                this.$http.get(this.$root.api + 'accounts/' + accountId, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                this.$http.get(this.$root.api + 'accounts/' + accountId, this.$root.config).then( response => {
                     this.account = response.data.data;
 
                     this.loading = false;
@@ -333,11 +325,7 @@
             createNewUser: function () {
                 this.loading = true;
 
-                return this.$http.post(this.$root.api + 'accounts/' + this.account.id + '/users', this.user, {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.token
-                    }
-                }).then(response => {
+                return this.$http.post(this.$root.api + 'accounts/' + this.account.id + '/users', this.user, this.$root.config).then(response => {
 
                     this.fetchUsers();
                     this.loading = false;
@@ -359,7 +347,7 @@
                 status = (1 == status) ? 0 : 1;
                 this.accounts.data[index].status = status;
 
-                this.$http.put(this.$root.api + 'accounts/' + id, {status: status}).then(response => {
+                this.$http.put(this.$root.api + 'accounts/' + id, {status: status}, this.$root.config).then(response => {
                     this.fetchAccounts();
                 }, error => {
                     swal('Error', error, 'error');
@@ -420,21 +408,13 @@
 
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', {
-                    headers: {
-                        'Authorization' : self.token
-                    }
-                }).then( response => {
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', this.$root.config).then( response => {
                     self.a = response.data.data.balance
                 }, error => {
                     console.log(error);
                 });
 
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', {
-                    headers: {
-                        'Authorization' : self.token
-                    }
-                }).then( response => {
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
                     self.b = response.data.data.balance
                 }, error => {
                     console.log(error);
@@ -462,11 +442,7 @@
 
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', {
-                    headers: {
-                        'Authorization' : self.token
-                    }
-                }).then( response => {
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
                     if (self.flightList.length >= 30) {
                         self.flightList.splice(0,1)
                     }
@@ -486,11 +462,7 @@
 
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', {
-                    headers: {
-                        'Authorization' : self.token
-                    }
-                }).then( response => {
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', this.$root.config).then( response => {
                     if (self.spendList.length >= 30) {
                         self.spendList.splice(0,1)
                     }

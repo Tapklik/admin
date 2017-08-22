@@ -113,11 +113,7 @@
                 
                 this.loading = true;
             
-                axios.get(this.$root.api + 'campaigns', {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.token
-                    }
-                }).then(response => {
+                axios.get(this.$root.api + 'campaigns', this.$root.config).then(response => {
                     this.campaigns = response.data;
                     this.loading = false;
                 }, error => {
@@ -132,11 +128,7 @@
                 status = (1 == status) ? 0 : 1;
                 this.campaigns.data[index].status = status;
 
-                axios.put(this.$root.api + 'campaigns/' + id + '/approve', {approved: status}, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then(response => {
+                axios.put(this.$root.api + 'campaigns/' + id + '/approve', {approved: status}, this.$root.config).then(response => {
                     this.fetchCampaigns();
                 }, error => {
                     console.log(error);

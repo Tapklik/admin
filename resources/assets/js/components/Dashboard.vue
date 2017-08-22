@@ -83,11 +83,7 @@
                 var self = this
                 setInterval(function(){ 
                     var data = 0
-                    axios.get('http://api.tapklik.com/v1/accounts/' + id + '/banker/main?query=balance', {
-                        headers: {
-                            'Authorization' : self.token
-                        }
-                    }).then( response => {
+                    axios.get('http://api.tapklik.com/v1/accounts/' + id + '/banker/main?query=balance', this.$root.config).then( response => {
                         //this.balanceList.push(response.data.data.balance)
                     var time = new Date(); console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds()); 
                     if (self.balanceList.length > 30) {

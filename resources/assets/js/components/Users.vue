@@ -300,11 +300,7 @@
                 this.loading = true;
                 var self = this;
 
-                this.$http.get(this.$root.api + 'accounts', {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                axios.get(this.$root.api + 'accounts', this.$root.config).then( response => {
                     this.accounts = response.data.data;
 
                     this.loading = false;
@@ -315,7 +311,7 @@
 
             fetchCountries: function () {
 
-                this.$http.get('/data/countries').then( response => {
+                axios.get('/data/countries').then( response => {
                     this.countriesList = response;
                 }, error => {
                     console.log(error);
@@ -324,7 +320,7 @@
 
             fetchTimezones: function () {
 
-                this.$http.get('/data/timezones').then( response => {
+                axios.get('/data/timezones').then( response => {
                     this.timezonesList = response;
                 }, error => {
                     console.log(error);
@@ -333,7 +329,7 @@
 
             fetchLanguages: function () {
 
-                this.$http.get('/data/languages').then( response => {
+                axios.get('/data/languages').then( response => {
                     this.languagesList = response;
                 }, error => {
                     console.log(error);
@@ -344,11 +340,7 @@
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + id + '/users', {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                axios.get(this.$root.api + 'accounts/' + id + '/users', this.$root.config).then( response => {
 
                     this.loading = false;
 
@@ -365,11 +357,7 @@
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + id, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then(response => {
+                axios.get(this.$root.api + 'accounts/' + id, this.$root.config).then(response => {
 
                     this.account = response.data;
                     this.loading = false;
@@ -388,11 +376,7 @@
             createNewAccount: function () {
                 this.loading = true;
 
-                return this.$http.post(this.$root.api + 'accounts', this.account, {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.token
-                    }
-                }).then(response => {
+                return axios.post(this.$root.api + 'accounts', this.account, this.$root.config).then(response => {
 
                     this.fetchAccounts();
                     this.loading = false;
@@ -414,7 +398,7 @@
                 status = (1 == status) ? 0 : 1;
                 this.accounts.data[index].status = status;
 
-                this.$http.put(this.$root.api + 'accounts/' + id, {status: status}).then(response => {
+                axios.put(this.$root.api + 'accounts/' + id, {status: status}, this.$root.config).then(response => {
                     this.fetchAccounts();
                 }, error => {
                     console.log(error);

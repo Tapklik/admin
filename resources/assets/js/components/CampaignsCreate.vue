@@ -506,11 +506,7 @@
 
             createCampaign() {
 
-                this.$http.post(this.$root.api + 'campaigns', this.campaign, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then(response => {
+                axios.post(this.$root.api + 'campaigns', this.campaign, this.$root.config).then(response => {
                     swal('Great Successs', 'Campaign created successfully', 'success');
                     console.log(response);
                 }, error => {
@@ -520,7 +516,7 @@
 
             fetchCategories() {
 
-                this.$http.get('/data/categories').then( response => {
+                axios.get('/data/categories').then( response => {
                     this.categories = response.body;
                 }, error => {
                     console.log(error);
@@ -528,7 +524,7 @@
             },
 
             fetchCountries() {
-                this.$http.get('/data/countries').then( response => {
+                axios.get('/data/countries').then( response => {
                     this.countries = response.data;
                 }, error => {
                     console.log(error);
@@ -536,11 +532,7 @@
             },
 
             fetchAccounts() {
-                this.$http.get(this.$root.api + 'accounts', {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                axios.get(this.$root.api + 'accounts', this.$root.config).then( response => {
                     this.accounts = response.data.data;
                 }, error => {
                     console.log(error);
@@ -551,7 +543,7 @@
                 var chosenCountry = $('#_search-countries').val();
                 var self = this;
 
-                this.$http.get('/search/geography/country?q=' + chosenCountry).then(response => {
+                axios.get('/search/geography/country?q=' + chosenCountry).then(response => {
                      var data = {
                         country: response.data.data.iso3,
                         city: $('#_search-cities').val(),

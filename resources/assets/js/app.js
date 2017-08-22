@@ -30,9 +30,10 @@ Vue.component('users', require('./components/Users.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-        'api': 'http://api.tapklik.com/v1/',
-        'path': '//api.tapklik.com/',
-        'token': ''
+        api : 'http://api.tapklik.com/v1/',
+        path: '//api.tapklik.com/',
+        token: false,
+        config: {}
     },
 
     mounted () {
@@ -43,7 +44,7 @@ const app = new Vue({
 
         getApiToken () {
 
-            this.$http.post(this.api + 'auth', {
+            axios.post(this.api + 'auth', {
                 'email': 'root',
                 'password': 'root'
             }).then(response => {
@@ -54,10 +55,13 @@ const app = new Vue({
 
         }
     },
-
+    
     watch: {
         token(value) {
+            if(value == null) return;
+
             this.$children[0].token = value;
+            this.config = {headers: {'Authorization': "Bearer " + this.token}};
         }
-    }
+    },
 });

@@ -97,11 +97,7 @@
             fetchCampaignCreatives: function () {
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'campaigns/' + obj.id + '/creatives', {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                axios.get(this.$root.api + 'campaigns/' + obj.id + '/creatives', this.$root.config).then( response => {
                     this.creatives = response.data;
                     this.loading = false;
                 }, error => {
@@ -115,11 +111,7 @@
                 var state = (status) ? 0 : 1;
 
                 var self = this;
-                this.$http.put(this.$root.api + 'creatives/' + id + '/status', {status: state}, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                axios.put(this.$root.api + 'creatives/' + id + '/status', {status: state}, this.$root.config).then( response => {
 
                    self.fetchCampaignCreatives();
                     this.loading = false;
