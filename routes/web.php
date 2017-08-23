@@ -10,6 +10,11 @@ Route::get('dashboard', [
 	'uses' => 'DashboardController@index'
 ]);
 
+Route::get('accounting', [
+	'as'   => 'accounting.index',
+	'uses' => 'AccountingController@index'
+]);
+
 Route::get('creatives', [
 	'as'   => 'creatives.index',
 	'uses' => 'CreativesController@index'
