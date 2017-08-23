@@ -26,6 +26,7 @@ Vue.component('creatives-all', require('./components/CreativesAll.vue'));
 Vue.component('creative-show', require('./components/CreativesShow.vue'));
 Vue.component('reports', require('./components/Reports.vue'));
 Vue.component('users', require('./components/Users.vue'));
+Vue.component('accounting', require('./components/Accounting.vue'));
 
 const app = new Vue({
     el: '#app',

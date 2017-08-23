@@ -89,7 +89,6 @@
 <script>
     export default {
         mounted() {
-            this.fetchCampaigns();
         },
 
         data() {

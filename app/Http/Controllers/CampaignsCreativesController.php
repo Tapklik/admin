@@ -5,6 +5,6 @@ class CampaignsCreativesController extends Controller
     public function show($id) {
     	$creatives = ['id' => $id];
 
-    	return view('frontend.campaigns.creatives.index', compact('creatives'));
+    	return view('campaigns.creatives.index', compact('creatives'));
     }
 }

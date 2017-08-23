@@ -8,11 +8,11 @@ class AccountCampaignsController extends Controller
 	{
 		$account   = ['id' => $id];
 		$campaigns = [];
-		return view('frontend.accounts.campaigns.index', compact('campaigns', 'account'));
+		return view('accounts.campaigns.index', compact('campaigns', 'account'));
 	}
 
 	public function show ($id, $cid) {
 
-		return view('frontend.accounts.campaigns.show', compact('cid'));
+		return view('accounts.campaigns.show', compact('cid'));
 	}
 }

@@ -8,18 +8,18 @@ class CreativesController extends Controller
 {
 	public function index ()
 	{
-		return view('frontend.creatives.index');
+		return view('creatives.index');
 	}
 
 	public function show ($id)
     {
-        return view('frontend.creatives.show', compact('id'));
+        return view('creatives.show', compact('id'));
     }
 
 	public function create ($id)
     {
 
-        return view('frontend.creatives.upload', compact('id'));
+        return view('creatives.upload', compact('id'));
     }
 
     public function upload (Request $request, $id) {

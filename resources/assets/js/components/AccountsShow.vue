@@ -196,7 +196,11 @@
         data: function () {
 
             return {
-                account: {},
+                account: {
+                    localization: {
+                        
+                    }
+                },
                 users: {},
                 user: {
                     first_name: '',

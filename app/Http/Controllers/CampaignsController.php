@@ -8,16 +8,16 @@ class CampaignsController extends Controller
 	{
 		$campaigns = [];
 
-		return view('frontend.campaigns.index', compact('campaigns'));
+		return view('campaigns.index', compact('campaigns'));
 	}
 
 	public function show ($id)
 	{
-		return view('frontend.campaigns.show', compact('id'));
+		return view('campaigns.show', compact('id'));
 	}
 
 	public function create () {
 
-		return view('frontend.campaigns.create');
+		return view('campaigns.create');
 	}
 }
