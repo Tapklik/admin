@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-md-8">
-                <h1 class="title pull-left">Accounts</h1>
+                <h1 class="title pull-left">Accountss</h1>
 
                 <button class="btn btn-default pull-right" @click="openCreateAccount()">
                     <i class="fa fa-plus"></i> Create new account

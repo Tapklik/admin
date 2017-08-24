@@ -60,8 +60,8 @@
                         link
                     </a>
                 </td>
-                <td>${{ campaign.budget.data.amount }}</td>
-                <td>${{ campaign.bid }}</td>
+                <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
+                <td>${{ $root.fromMicroDollars(campaign.bid) }}</td>
                 <td>
                     <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
                         View

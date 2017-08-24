@@ -92,6 +92,51 @@
                     </table>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-sm-7 pull-right">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    ID
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Delete
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="campaign in campaigns">
+                                <td>
+                                    {{ campaign.name }}
+                                </td>
+                                <td>
+                                    {{ campaign.id }}
+                                </td>
+                                <td>
+                                    <button class="btn"
+                                            :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn':campaign.status=='archived' }"
+                                            @click="toggleStatus(campaign.id , campaign.status)">
+                                        <i class="fa fa-check-circle-o"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
+                                        <i class="fa fa-check-circle-o"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             
             <hr/>
 
@@ -193,7 +238,7 @@
             this.fetchLanguages();
         },
 
-        data: function () {
+        data() {
 
             return {
                 account: {
@@ -218,6 +263,7 @@
                 balanceList: [],
                 flightList:[],
                 spendList:[],
+                campaigns: [],
                 a: null,
                 b: null
             }
@@ -225,12 +271,16 @@
 
         methods: {
 
-            fetchUsers: function () {
+            consoleLog(message, mes) {
+                console.log(message + mes);
+            },
+
+            fetchUsers() {
                 this.loading = true;
                 var self = this;
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                this.$http.get(this.$root.api + 'accounts/' + accountId + '/users', this.$root.config).then( response => {
+                axios.get(this.$root.api + 'accounts/' + accountId + '/users', this.$root.config).then( response => {
                     this.users = response.data.data;
 
                     this.loading = false;
@@ -239,13 +289,13 @@
                 });
             },
 
-            fetchAccount: function () {
+            fetchAccount() {
 
                 this.loading = true;
                 var self = this;
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                this.$http.get(this.$root.api + 'accounts/' + accountId, this.$root.config).then( response => {
+                axios.get(this.$root.api + 'accounts/' + accountId, this.$root.config).then( response => {
                     this.account = response.data.data;
 
                     this.loading = false;
@@ -254,42 +304,88 @@
                 });
             },
 
-            fetchCountries: function () {
+            fetchCampaigns() {
 
-                this.$http.get('/data/countries').then( response => {
+                this.loading = true;
+                var self = this;
+                var accountId = window.location.pathname.replace('\/accounts\/', '');
+
+                axios.get(this.$root.api + 'accounts/' + accountId + '/campaigns', this.$root.config).then( response => {
+                    this.campaigns = response.data.data;
+
+                    this.loading = false;
+                }, error => {
+                    console.log(error);
+                });
+            },
+
+            fetchCountries() {
+
+                axios.get('/data/countries').then( response => {
                     this.countriesList = response;
                 }, error => {
                     console.log(error);
                 });
             },
 
-            fetchTimezones: function () {
+            fetchTimezones() {
 
-                this.$http.get('/data/timezones').then( response => {
+                axios.get('/data/timezones').then( response => {
                     this.timezonesList = response;
                 }, error => {
                     console.log(error);
                 });
             },
 
-            fetchLanguages: function () {
+            fetchLanguages() {
 
-                this.$http.get('/data/languages').then( response => {
+                axios.get('/data/languages').then( response => {
                     this.languagesList = response;
                 }, error => {
                     console.log(error);
                 });
             },
 
+            deleteCampaign(id) {
+
+                axios.delete(this.$root.api + 'campaigns/' + id, this.$root.config).then( response => {
+                    alert('succesful deletion');
+                }, error => {
+                    console.log(error);
+                });
+            },
+
+
+            toggleStatus(id, status) {
+
+               if (status == 'active') {
+                    axios.put(this.$root.api + 'campaigns/' + id, {status: 'stopped'}, this.$root.config).then(response => {
+                    alert('success');
+                    }, error => {
+                    console.log(error);
+                    });
+                }
+                else if(status == 'stopped') {
+                    axios.put(this.$root.api + 'campaigns/' + id, {status: 'archived'}, this.$root.config).then(response => {
+                    alert('success')
+                    }, error => {
+                    console.log(error);
+                    });
+                }
+                else {
+                    axios.put(this.$root.api + 'campaigns/' + id, {status: 'active'}, this.$root.config).then(response => {
+                    alert('success')
+                    }, error => {
+                    console.log(error);
+                    });
+                }
+            },
+
             openUsers(id) {
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + id + '/users', {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then( response => {
+                axios.get(this.$root.api + 'accounts/' + id + '/users', this.$root.config).then( response => {
 
                     this.loading = false;
 
@@ -306,11 +402,7 @@
 
                 this.loading = true;
 
-                this.$http.get(this.$root.api + 'accounts/' + id, {
-                    headers: {
-                        'Authorization': 'Bearer ' + self.token
-                    }
-                }).then(response => {
+                axios.get(this.$root.api + 'accounts/' + id, this.$root.config).then(response => {
 
                     this.account = response.data;
                     this.loading = false;
@@ -329,7 +421,7 @@
             createNewUser: function () {
                 this.loading = true;
 
-                return this.$http.post(this.$root.api + 'accounts/' + this.account.id + '/users', this.user, this.$root.config).then(response => {
+                return axios.post(this.$root.api + 'accounts/' + this.account.id + '/users', this.user, this.$root.config).then(response => {
 
                     this.fetchUsers();
                     this.loading = false;
@@ -344,18 +436,6 @@
 
             closeModal() {
                 $('#_modal-create-new-user').modal('close');
-            },
-
-            toggleStatus(id, status, index) {
-
-                status = (1 == status) ? 0 : 1;
-                this.accounts.data[index].status = status;
-
-                this.$http.put(this.$root.api + 'accounts/' + id, {status: status}, this.$root.config).then(response => {
-                    this.fetchAccounts();
-                }, error => {
-                    swal('Error', error, 'error');
-                });
             },
 
             createChart(target, dataset) {
@@ -515,9 +595,10 @@
         },
 
         watch: {
-            token: function (value) {
+            token(value) {
                 this.fetchAccount();
                 this.fetchUsers();
+                this.fetchCampaigns();
             }
         }
     }

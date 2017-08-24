@@ -18,7 +18,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
+                    <th>Namee</th>
                     <th>Start Time</th>
                     <th>End Time</th>
                     <th>Adomain</th>

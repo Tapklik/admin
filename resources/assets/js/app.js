@@ -54,6 +54,14 @@ const app = new Vue({
                 alert('Error');
             });
 
+        },
+
+        toMicroDollars(value){
+            return value * 1000000
+        },
+
+        fromMicroDollars(value) {
+            return value / 1000000
         }
     },
     

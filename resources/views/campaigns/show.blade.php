@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('breadcrumbs')
-    Edit campaign
+    Campaign
 @stop
 
 @section('head_scripts')
