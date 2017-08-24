@@ -20,6 +20,7 @@
                 <th>Acc. Id</th>
                 <th>Status</th>
                 <th>Settings</th>
+                <th>Delete Account</th>
             </tr>
             </thead>
             <tbody class="vcenter">
@@ -50,6 +51,11 @@
                     <button class="btn">
                         <i class="fa fa-cog"></i>
                     </button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" @click="deleteAccount(account.id)">
+                        <i class="fa fa-check-circle-o"></i>
+                    </button>                    
                 </td>
             </tr>
             </tbody>
@@ -199,6 +205,15 @@
 
                 axios.get('/data/languages').then( response => {
                     this.languagesList = response;
+                }, error => {
+                    console.log(error);
+                });
+            },
+
+            deleteAccount(id) {
+
+                axios.delete(this.$root.api + 'accounts/' + id, this.$root.config).then( response => {
+                    alert('succesful deletion');
                 }, error => {
                     console.log(error);
                 });

@@ -70,6 +70,9 @@
                                 <th>
                                     Status
                                 </th>
+                                <th>
+                                    Delete User
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,6 +89,11 @@
                                 <td>
                                     <i class="fa fa-check" v-show="user.status == 1"></i>
                                     <i class="fa fa-ban" v-show="!user.status"></i>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" @click="deleteUser(user.id)">
+                                        <i class="fa fa-check-circle-o"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -108,7 +116,7 @@
                                     Status
                                 </th>
                                 <th>
-                                    Delete
+                                    Delete Campaign
                                 </th>
                             </tr>
                         </thead>
@@ -122,7 +130,7 @@
                                 </td>
                                 <td>
                                     <button class="btn"
-                                            :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn':campaign.status=='archived' }"
+                                            :class="{ 'btn-success': campaign.status==='active', 'btn-danger': campaign.status==='stopped', 'btn':campaign.status==='archived' }"
                                             @click="toggleStatus(campaign.id , campaign.status)">
                                         <i class="fa fa-check-circle-o"></i>
                                     </button>
@@ -355,14 +363,26 @@
                 });
             },
 
+            deleteUser(id) {
+
+                var accountId = window.location.pathname.replace('\/accounts\/', '');
+
+                axios.delete(this.$root.api + 'accounts/' + accountId + '/users/' + id, this.$root.config).then(response => {
+                    alert('succesful deletion');
+                }, error => {
+                    console.log(error);
+                });
+            },
+
 
             toggleStatus(id, status) {
 
                if (status == 'active') {
+                status=='stopped'
                     axios.put(this.$root.api + 'campaigns/' + id, {status: 'stopped'}, this.$root.config).then(response => {
                     alert('success');
                     }, error => {
-                    console.log(error);
+                        status=='active'
                     });
                 }
                 else if(status == 'stopped') {
@@ -414,7 +434,6 @@
             },
 
             openCreateAccount() {
-
                 $('#_modal-create-new-user').modal();
             },
 
@@ -602,5 +621,4 @@
             }
         }
     }
-
 </script>
