@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
 
-    return redirect('/campaigns');
+    return redirect('/auth');
 });
 
 Route::get('auth', [
