@@ -126,6 +126,15 @@ Route::group(
     }
 );
 
+Route::get(
+	'/logout',
+	function (Request $request) {
+
+		$request->session()->flush();
+
+		return redirect('/auth');
+	}
+);
 
 Route::get('data/countries', function () {
 

@@ -42,6 +42,11 @@
                         Accounting
                     </a>
                 </li>
+                <li class="{{ Request::is('logout') ? 'selected' : '' }}">
+                    <a href="/logout">
+                        Logout
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
