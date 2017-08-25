@@ -398,7 +398,7 @@
 
                 var accountId = window.location.pathname.replace('\/campaigns\/', '');
 
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', this.$root.config).then( response => {
+                axios.get('http://api.tapklik.com/v1/campaigns/' + accountId + '/banker/spend?query=balance', this.$root.config).then( response => {
                     if (self.spendList.length >= 30) {
                         self.spendList.splice(0,1)
                     }

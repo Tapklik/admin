@@ -545,7 +545,7 @@
 
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get('http://api.tapklik.com/v1/campaigns/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
+                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
                     if (self.flightList.length >= 30) {
                         self.flightList.splice(0,1)
                     }
