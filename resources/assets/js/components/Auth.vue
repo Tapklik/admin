@@ -62,6 +62,7 @@
                     'password': this.password
                 }).then(response => {
                     this.token = atob(response.data.token);
+                    console.log(this.token);
                     this.isLoading = false;
                 }, error => {
                     this.error = error.data.error;

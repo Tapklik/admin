@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\Authenticate;
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
 
     return redirect('/campaigns');
@@ -94,6 +97,35 @@ Route::get('accounts/{id}/creatives', [
 	'as'   => 'accounts.noroute',
 	'uses' => 'AccountsController@noroute'
 ]);
+
+Route::group(
+    ['prefix' => 'core'],
+    function () {
+
+        Route::get(
+            '/token',
+            function (Request $request) {
+
+                return response()->json(
+                    [
+                        'token' => session('token'),
+                    ]
+                );
+            }
+        );
+
+        Route::post(
+            '/token',
+            function (Request $request) {
+
+                session(['token' => $request->input('token')]);
+
+                return response()->json(['token' => true]);
+            }
+        );
+    }
+);
+
 
 Route::get('data/countries', function () {
 

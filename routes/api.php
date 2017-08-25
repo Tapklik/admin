@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('/token', function (Request $request) {
+
+    session(['token' => $request->input('token')]);
+
+    return response()->json(['token' => true]);
+});
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');

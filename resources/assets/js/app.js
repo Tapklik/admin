@@ -45,7 +45,19 @@ const app = new Vue({
     },
 
     methods: {
+/*
+        getApiToken () {
 
+            axios.post(this.api + 'auth', {
+                'email': 'root',
+                'password': 'root'
+            }).then(response => {
+                this.token = atob(response.data.token);
+            }, error => {
+                alert('Error');
+            });
+
+        },*/
         getApiToken() {
 
             axios.get('/core/token').then(response => {
