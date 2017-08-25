@@ -28,6 +28,9 @@ Vue.component('reports', require('./components/Reports.vue'));
 Vue.component('users', require('./components/Users.vue'));
 Vue.component('accounting', require('./components/Accounting.vue'));
 
+/*LOGIN COMPONENT*/
+Vue.component('auth', require('./components/Auth.vue'));
+
 const app = new Vue({
     el: '#app',
     data: {
@@ -43,17 +46,13 @@ const app = new Vue({
 
     methods: {
 
-        getApiToken () {
+        getApiToken() {
 
-            axios.post(this.api + 'auth', {
-                'email': 'root',
-                'password': 'root'
-            }).then(response => {
-                this.token = atob(response.data.token);
+            axios.get('/core/token').then(response => {
+                this.token = response.data.token;
             }, error => {
-                alert('Error');
+               swal('Error', error, 'error');
             });
-
         },
 
         toMicroDollars(value){

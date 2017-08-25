@@ -130,7 +130,7 @@
                                 </td>
                                 <td>
                                     <button class="btn"
-                                            :class="{ 'btn-success': campaign.status==='active', 'btn-danger': campaign.status==='stopped', 'btn':campaign.status==='archived' }"
+                                            :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status=='archived' }"
                                             @click="toggleStatus(campaign.id , campaign.status)">
                                         <i class="fa fa-check-circle-o"></i>
                                     </button>
@@ -358,6 +358,7 @@
 
                 axios.delete(this.$root.api + 'campaigns/' + id, this.$root.config).then( response => {
                     alert('succesful deletion');
+                    location.reload();
                 }, error => {
                     console.log(error);
                 });
@@ -369,6 +370,7 @@
 
                 axios.delete(this.$root.api + 'accounts/' + accountId + '/users/' + id, this.$root.config).then(response => {
                     alert('succesful deletion');
+                    location.reload();
                 }, error => {
                     console.log(error);
                 });
@@ -378,23 +380,26 @@
             toggleStatus(id, status) {
 
                if (status == 'active') {
-                status=='stopped'
+                
                     axios.put(this.$root.api + 'campaigns/' + id, {status: 'stopped'}, this.$root.config).then(response => {
                     alert('success');
+                    location.reload();
                     }, error => {
-                        status=='active'
+                    console.log(error);
                     });
                 }
                 else if(status == 'stopped') {
                     axios.put(this.$root.api + 'campaigns/' + id, {status: 'archived'}, this.$root.config).then(response => {
-                    alert('success')
+                    alert('success');
+                    location.reload();
                     }, error => {
                     console.log(error);
                     });
                 }
                 else {
                     axios.put(this.$root.api + 'campaigns/' + id, {status: 'active'}, this.$root.config).then(response => {
-                    alert('success')
+                    alert('success');
+                    location.reload();
                     }, error => {
                     console.log(error);
                     });

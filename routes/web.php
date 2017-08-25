@@ -5,6 +5,11 @@ Route::get('/', function () {
     return redirect('/campaigns');
 });
 
+Route::get('auth', [
+	'as'   => 'auth.index',
+	'uses' => 'AuthController@index'
+]);
+
 Route::get('dashboard', [
 	'as'   => 'dashboard.index',
 	'uses' => 'DashboardController@index'
