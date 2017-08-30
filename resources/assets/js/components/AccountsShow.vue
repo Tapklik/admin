@@ -113,7 +113,7 @@
                                     ID
                                 </th>
                                 <th>
-                                    Status
+                                    Statuss
                                 </th>
                                 <th>
                                     Delete Campaign
@@ -129,6 +129,7 @@
                                     {{ campaign.id }}
                                 </td>
                                 <td>
+                                <input type="text" v-model="campaign.status">
                                     <button class="btn"
                                             :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status=='archived' }"
                                             @click="toggleStatus(campaign.id , campaign.status)">
@@ -383,7 +384,6 @@
                 
                     axios.put(this.$root.api + 'campaigns/' + id, {status: 'stopped'}, this.$root.config).then(response => {
                     alert('success');
-                    location.reload();
                     }, error => {
                     console.log(error);
                     });

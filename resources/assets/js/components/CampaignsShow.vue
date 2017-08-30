@@ -31,7 +31,7 @@
                                 <button class="btn"
                                 :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status == 'archived'}"
                                 :data-status="campaign.status"
-                                @click="toggleStatus(campaign.id, campaign.approved, index)">
+                                @click="toggleStatus(campaign.id, campaign.status)">
                                 <i class="fa fa-check-circle-o"></i>
                             </button>
                         </td>
