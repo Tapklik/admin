@@ -31,12 +31,12 @@
         <nav>
             <ul>
                 <li class="">
-                    <a href="/dashboard">
+                    <a href="/register">
                         Register
                     </a>
                 </li>
                 <li class="">
-                    <a href="/accounts">
+                    <a href="/auth">
                         Login
                     </a>
                 </li>
