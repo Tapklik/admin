@@ -31,14 +31,7 @@
         <nav>
             <ul>
                 <li class="">
-                    <a href="/dashboard">
-                        Register
-                    </a>
-                </li>
-                <li class="">
-                    <a href="/accounts">
-                        Login
-                    </a>
+
                 </li>
             </ul>
         </nav>

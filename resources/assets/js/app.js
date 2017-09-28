@@ -34,36 +34,23 @@ Vue.component('auth', require('./components/Auth.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-        api : 'http://api.tapklik.com/v1/',
+        api : 'http://local.api.tapklik.com/v1',
         path: '//api.tapklik.com/',
         token: false,
         config: {}
     },
 
     mounted () {
-        this.getApiToken();
+
     },
 
     methods: {
-/*
-        getApiToken () {
-
-            axios.post(this.api + 'auth', {
-                'email': 'root',
-                'password': 'root'
-            }).then(response => {
-                this.token = atob(response.data.token);
-            }, error => {
-                alert('Error');
-            });
-
-        },*/
         getApiToken() {
 
             axios.get('/core/token').then(response => {
                 this.token = response.data.token;
-            }, error => {
-               swal('Error', error, 'error');
+        }, error => {
+                swal('Error', error, 'error');
             });
         },
 
@@ -82,6 +69,8 @@ const app = new Vue({
 
             this.$children[0].token = value;
             this.config = {headers: {'Authorization': "Bearer " + this.token}};
+
+            this.getUserInfo();
         }
     },
 });

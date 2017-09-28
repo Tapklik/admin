@@ -37,7 +37,6 @@
 <script>
     export default {
         mounted () {
-
         },
 
         data() {
@@ -57,7 +56,7 @@
                 this.isLoading = true;
                 this.error = '';
 
-                axios.post(this.$root.api + 'auth', {
+                this.$http.post(this.$root.api + '/auth', {
                     'email': this.email,
                     'password': this.password
                 }).then(response => {
@@ -65,7 +64,7 @@
                     this.isLoading = false;
                 }, error => {
                     this.error = error.data.error;
-                     this.isLoading = false;
+                    this.isLoading = false;
                 });
             }
         },
@@ -75,14 +74,13 @@
                 if(this.token == null) return; // prevent endless loop
 
                 // Need to save this to local session
-                axios.post('/core/token', {
+                this.$http.post('/core/token', {
                     token: this.token
                 }).then(response => {
-
-                    window.location = '/campaigns';
+                    window.location = '/dashboard';
                 }, error => {
 
-                   swal('Error', error.data.error, 'error');
+                    swal('Error', error.data.error, 'error');
                 });
             }
         }
