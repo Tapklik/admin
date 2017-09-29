@@ -56,7 +56,7 @@
                 this.isLoading = true;
                 this.error = '';
 
-                this.$http.post(this.$root.api + '/auth', {
+                this.$http.post(this.$root.api + 'auth', {
                     'email': this.email,
                     'password': this.password
                 }).then(response => {
