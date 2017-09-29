@@ -42,7 +42,7 @@
         data() {
 
             return {
-                'token': false,
+                'token': null,
                 'email': '',
                 'password': '',
                 'isLoading': false,
