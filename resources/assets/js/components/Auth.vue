@@ -42,11 +42,11 @@
         data() {
 
             return {
-                'token': null,
-                'email': '',
-                'password': '',
-                'isLoading': false,
-                'error': ''
+                token: null,
+                email: '',
+                password: '',
+                isLoading: false,
+                error: ''
             }
         },
 
