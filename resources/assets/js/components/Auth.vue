@@ -56,7 +56,7 @@
                 this.isLoading = true;
                 this.error = '';
 
-                this.$http.post(this.$root.api + 'auth', {
+                axios.post(this.$root.api + 'auth', {
                     'email': this.email,
                     'password': this.password
                 }).then(response => {
@@ -74,7 +74,7 @@
                 if(this.token == null) return; // prevent endless loop
 
                 // Need to save this to local session
-                this.$http.post('/core/token', {
+                axios.post('/core/token', {
                     token: this.token
                 }).then(response => {
                     window.location = '/dashboard';
