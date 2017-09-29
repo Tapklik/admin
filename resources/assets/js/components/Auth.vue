@@ -70,18 +70,12 @@
         },
 
         watch: {
-            token () {
-                if(this.token == null) return; // prevent endless loop
+            token (value) {
+                if(value == null) return;
 
-                // Need to save this to local session
-                axios.post('/core/token', {
-                    token: this.token
-                }).then(response => {
-                    window.location = '/dashboard';
-                }, error => {
-
-                    swal('Error', error.data.error, 'error');
-                });
+                this.token = value;
+                this.$children[0].token = value;
+                this.config = {headers: {'Authorization': "Bearer " + this.token}};
             }
         }
     }
