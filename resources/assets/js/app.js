@@ -41,7 +41,7 @@ const app = new Vue({
     },
 
     mounted () {
-
+        this.getApiToken();
     },
 
     methods: {
@@ -69,8 +69,6 @@ const app = new Vue({
 
             this.$children[0].token = value;
             this.config = {headers: {'Authorization': "Bearer " + this.token}};
-
-            this.getUserInfo();
         }
     },
 });
