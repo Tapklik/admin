@@ -65,7 +65,7 @@ const app = new Vue({
     
     watch: {
         token(value) {
-            if(value == null) return;
+            if(value == false) return;
 
             this.$children[0].token = value;
             this.config = {headers: {'Authorization': "Bearer " + this.token}};
