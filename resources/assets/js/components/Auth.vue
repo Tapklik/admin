@@ -78,7 +78,7 @@
                     token: this.token
                 }).then(response => {
 
-                    window.location = '/admin/dashboard';
+                    window.location = '/dashboard';
                 }, error => {
 
                     swal('Error', error.data.error, 'error');
