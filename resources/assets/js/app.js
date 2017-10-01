@@ -34,7 +34,7 @@ Vue.component('auth', require('./components/Auth.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-        api : 'http://45.32.157.221:10006/v1/',
+        api : 'https://api.tapklik.com/v1/',
         path: '//api.tapklik.com/',
         token: false,
         config: {}
