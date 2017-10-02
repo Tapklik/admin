@@ -154,83 +154,80 @@
                     <h2>Campaigns</h2>
                 </div>
             </div>
-            <div class="row">
                 <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Adomain</th>
-                <th>CTR URL</th>
-                <th>Budget</th>
-                <th>Daily</th>
-                <th>Creatives</th>
-                <th>JSON</th>
-                <th>Status</th>
-                <th>Delete</th>
-            </tr>
-            </thead>
-            <tbody class="vcenter">
-            <tr v-show="loading == true">
-                <td colspan="11" class="loader text-center">
-                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                </td>
-            </tr>
-            <tr v-show="noresult">
-                <td colspan="11">
-                    Sorry but theres nothing here... yet :)
-                </td>
-            </tr>
-
-            <tr v-for="campaign in campaigns">
-                <td>{{ campaign.id }}</td>
-                <td>
-                    <a :href="'campaigns/' + campaign.id">
-                        {{ campaign.name }}
-                    </a>
-                </td>
-                <td>{{ campaign.start_time }}</td>
-                <td>{{ campaign.end_time }}</td>
-                <td>
-                    <a :href="adomain" v-for="adomain in campaign.adomain" target="_blank">
-                        {{ adomain }}
-                    </a>
-                </td>
-                <td>
-                    <a :href="campaign.ctrurl" target="_blank">
-                        link
-                    </a>
-                </td>
-                <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
-                <td>${{ $root.fromMicroDollars(campaign.bid) }}</td>
-                <td>
-                    <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
-                        View
-                    </a>
-                </td>
-                <td>
-                    <a :href="generateUri('api', campaign.id)"  class="btn btn-primary" target="_blank">
-                        View
-                    </a>
-                </td>
-                <td>
-                    <button class="btn"
-                            :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status=='archived' }"
-                            @click="toggleStatus(campaign.id , campaign.status)">
-                        <i class="fa fa-check-circle-o"></i>
-                    </button>
-                </td>
-                <td>
-                    <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
-                        <i class="fa fa-check-circle-o"></i>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-            </div>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Adomain</th>
+                            <th>CTR URL</th>
+                            <th>Budget</th>
+                            <th>Daily</th>
+                            <th>Creatives</th>
+                            <th>JSON</th>
+                            <th>Status</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody class="vcenter">
+                        <tr v-show="loading == true">
+                            <td colspan="11" class="loader text-center">
+                                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                            </td>
+                        </tr>
+                        <tr v-show="noresult">
+                            <td colspan="11">
+                                Sorry but theres nothing here... yet :)
+                            </td>
+                        </tr>
+                        <tr v-for="campaign in campaigns">
+                            <td>{{ campaign.id }}</td>
+                            <td>
+                                <a :href="'campaigns/' + campaign.id">
+                                    {{ campaign.name }}
+                                </a>
+                            </td>
+                            <td>{{ campaign.start_time }}</td>
+                            <td>{{ campaign.end_time }}</td>
+                            <td>
+                                <a :href="adomain" v-for="adomain in campaign.adomain" target="_blank">
+                                    {{ adomain }}
+                                </a>
+                            </td>
+                            <td>
+                                <a :href="campaign.ctrurl" target="_blank">
+                                    link
+                                </a>
+                            </td>
+                            <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
+                            <td>${{ $root.fromMicroDollars(campaign.bid) }}</td>
+                            <td>
+                                <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
+                                    View
+                                </a>
+                            </td>
+                            <td>
+                                <a :href="generateUri('api', campaign.id)"  class="btn btn-primary" target="_blank">
+                                    View
+                                </a>
+                            </td>
+                            <td>
+                                <button class="btn"
+                                        :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status=='archived' }"
+                                        @click="toggleStatus(campaign.id , campaign.status)">
+                                    <i class="fa fa-check-circle-o"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
+                                    <i class="fa fa-check-circle-o"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
             <hr/>
 
@@ -239,7 +236,6 @@
                     <h2>Creatives</h2>
                 </div>
             </div>
-            <div class="row">
                 <table class="table table-striped">
             <thead>
             <tr>
@@ -248,7 +244,7 @@
                 <th>Class</th>
                 <th>Dimensions</th>
                 <th>Image</th>
-                <th>Edit</th>
+                <th>Approve</th>
                 <th>Delete</th>
             </tr>
             </thead>
@@ -271,9 +267,15 @@
                         {{ c.name }}
                     </a>
                 </td>
-                <td>{{ c.dimensions }}</td>
-                <td>{{ c.image }}</td>
+                <td>{{ c.class }}</td>
+                <td>{{ c.w }}x{{ c.h}} </td>
+                <td> <img width="70px" :src="c.thumb"> </td>
                 
+                <td>
+                    <button class="btn btn-danger" @click="deleteCreative(c.id)">
+                        <i class="fa fa-check-circle-o"></i>
+                    </button>
+                </td>
                 <td>
                     <button class="btn btn-danger" @click="deleteCreative(c.id)">
                         <i class="fa fa-check-circle-o"></i>
@@ -281,10 +283,7 @@
                 </td>
             </tr>
             </tbody>
-        </table>
-            </div>
-
-            
+        </table>            
 
             <hr/>
 
