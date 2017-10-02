@@ -98,6 +98,11 @@ Route::get('auth', [
         'uses' => 'AccountsController@noroute'
     ]);
 
+    Route::get('accounts/{id}/billing', [
+        'as'   => 'billing.index',
+        'uses' => 'BillingController@index'
+    ]);
+
 Route::group(
     ['prefix' => 'core'],
     function () {

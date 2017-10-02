@@ -27,6 +27,7 @@ Vue.component('creative-show', require('./components/CreativesShow.vue'));
 Vue.component('reports', require('./components/Reports.vue'));
 Vue.component('users', require('./components/Users.vue'));
 Vue.component('accounting', require('./components/Accounting.vue'));
+Vue.component('billing', require('./components/BillingShow.vue'));
 
 /*LOGIN COMPONENT*/
 Vue.component('auth', require('./components/Auth.vue'));
