@@ -216,18 +216,17 @@
                     </a>
                 </td>
                 <td>
-                                <input type="text" v-model="campaign.status">
-                                    <button class="btn"
-                                            :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status=='archived' }"
-                                            @click="toggleStatus(campaign.id , campaign.status)">
-                                        <i class="fa fa-check-circle-o"></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
-                                        <i class="fa fa-check-circle-o"></i>
-                                    </button>
-                                </td>
+                    <button class="btn"
+                            :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status=='archived' }"
+                            @click="toggleStatus(campaign.id , campaign.status)">
+                        <i class="fa fa-check-circle-o"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
+                        <i class="fa fa-check-circle-o"></i>
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -241,25 +240,51 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="col-md-12 panel panel-default">
-                        <h4>Balance </h4>
-                        <div id="chartdiv" style="height: 300px;"></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="col-md-12 panel panel-default">
-                        <h4> In-Flight </h4>
-                        <div id="chartdiv2" style="height: 300px;"></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="col-md-12 panel panel-default">
-                        <h4>Total Spend</h4>
-                        <div id="chartdiv3" style="height: 300px;"></div>
-                    </div>
-                </div>
+                <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Dimensions</th>
+                <th>Image</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody class="vcenter">
+            <tr v-show="loading == true">
+                <td colspan="11" class="loader text-center">
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                </td>
+            </tr>
+            <tr v-show="noresult">
+                <td colspan="11">
+                    Sorry but theres nothing here... yet :)
+                </td>
+            </tr>
+
+            <tr v-for="c in creatives">
+                <td>{{ c.id }}</td>
+                <td>
+                    <a :href="'campaigns/' + c.id">
+                        {{ c.name }}
+                    </a>
+                </td>
+                <td>{{ c.dimensions }}</td>
+                <td>{{ c.image }}</td>
+                
+                <td>
+                    <button class="btn btn-danger" @click="deleteCreative(c.id)">
+                        <i class="fa fa-check-circle-o"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
             </div>
+
+            
 
             <hr/>
 
@@ -390,7 +415,8 @@
                 campaigns: [],
                 folders:[],
                 a: null,
-                b: null
+                b: null,
+                creatives: {}
             }
         },
 
@@ -419,14 +445,49 @@
                 this.loading = true;
                 var self = this;
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
-
-                axios.get(this.$root.api + 'creatives/folders', this.$root.config).then(response => {
-                    console.log(response.data);
-                    this.folders = response.data;
+                var folders = [];
+                axios.get(this.$root.api + 'creatives/' + accountId + '/folders', this.$root.config).then(response => {
+                    this.folders = response.data.data;
+                    folders = response.data.data;
+                    
                     this.loading = false;
                 }, error => {
                     alert(error);
                 });
+                var creatives = [];
+                for (var f in folders) {
+                    axios.get(this.$root.api + 'creatives/' + accountId + '/folders/' + folders[f].id, this.$root.config).then(response => {
+                    var a = response.data;
+                    creatives.push(a);
+                    
+                    this.loading = false;
+                }, error => {
+                    alert(error);
+                });
+                }
+                this.creatives = creatives;
+            },
+
+            getCreatives() {
+                this.loading = true;
+                var self = this;
+                var accountId = window.location.pathname.replace('\/accounts\/', '');
+                var folders = this.folders;
+                var creatives = [];
+                
+                for (var f in folders) {
+                    axios.get(this.$root.api + 'creatives/' + accountId + '/folders/' + folders[f].id, this.$root.config).then(response => {
+                        console.log(response.data.data);
+                        var a = response.data.data;
+                        for (var i in a) {
+                            creatives.push(a[i]);
+                        }
+                        this.loading = false;
+                }, error => {
+                    alert(error);
+                });
+                }
+                this.creatives = creatives;
             },
 
             fetchAccount() {
@@ -756,6 +817,10 @@
                 this.fetchCampaigns();
                 this.getFolders();
             
+            },
+
+            folders(value) {
+                this.getCreatives();
             }
         }
     }
