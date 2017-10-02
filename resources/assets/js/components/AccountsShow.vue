@@ -268,11 +268,11 @@
                     </a>
                 </td>
                 <td>{{ c.class }}</td>
-                <td>{{ c.w }}x{{ c.h}} </td>
+                <td>{{ c.w }}x{{ c.h}}</td>
                 <td> <img width="70px" :src="c.thumb"> </td>
                 
                 <td>
-                    <button class="btn btn-danger" @click="deleteCreative(c.id)">
+                    <button class="btn btn-danger" @click="toggleApproval(c.id, c.approved)">
                         <i class="fa fa-check-circle-o"></i>
                     </button>
                 </td>
@@ -487,6 +487,34 @@
                 });
                 }
                 this.creatives = creatives;
+            },
+
+            toggleApproval(id, status) {
+
+                if (status == 'approved') {
+                
+                    axios.post(this.$root.api + 'creatives/' + id, {approved: 'declined'}, this.$root.config).then(response => {
+                    alert('success');
+                    }, error => {
+                    console.log(error);
+                    });
+                }
+                else if(status == 'pending') {
+                    axios.post(this.$root.api + 'creatives/' + id, {approved: 'approved'}, this.$root.config).then(response => {
+                    alert('success');
+                    location.reload();
+                    }, error => {
+                    console.log(error);
+                    });
+                }
+                else {
+                    axios.post(this.$root.api + 'creatives/' + id, {approved: 'approved'}, this.$root.config).then(response => {
+                    alert('success');
+                    location.reload();
+                    }, error => {
+                    console.log(error);
+                    });
+                }
             },
 
             fetchAccount() {
