@@ -241,10 +241,15 @@
             <hr/>
 
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12 col-md-6">
                     <h2>Budget</h2>
+                    <span>Balance: ${{$root.twoDecimalPlaces($root.fromMicroDollars(balance.balance))}} </span>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <a class="btn btn-default pull-right" :href="accountId + '/billing'">Billing</a>
                 </div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-md-4">
                     <div class="col-md-12 panel panel-default">
@@ -342,6 +347,7 @@
         data() {
 
             return {
+                balance: null,
                 account: {
                     localization: {
                         
@@ -393,7 +399,20 @@
                 });
             },
 
-            
+            fetchBalance() {
+                this.loading = true;
+                var self = this;
+                var accountId = window.location.pathname.replace('\/accounts\/', '');
+
+                axios.get(this.$root.api + 'accounts/' + accountId + '/banker/main?query=balance', this.$root.config).then( response => {
+                    this.balance = response.data.data;
+
+                    this.loading = false;
+                }, error => {
+                    alert(error);
+                });
+            },
+
             getFolders() {
                 this.loading = true;
                 var self = this;
@@ -783,6 +802,7 @@
                 this.fetchUsers();
                 this.fetchCampaigns();
                 this.getFolders();
+                this.fetchBalance();
             
             },
 
