@@ -491,7 +491,8 @@
             toggleApproval(id, status) {
                 var toggleBag = {
                     approved: 'declined',
-                    declined: 'approved'
+                    declined: 'approved',
+                    pending: 'approved'
                 };
 
                 axios.put(this.$root.api + 'creatives/' + id, {status: toggleBag[status]}, this.$root.config).then(response => {

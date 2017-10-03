@@ -1,9 +1,9 @@
 @extends('layouts.default')
 
 @section('breadcrumbs')
-    Edit Creative {{ $creativeUuId }}
+    Manage creatives
 @stop
 
 @section('content')
-    <creative></creative>
+<creative></creative>
 @stop

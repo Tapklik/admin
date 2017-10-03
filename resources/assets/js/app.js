@@ -20,6 +20,7 @@ Vue.component('campaigns', require('./components/Campaigns.vue'));
 Vue.component('campaign-create', require('./components/CampaignsCreate.vue'));
 Vue.component('campaigns-all', require('./components/CampaignsAll.vue'));
 Vue.component('campaigns-show', require('./components/CampaignsShow.vue'));
+Vue.component('creative', require('./components/CreativeShow.vue'));
 Vue.component('creatives', require('./components/Creatives.vue'));
 Vue.component('dashboard', require('./components/Dashboard.vue'));
 Vue.component('creatives-all', require('./components/CreativesAll.vue'));
