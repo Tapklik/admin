@@ -263,7 +263,7 @@
             <tr v-for="c in creatives">
                 <td>{{ c.id }}</td>
                 <td>
-                    <a :href="'campaigns/' + c.id">
+                    <a :href=" accountId + '/creatives/' + c.id">
                         {{ c.name }}
                     </a>
                 </td>
@@ -414,7 +414,8 @@
                 folders:[],
                 a: null,
                 b: null,
-                creatives: {}
+                creatives: {},
+                accountId: window.location.pathname.replace('\/accounts\/', '')
             }
         },
 
