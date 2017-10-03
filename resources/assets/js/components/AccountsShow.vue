@@ -101,52 +101,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-7 pull-right">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Name
-                                </th>
-                                <th>
-                                    ID
-                                </th>
-                                <th>
-                                    Statuss
-                                </th>
-                                <th>
-                                    Delete Campaign
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="campaign in campaigns">
-                                <td>
-                                    {{ campaign.name }}
-                                </td>
-                                <td>
-                                    {{ campaign.id }}
-                                </td>
-                                <td>
-                                <input type="text" v-model="campaign.status">
-                                    <button class="btn"
-                                            :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status=='archived' }"
-                                            @click="toggleStatus(campaign.id , campaign.status)">
-                                        <i class="fa fa-check-circle-o"></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
-                                        <i class="fa fa-check-circle-o"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
             <hr/>
 
             <div class="row">
