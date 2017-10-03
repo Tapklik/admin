@@ -270,9 +270,8 @@
                 <td>{{ c.class }}</td>
                 <td>{{ c.w }}x{{ c.h}}</td>
                 <td> <img width="70px" :src="c.thumb"> </td>
-                
                 <td>
-                    <button class="btn btn-danger" @click="toggleApproval(c.id, c.approved)">
+                    <button :class="{'btn btn-success': c.approved == 'approved', 'btn btn-danger': c.approved != 'approved'}" @click="toggleApproval(c.id, c.approved)">
                         <i class="fa fa-check-circle-o"></i>
                     </button>
                 </td>
@@ -490,31 +489,16 @@
             },
 
             toggleApproval(id, status) {
+                var toggleBag = {
+                    approved: 'declined',
+                    declined: 'approved'
+                };
 
-                if (status == 'approved') {
-                
-                    axios.post(this.$root.api + 'creatives/' + id, {approved: 'declined'}, this.$root.config).then(response => {
-                    alert('success');
-                    }, error => {
+                axios.put(this.$root.api + 'creatives/' + id, {status: toggleBag[status]}, this.$root.config).then(response => {
+                    this.getCreatives();
+                }, error => {
                     console.log(error);
-                    });
-                }
-                else if(status == 'pending') {
-                    axios.post(this.$root.api + 'creatives/' + id, {approved: 'approved'}, this.$root.config).then(response => {
-                    alert('success');
-                    location.reload();
-                    }, error => {
-                    console.log(error);
-                    });
-                }
-                else {
-                    axios.post(this.$root.api + 'creatives/' + id, {approved: 'approved'}, this.$root.config).then(response => {
-                    alert('success');
-                    location.reload();
-                    }, error => {
-                    console.log(error);
-                    });
-                }
+                });
             },
 
             fetchAccount() {
