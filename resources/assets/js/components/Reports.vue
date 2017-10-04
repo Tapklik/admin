@@ -7,8 +7,16 @@
         </div>
         <hr/>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <h4>Nodes</h4>
+                <span v-for="n in nodes">
+                    <input type="checkbox"> {{n}}
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Campaigns</h4>
             </div>
             <div class="col-md-6">
                 <div class="col-md-12 panel panel-default">
@@ -75,7 +83,8 @@
                 stats: [],     
                 bids: [],
                 loading: false,
-                noresult: false
+                noresult: false,
+                nodes: []
             }
         },
         methods: {
@@ -209,7 +218,35 @@
                 }, error => {
                     console.log(error);
                 });
-            }
+            },
+
+            fetchNodes() {
+                var nodesPackage = this.stats.data;
+                var nodes = [];
+                var duplicate = 0;
+                var realNodes = [];
+                for (var n in nodesPackage) {
+                    nodes.push(nodesPackage[n].node);
+                }
+                realNodes.push(nodes[0]);
+                for(var a in nodes) {
+                    for(var b in nodes) {
+                        if(nodes[a] == nodes[b]){
+                            duplicate++;
+                            console.log(duplicate);
+                        }
+                    }    
+                    if(duplicate < 2 && a != 0){
+                        realNodes.push(nodes[a]);
+                        duplicate = 0;
+                    }
+                    else {
+                        duplicate = 0;
+                    }
+                } 
+                this.nodes = realNodes;
+            },            
+
         },
         computed: {
             
@@ -218,6 +255,10 @@
             token(value) {
                 this.fetchCampaigns();
                 this.fetchBids();
+            },
+
+            stats(value) {
+                this.fetchNodes();
             }
         }
     }
