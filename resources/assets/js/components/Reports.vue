@@ -10,13 +10,21 @@
             <div class="col-md-6">
                 <h4>Nodes</h4>
                 <span v-for="n in nodes">
-                    <input type="checkbox"> {{n}}
+                    <input type="checkbox" :value="n" v-model="selectedNodes"> {{n}}<br>
                 </span>
+            </div>
+            <div class="col-md-6">
+                <h4>Selections</h4>
+                Cmp: <span v-for="c in selectedCampaigns">{{c}}, </span> <br>
+                Status: <span>{{check}}</span>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <h4>Campaigns</h4>
+                <span v-for="c in campaigns">
+                    <input type="checkbox" :value="c" v-model="selectedCampaigns"> {{c}}<br>
+                </span>
             </div>
             <div class="col-md-6">
                 <div class="col-md-12 panel panel-default">
@@ -25,8 +33,6 @@
                 </div>
             </div>
         </div>
-       
-        <div>{{ getNodes() }}</div>
        
         <hr/>
        
@@ -84,7 +90,11 @@
                 bids: [],
                 loading: false,
                 noresult: false,
-                nodes: []
+                nodes: [],
+                campaigns: [],
+                selectedCampaigns: [],
+                selectedNodes: [],
+                check: true
             }
         },
         methods: {
@@ -104,10 +114,38 @@
                 }, 2000); 
             },
             getStatsData(){
+                var campaigns = this.selectedCampaigns;
+                var nodes = this.selectedNodes;
+                console.log(campaigns); 
                 var self = this;
                 var time = new Date()
                 axios.get('http://45.76.95.115:2301/api/stats', this.$root.config).then( response => {
-                    self.stats = response
+                    if(campaigns=='' || nodes == ''){
+                        self.stats = response.data
+                    }
+                    else {
+                        var count = 0;
+                        var stats = response.data;
+                        var realStats = [];
+                        for(var s in stats) {
+                            for(var c in campaigns) {
+                                for(var n in nodes) {
+                                    if(stats[s].node == nodes[n] && stats[s].cmp == campaigns[c]){
+                                        count++;
+                                    }
+                                }
+                            }
+                            if (count > 0) {
+                                realStats.push(stats[s])
+                                count = 0;
+                            }
+                            else {
+                                count = 0;
+                            }
+                        }
+                        self.stats = realStats;
+                    }
+                
                 }, error => {
                     console.log(error);
                 });
@@ -171,24 +209,17 @@
                   chart.validateData();
                 }, 5000 );
             },
-            getNodes() {
-                var listOfNodes = [];
-                for (var n in this.stats.data) {
-                    var x = this.stats.data[n].node;
-                    if( listOfNodes.indexOf(x) < 0 ) listOfNodes += x  
-                }
-                return listOfNodes
-            },
+
             getTotals() {
                 var totalBR = 0;
                 var totalBids = 0;
                 var totalImps = 0;
                 var totalClicks = 0;
-                for (var n in this.stats.data) {
-                    totalBR += this.stats.data[n].stats.bid_requests;
-                    totalBids += this.stats.data[n].stats.bids; 
-                    totalImps += this.stats.data[n].stats.imps; 
-                    totalClicks += this.stats.data[n].stats.clicks; 
+                for (var n in this.stats) {
+                    totalBR += this.stats[n].stats.bid_requests;
+                    totalBids += this.stats[n].stats.bids; 
+                    totalImps += this.stats[n].stats.imps; 
+                    totalClicks += this.stats[n].stats.clicks; 
                 }
                 return {
                     "bid_requests" : totalBR,
@@ -208,6 +239,7 @@
                     }
                     emptyData.push(d)
                 }
+                console.log(emptyData);
                 return emptyData
             },
 
@@ -221,7 +253,7 @@
             },
 
             fetchNodes() {
-                var nodesPackage = this.stats.data;
+                var nodesPackage = this.stats;
                 var nodes = [];
                 var duplicate = 0;
                 var realNodes = [];
@@ -233,7 +265,6 @@
                     for(var b in nodes) {
                         if(nodes[a] == nodes[b]){
                             duplicate++;
-                            console.log(duplicate);
                         }
                     }    
                     if(duplicate < 2 && a != 0){
@@ -245,7 +276,58 @@
                     }
                 } 
                 this.nodes = realNodes;
-            },            
+            },        
+
+            fetchCampaigns() {
+                var campaignsPackage = this.stats;
+                var campaigns = [];
+                var duplicate = 0;
+                var realCampaigns = [];
+                for (var n in campaignsPackage) {
+                    campaigns.push(campaignsPackage[n].cmp);
+                }
+                realCampaigns.push(campaigns[0]);
+                for(var a in campaigns) {
+                    for(var b in campaigns) {
+                        if(campaigns[a] == campaigns[b]){
+                            duplicate++;
+                            console.log(duplicate);
+                        }
+                    }    
+                    if(duplicate < 2 && a != 0){
+                        realCampaigns.push(campaigns[a]);
+                        duplicate = 0;
+                    }
+                    else {
+                        duplicate = 0;
+                    }
+                } 
+                this.campaigns = realCampaigns;
+            },
+
+            checkCombination() {
+                var a = 0;
+                var campaigns = this.selectedCampaigns;
+                var nodes = this.selectedNodes;
+                var object = this.stats; 
+                for (var p in object) {
+                    for(var n in nodes) {
+                        for(var c in campaigns) {
+                            if(object[p].node == nodes[n] && object[p].cmp == campaigns[c]){
+                                a++;
+                            }
+                        }
+                    }
+                }
+
+                if(a > 0) {
+                    this.check = true;
+                }
+                
+                else {
+                    this.check = false;
+                }
+            }            
 
         },
         computed: {
@@ -253,12 +335,14 @@
         },
         watch: {
             token(value) {
-                this.fetchCampaigns();
                 this.fetchBids();
             },
 
             stats(value) {
                 this.fetchNodes();
+                this.fetchCampaigns();
+                this.checkCombination();
+                
             }
         }
     }
