@@ -190,18 +190,18 @@
                     <h2>Creatives</h2>
                 </div>
             </div>
-                <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Class</th>
-                <th>Dimensions</th>
-                <th>Image</th>
-                <th>Approve</th>
-                <th>Delete</th>
-            </tr>
-            </thead>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Dimensions</th>
+                        <th>Image</th>
+                        <th>Approve</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
             <tbody class="vcenter">
             <tr v-show="loading == true">
                 <td colspan="11" class="loader text-center">

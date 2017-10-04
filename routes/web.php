@@ -43,6 +43,11 @@ Route::get('auth', [
         'uses' => 'ReportsController@index'
     ]);
 
+    Route::get('reports/{id}', [
+        'as'   => 'bid.index',
+        'uses' => 'BidController@index'
+    ]);
+
     Route::get('campaigns', [
         'as'   => 'campaigns.index',
         'uses' => 'CampaignsController@index'

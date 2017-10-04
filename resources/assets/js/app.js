@@ -29,6 +29,7 @@ Vue.component('reports', require('./components/Reports.vue'));
 Vue.component('users', require('./components/Users.vue'));
 Vue.component('accounting', require('./components/Accounting.vue'));
 Vue.component('billing', require('./components/BillingShow.vue'));
+Vue.component('bid-show', require('./components/BidShow.vue'));
 
 /*LOGIN COMPONENT*/
 Vue.component('auth', require('./components/Auth.vue'));
@@ -63,7 +64,7 @@ const app = new Vue({
         fromMicroDollars(value) {
             return value / 1000000
         },
-        
+
         twoDecimalPlaces(value) {
             if(value) {
                 return value.toFixed(2);
