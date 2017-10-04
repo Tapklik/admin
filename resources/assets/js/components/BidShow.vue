@@ -44,12 +44,10 @@
         <hr/>
 
         <table class="table table-striped">
-            <thead>
-                <th v-for="b in bidKeys"> {{ b }} </th>
-            </thead>
             <tbody class="vcenter">
-                <tr>
-                    <td v-for="b in bid"> {{ b }} </td>
+                <tr v-for="(item, index) in bid">
+                    <th> {{ index }} </th>
+                    <td>{{ item }} </td>
                 </tr>
             </tbody>
         </table>
