@@ -18,22 +18,28 @@
                 Cmp: <span v-for="c in selectedCampaigns">{{c}}, </span> <br>
                 Status: <span>{{check}}</span>
             </div>
+            <div class="col-md-6">
+                <div class="col-md-12 panel panel-default">
+                    <h4>Total </h4>
+                    <div id="chartdiv" style="height: 160px;"></div>
+                </div>
+            </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col-md-3">
                 <h4>Campaigns</h4>
+                <button class="btn btn-default btn-sm" style="float:right;" @click="drawCharts()">Generate</button>
                 <span v-for="c in campaigns">
                     <input type="checkbox" :value="c" v-model="selectedCampaigns"> {{c}}<br>
                 </span>
             </div>
             <div class="col-md-9">
-                <div class="col-md-12 panel panel-default">
-                    <h4>Total </h4>
-                    <div id="chartdiv" style="height: 200px;"></div>
-                </div>
-                <div class="col-md-12 panel panel-default" v-for="n in something">
-                    <h4>{{n.cmp}} </h4>
-                    <div :id="n.name" style="height: 200px;"></div>
+                <div class="col-md-6" v-for="(n, index) in something">  
+                    <div class="col-md-12 panel panel-default">
+                        <h4>{{n.cmp}} </h4>
+                        <div :id="n.name" style="height: 160px;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -85,7 +91,6 @@
         mounted() {
             this.getData();
             this.createChartStats('chartdiv', this.emptyData(), 'all'); 
-            this.createChartStats('chartdiv0', this.emptyData(), 'campaign'); 
 
         },
         data() {
@@ -102,7 +107,7 @@
                 selectedNodes: [],
                 check: true,
                 numberOfGraphs: [],
-                something: []
+                something: [],
             }
         },
         methods: {
@@ -158,8 +163,10 @@
             },
             
             createChartStats(target, dataset, cmp) {
+                console.log(target)
                 var self = this; 
-                var chart[cmp] = AmCharts.makeChart( target, {
+                var chart = [];
+                chart[cmp] = AmCharts.makeChart( target, {
                   "type": "serial",
                   "theme": "light",
                   "zoomOutButton": {
@@ -220,15 +227,13 @@
             drawCharts() {
                 var numbers = this.something;
                 for(var n in numbers) {
-                    this.createChartStats(numbers[n].name, this.emptyData, n);
+                    this.createChartStats('chartdiv' + n, this.emptyData, n);
                 }
             },
 
             getTotals(cmp) {
                 var something = this.something;
-                console.log('campaign: ' + cmp)
                 if(cmp == 'all') {
-                    console.log('here')
                     var totalBR = 0;
                     var totalBids = 0;
                     var totalImps = 0;
@@ -247,8 +252,7 @@
                         "clicks" : totalClicks
                     }
                 } else {
-                    console.log(something[0].stats);
-                    return something[0].stats
+                    return something[cmp].stats
                 }
                 
             },
@@ -387,6 +391,7 @@
                 this.fetchBids();
             },
 
+            
             stats(value) {
                 this.fetchNodes();
                 this.fetchCampaigns();
@@ -394,8 +399,8 @@
                 this.checkCombination();
                 this.largestArray();
                 this.createObject();
-                this.drawCharts();
-            }
+
+            },
         }
     }
 </script>
