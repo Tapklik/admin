@@ -2,34 +2,38 @@
     <div>
         <div class="row">
             <div class="col-md-8">
-                <h1 class="title pull-left">Reports</h1>
+                <h1 class="title pull-left">Reportss</h1>
             </div>
         </div>
         <hr/>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <h4>Nodes</h4>
                 <span v-for="n in nodes">
                     <input type="checkbox" :value="n" v-model="selectedNodes"> {{n}}<br>
                 </span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <h4>Selections</h4>
                 Cmp: <span v-for="c in selectedCampaigns">{{c}}, </span> <br>
                 Status: <span>{{check}}</span>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <h4>Campaigns</h4>
                 <span v-for="c in campaigns">
                     <input type="checkbox" :value="c" v-model="selectedCampaigns"> {{c}}<br>
                 </span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="col-md-12 panel panel-default">
                     <h4>Total </h4>
-                    <div id="chartdiv" style="height: 300px;"></div>
+                    <div id="chartdiv" style="height: 200px;"></div>
+                </div>
+                <div class="col-md-12 panel panel-default" v-for="n in something">
+                    <h4>{{n.cmp}} </h4>
+                    <div :id="n.name" style="height: 200px;"></div>
                 </div>
             </div>
         </div>
@@ -80,11 +84,13 @@
    export default {
         mounted() {
             this.getData();
-            this.createChartStats('chartdiv', this.emptyData())
+            this.createChartStats('chartdiv', this.emptyData(), 'all'); 
+            this.createChartStats('chartdiv0', this.emptyData(), 'campaign'); 
+
         },
         data() {
             return {
-                campaigns: [],
+                allCampaigns: [],
                 token: this.token,
                 stats: [],     
                 bids: [],
@@ -94,16 +100,17 @@
                 campaigns: [],
                 selectedCampaigns: [],
                 selectedNodes: [],
-                check: true
+                check: true,
+                numberOfGraphs: [],
+                something: []
             }
         },
         methods: {
-            fetchCampaigns() {
+            fetchAllCampaigns() {
                             
                 axios.get(this.$root.api + 'campaigns', this.$root.config).then(response => {
-                    this.campaigns = response.data;
+                    this.allCampaigns = response.data;
                 }, error => {
-                    console.log("heeey")
                     swal('Error', error, 'error');
                 })
             },
@@ -116,7 +123,6 @@
             getStatsData(){
                 var campaigns = this.selectedCampaigns;
                 var nodes = this.selectedNodes;
-                console.log(campaigns); 
                 var self = this;
                 var time = new Date()
                 axios.get('http://45.76.95.115:2301/api/stats', this.$root.config).then( response => {
@@ -150,9 +156,10 @@
                     console.log(error);
                 });
             },
-            createChartStats(target, dataset) {
+            
+            createChartStats(target, dataset, cmp) {
                 var self = this; 
-                var chart = AmCharts.makeChart( target, {
+                var chart[cmp] = AmCharts.makeChart( target, {
                   "type": "serial",
                   "theme": "light",
                   "zoomOutButton": {
@@ -194,40 +201,58 @@
                         "hideBulletsCount": 50
                     } ]
                 } )
+
                 setInterval( function() {
-     
-                  chart.dataProvider.shift();
-                  var time = new Date();
-                  var data = self.getTotals();
-                  chart.dataProvider.push( {
-                    "date": time,
-                    "bid_requests": data.bid_requests,
-                    "bids": data.bids,
-                    "imps": data.imps,
-                    "clicks": data.clicks
-                  } );
-                  chart.validateData();
+                    chart[cmp].dataProvider.shift();
+                    var time = new Date();
+                    var data = self.getTotals(cmp);
+                    chart[cmp].dataProvider.push({
+                        "date": time,
+                        "bid_requests": data.bid_requests,
+                        "bids": data.bids,
+                        "imps": data.imps,
+                        "clicks": data.clicks
+                    });
+                    chart[cmp].validateData();
                 }, 5000 );
             },
-
-            getTotals() {
-                var totalBR = 0;
-                var totalBids = 0;
-                var totalImps = 0;
-                var totalClicks = 0;
-                for (var n in this.stats) {
-                    totalBR += this.stats[n].stats.bid_requests;
-                    totalBids += this.stats[n].stats.bids; 
-                    totalImps += this.stats[n].stats.imps; 
-                    totalClicks += this.stats[n].stats.clicks; 
-                }
-                return {
-                    "bid_requests" : totalBR,
-                    "bids" : totalBids,
-                    "imps" : totalImps,
-                    "clicks" : totalClicks
+            
+            drawCharts() {
+                var numbers = this.something;
+                for(var n in numbers) {
+                    this.createChartStats(numbers[n].name, this.emptyData, n);
                 }
             },
+
+            getTotals(cmp) {
+                var something = this.something;
+                console.log('campaign: ' + cmp)
+                if(cmp == 'all') {
+                    console.log('here')
+                    var totalBR = 0;
+                    var totalBids = 0;
+                    var totalImps = 0;
+                    var totalClicks = 0;
+                    for (var n in this.stats) {
+                        totalBR += this.stats[n].stats.bid_requests;
+                        totalBids += this.stats[n].stats.bids; 
+                        totalImps += this.stats[n].stats.imps; 
+                        totalClicks += this.stats[n].stats.clicks;
+                    }
+
+                    return {
+                        "bid_requests" : totalBR,
+                        "bids" : totalBids,
+                        "imps" : totalImps,
+                        "clicks" : totalClicks
+                    }
+                } else {
+                    console.log(something[0].stats);
+                    return something[0].stats
+                }
+                
+            },
+            
             emptyData() {
                 var emptyData = []
                 var time = new Date();
@@ -239,7 +264,6 @@
                     }
                     emptyData.push(d)
                 }
-                console.log(emptyData);
                 return emptyData
             },
 
@@ -291,7 +315,6 @@
                     for(var b in campaigns) {
                         if(campaigns[a] == campaigns[b]){
                             duplicate++;
-                            console.log(duplicate);
                         }
                     }    
                     if(duplicate < 2 && a != 0){
@@ -303,6 +326,16 @@
                     }
                 } 
                 this.campaigns = realCampaigns;
+            },
+
+            largestArray() {
+                var campaigns = this.selectedCampaigns; 
+                var numbers = [];
+                for(var c in campaigns) {
+                    numbers.push('chartdiv'+c);
+                }
+                this.numberOfGraphs = numbers;
+                
             },
 
             checkCombination() {
@@ -327,7 +360,23 @@
                 else {
                     this.check = false;
                 }
-            }            
+            },
+            createObject() {
+                var campaigns = this.selectedCampaigns;
+                var stats = this.stats;
+                var result = [];
+                var a = [];
+                for (var c in campaigns) {
+                    for(var s in stats) {
+                        if(stats[s].cmp == campaigns[c]) {
+                            a = stats[s].stats
+                        }
+                    }
+                    result.push({cmp: campaigns[c], stats: a, name: 'chartdiv'+c})
+                }
+                this.something = result;
+            },
+
 
         },
         computed: {
@@ -341,8 +390,11 @@
             stats(value) {
                 this.fetchNodes();
                 this.fetchCampaigns();
+                this.fetchAllCampaigns();
                 this.checkCombination();
-                
+                this.largestArray();
+                this.createObject();
+                this.drawCharts();
             }
         }
     }
