@@ -348,7 +348,9 @@
         data() {
 
             return {
-                balance: null,
+                balance: {
+                    balance: null
+                },
                 account: {
                     localization: {
                         
@@ -830,7 +832,7 @@
                 this.fetchUsers();
                 this.fetchCampaigns();
                 this.getFolders();
-               // this.fetchBalance();
+                this.fetchBalance();
             
             },
 
