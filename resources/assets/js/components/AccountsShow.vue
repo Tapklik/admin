@@ -254,19 +254,19 @@
                 <div class="col-md-4">
                     <div class="col-md-12 panel panel-default">
                         <h4>Balance </h4>
-                        <div id="chartdiv" style="height: 300px;"></div>
+                        <div id="chartdiv_balance" style="height: 300px;"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="col-md-12 panel panel-default">
                         <h4> In-Flight </h4>
-                        <div id="chartdiv2" style="height: 300px;"></div>
+                        <div id="chartdiv_flight" style="height: 300px;"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="col-md-12 panel panel-default">
                         <h4>Total Spend</h4>
-                        <div id="chartdiv3" style="height: 300px;"></div>
+                        <div id="chartdiv_spend" style="height: 300px;"></div>
                     </div>
                 </div>
             </div>
@@ -338,10 +338,11 @@
 <script>
     export default {
         mounted() {
-            this.generateCharts();
+            //this.generateCharts();
             this.fetchCountries();
             this.fetchTimezones();
             this.fetchLanguages();
+           // this.createChartStats();
         },
 
         data() {
@@ -673,92 +674,119 @@
 
             },
 
-            generateCharts() {
+            getData() {
                 var self = this
-
                 setInterval(function(){
                     self.getBalanceData();
-                    self.getFlightData();
-                    self.getSpendData();
-                    self.createChart('chartdiv', self.balanceList)
-                    self.createChart('chartdiv2', self.flightList)
-                    self.createChart('chartdiv3', self.spendList)
-                }, 10000); 
+                }, 2000); 
             },
 
-            getBalanceData(){
+             getBalanceData(){
 
                 var self = this;
-                var time = new Date()
                 var main = 'main'
 
                 var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', this.$root.config).then( response => {
+                axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', this.$root.config).then( response => {
                     self.a = response.data.data.balance
                 }, error => {
                     console.log(error);
                 });
 
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
+                axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
                     self.b = response.data.data.balance
                 }, error => {
                     console.log(error);
                 });
-                console.log(self.a)
-                console.log(self.b)
-                var c = ((self.a + self.b)/1000000).toFixed(2)
 
-
-                if (self.balanceList.length >= 30) {
-                    self.balanceList.splice(0,1)
+                 axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', this.$root.config).then( response => {
+                    self.c = response.data.data.balance
+                }, error => {
+                    console.log(error);
+                });
+    
+                var balance = ((self.a + self.b)/1000000).toFixed(2)
+                console.log("heyy" + balance)
+                return {
+                    "balance": balance,
+                    "flight": self.b,
+                    "spend": self.c
                 }
-                self.balanceList.push({
-                    "date": time,
-                    "balance": c
-                }) 
-
-
             },
 
-            getFlightData() {
-                var self = this;
-                var time = new Date()
-                var flight = 'flight'
+            createChartStats() {
+                var self = this; 
+                var charts = ['balance', 'flight', 'spend']
+                var chart = [];
+                console.log('asdasd')
+                for( c in charts) {
+                    chart[c] = AmCharts.makeChart( 'chartdiv_' + c, {
+                      "type": "serial",
+                      "theme": "light",
+                      "zoomOutButton": {
+                        "backgroundColor": '#000000',
+                        "backgroundAlpha": 0.15
+                        },
+                        "dataProvider": self.emptyData(),
+                        "categoryField": "date",
+                        "categoryAxis": {
+                            "parseDates": true,
+                            "minPeriod": "ss",
+                            "dashLength": 1,
+                            "gridAlpha": 0.15,
+                            "axisColor": "#DADADA"
+                        },
+                        "graphs": [ {
+                            "id": "balance",
+                            "valueField": "balance",
+                            "lineThickness": 2,
+                            "lineColor": "red",
+                            "hideBulletsCount": 50
+                        }]
+                    } )
+                }
 
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
+                console.log(chart)
 
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
-                    if (self.flightList.length >= 30) {
-                        self.flightList.splice(0,1)
-                    }
-                    self.flightList.push({
+                setInterval( function() {
+                    chart['balance'].dataProvider.shift();
+                    chart['flight'].dataProvider.shift();
+                    chart['spend'].dataProvider.shift();
+                    var time = new Date();
+                    var data = self.getBalanceData;
+                    console.log(data)
+                    chart['balance'].dataProvider.push({
                         "date": time,
-                        "balance": (response.data.data.balance/1000000).toFixed(2)
-                    })
-                }, error => {
-                    console.log(error);
-                });
+                        "balance": data.balance
+                    });
+                    chart['flight'].dataProvider.push({
+                        "date": time,
+                        "balance": data.flight
+                    });
+                    chart['spend'].dataProvider.push({
+                        "date": time,
+                        "balance": data.spend
+                    });
+                    chart['balance'].validateData();
+                    chart['flight'].validateData();
+                    chart['spend'].validateData();
+                }, 5000 );
             },
 
-            getSpendData() {
-                var self = this;
-                var time = new Date()
-                var spend = 'spend'
-
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
-
-                axios.get('http://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', this.$root.config).then( response => {
-                    if (self.spendList.length >= 30) {
-                        self.spendList.splice(0,1)
+            emptyData() {
+                var emptyData = []
+                var time = new Date();
+                var data = 0;
+                for (var i = 40; i >= 0; i--) {
+                    var d = {
+                        "date" : time - (i * 5000),
+                        "balance": data
                     }
-                    self.spendList.push({
-                        "date": time,
-                        "balance": (response.data.data.balance/1000000).toFixed(2)
-                    })
-                }, error => {
-                    console.log(error);
-                });
+                    emptyData.push(d)
+                }
+                console.log(emptyData)
+                return emptyData
             },
 
             generateUri(type, id) {
@@ -802,7 +830,7 @@
                 this.fetchUsers();
                 this.fetchCampaigns();
                 this.getFolders();
-                this.fetchBalance();
+               // this.fetchBalance();
             
             },
 
