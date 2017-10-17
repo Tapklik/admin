@@ -157,7 +157,8 @@
                         self.stats = realStats;
                     }
                 
-                }, error => {
+                }, 
+                error => {
                     console.log(error);
                 });
             },

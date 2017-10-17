@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('breadcrumbs')
-Edit account
+ 
 @stop
 
 @section('content')
