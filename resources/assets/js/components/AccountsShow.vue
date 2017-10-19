@@ -254,19 +254,19 @@
                 <div class="col-md-4">
                     <div class="col-md-12 panel panel-default">
                         <h4>Balance </h4>
-                        <div id="chartdiv_balance" style="height: 300px;"></div>
+                        <div id="chartdiv_0" style="height: 300px;"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="col-md-12 panel panel-default">
                         <h4> In-Flight </h4>
-                        <div id="chartdiv_flight" style="height: 300px;"></div>
+                        <div id="chartdiv_1" style="height: 300px;"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="col-md-12 panel panel-default">
                         <h4>Total Spend</h4>
-                        <div id="chartdiv_spend" style="height: 300px;"></div>
+                        <div id="chartdiv_2" style="height: 300px;"></div>
                     </div>
                 </div>
             </div>
@@ -338,11 +338,10 @@
 <script>
     export default {
         mounted() {
-            //this.generateCharts();
             this.fetchCountries();
             this.fetchTimezones();
             this.fetchLanguages();
-           // this.createChartStats();
+            this.createChart();
         },
 
         data() {
@@ -375,18 +374,17 @@
                 spendList:[],
                 campaigns: [],
                 folders:[],
-                a: null,
-                b: null,
+                banker: {
+                    main: 0,
+                    flight: 0,
+                    spend: 0
+                },
                 creatives: {},
                 accountId: window.location.pathname.replace('\/accounts\/', '')
             }
         },
 
         methods: {
-
-            consoleLog(message, mes) {
-                console.log(message + mes);
-            },
 
             fetchUsers() {
                 this.loading = true;
@@ -452,7 +450,6 @@
                 
                 for (var f in folders) {
                     axios.get(this.$root.api + 'creatives/' + accountId + '/folders/' + folders[f].id, this.$root.config).then(response => {
-                        console.log(response.data.data);
                         var a = response.data.data;
                         for (var i in a) {
                             creatives.push(a[i]);
@@ -643,86 +640,10 @@
                 $('#_modal-create-new-user').modal('close');
             },
 
-            createChart(target, dataset) {
-
-                var chart = AmCharts.makeChart( target, {
-                  "type": "serial",
-                  "theme": "light",
-                  "zoomOutButton": {
-                    "backgroundColor": '#000000',
-                    "backgroundAlpha": 0.15
-                },
-                "dataProvider": dataset,
-                "categoryField": "date",
-                "categoryAxis": {
-                    "parseDates": true,
-                    "minPeriod": "ss",
-                    "dashLength": 1,
-                    "gridAlpha": 0.15,
-                    "axisColor": "#DADADA"
-                },
-                "graphs": [ {
-                    "id": "g1",
-                    "valueField": "balance",
-                    "bullet": "round",
-                    "bulletBorderColor": "#FFFFFF",
-                    "bulletBorderThickness": 2,
-                    "lineThickness": 2,
-                    "lineColor": "#b5030d",
-                    "negativeLineColor": "#0352b5",
-                    "hideBulletsCount": 50
-                } ]
-            } )
-
-            },
-
-            getData() {
-                var self = this
-                setInterval(function(){
-                    self.getBalanceData();
-                }, 2000); 
-            },
-
-             getBalanceData(){
-
-                var self = this;
-                var main = 'main'
-
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
-
-                axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', this.$root.config).then( response => {
-                    self.a = response.data.data.balance
-                }, error => {
-                    console.log(error);
-                });
-
-                axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
-                    self.b = response.data.data.balance
-                }, error => {
-                    console.log(error);
-                });
-
-                 axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', this.$root.config).then( response => {
-                    self.c = response.data.data.balance
-                }, error => {
-                    console.log(error);
-                });
-    
-                var balance = ((self.a + self.b)/1000000).toFixed(2)
-                console.log("heyy" + balance)
-                return {
-                    "balance": balance,
-                    "flight": self.b,
-                    "spend": self.c
-                }
-            },
-
-            createChartStats() {
+            createChart() {
                 var self = this; 
-                var charts = ['balance', 'flight', 'spend']
                 var chart = [];
-                console.log('asdasd')
-                for( c in charts) {
+                for( var c = 0; c <= 2; c++) {
                     chart[c] = AmCharts.makeChart( 'chartdiv_' + c, {
                       "type": "serial",
                       "theme": "light",
@@ -743,37 +664,77 @@
                             "id": "balance",
                             "valueField": "balance",
                             "lineThickness": 2,
-                            "lineColor": "red",
+                            "lineColor": "#337ab7",
+                            "bullet": "round",
+                            "bulletAlpha": 0,
                             "hideBulletsCount": 50
-                        }]
+                        }],
+                        "balloon": {
+                            "borderColor": "#337ab7",
+                            "borderAlpha": 0,
+                            "borderThickness": 0,
+                            "shadowAlpha": 0,
+                            "color": "#ffffff",
+                            "drop": false,
+                            "cornerRadius": 5,
+                            "fillColor": "#337ab7",
+                            "fillAlpha": 1,
+                        }
                     } )
                 }
 
-                console.log(chart)
-
                 setInterval( function() {
-                    chart['balance'].dataProvider.shift();
-                    chart['flight'].dataProvider.shift();
-                    chart['spend'].dataProvider.shift();
+                    chart[0].dataProvider.shift();
+                    chart[1].dataProvider.shift();
+                    chart[2].dataProvider.shift();
                     var time = new Date();
-                    var data = self.getBalanceData;
-                    console.log(data)
-                    chart['balance'].dataProvider.push({
+                    var data = self.getBalanceData();
+                    chart[0].dataProvider.push({
                         "date": time,
                         "balance": data.balance
                     });
-                    chart['flight'].dataProvider.push({
+                    chart[1].dataProvider.push({
                         "date": time,
                         "balance": data.flight
                     });
-                    chart['spend'].dataProvider.push({
+                    chart[2].dataProvider.push({
                         "date": time,
                         "balance": data.spend
                     });
-                    chart['balance'].validateData();
-                    chart['flight'].validateData();
-                    chart['spend'].validateData();
+                    chart[0].validateData();
+                    chart[1].validateData();
+                    chart[2].validateData();
                 }, 5000 );
+            },
+
+             getBalanceData(){
+                var accountId = window.location.pathname.replace('\/accounts\/', '');
+                var self = this;
+
+                axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', this.$root.config).then( response => {
+                    self.banker.main = response.data.data.balance
+                }, error => {
+                    console.log(error);
+                });
+
+                axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
+                    self.banker.flight = response.data.data.balance
+                }, error => {
+                    console.log(error);
+                });
+
+                 axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', this.$root.config).then( response => {
+                    self.banker.spend = response.data.data.balance
+                }, error => {
+                    console.log(error);
+                });
+    
+                var balance = ((self.banker.main + self.banker.flight)/1000000).toFixed(2)
+                return {
+                    "balance": balance,
+                    "flight": self.banker.flight,
+                    "spend": self.banker.spend
+                }
             },
 
             emptyData() {
@@ -787,7 +748,6 @@
                     }
                     emptyData.push(d)
                 }
-                console.log(emptyData)
                 return emptyData
             },
 

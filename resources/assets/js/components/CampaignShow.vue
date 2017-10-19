@@ -205,6 +205,33 @@
                 </div>
             </div>
         </div>
+        <hr/>
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h2>Campaign balance</h2>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col-md-12 panel panel-default">
+                    <h4>Balance </h4>
+                    <div id="chartdiv_0" style="height: 300px;"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12 panel panel-default">
+                    <h4> In-Flight </h4>
+                    <div id="chartdiv_1" style="height: 300px;"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12 panel panel-default">
+                    <h4>Total Spend</h4>
+                    <div id="chartdiv_2" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -212,7 +239,8 @@
     export default {
         mounted() {
             this.fetchCategories();
-            this.fetchTechnologies();
+            this.fetchTechnologies();            
+            this.createChart();
         },
 
         data() {
@@ -222,6 +250,11 @@
                 accountId: this.getAccountId(),
                 creatives: [],
                 folders: [],
+                banker: {
+                    main: 0,
+                    flight: 0,
+                    spend: 0
+                },
                 campaign: {
                     name: '',
                     adomain: '',
@@ -607,7 +640,103 @@
                 this.creatives = creatives;
             },
 
+            createChart() {
+                var self = this; 
+                var chart = [];
+                for( var c = 0; c <= 2; c++) {
+                    chart[c] = AmCharts.makeChart( 'chartdiv_' + c, {
+                      "type": "serial",
+                      "theme": "light",
+                      "zoomOutButton": {
+                        "backgroundColor": '#000000',
+                        "backgroundAlpha": 0.15
+                        },
+                        "dataProvider": self.emptyData(),
+                        "categoryField": "date",
+                        "categoryAxis": {
+                            "parseDates": true,
+                            "minPeriod": "ss",
+                            "dashLength": 1,
+                            "gridAlpha": 0.15,
+                            "axisColor": "#DADADA"
+                        },
+                        "graphs": [ {
+                            "id": "balance",
+                            "valueField": "balance",
+                            "lineThickness": 2,
+                            "lineColor": "#337ab7",
+                            "bullet": "round",
+                            "bulletAlpha": 0,
+                            "hideBulletsCount": 50
+                        }],
+                        "balloon": {
+                            "borderColor": "#337ab7",
+                            "borderAlpha": 0,
+                            "borderThickness": 0,
+                            "shadowAlpha": 0,
+                            "color": "#ffffff",
+                            "drop": false,
+                            "cornerRadius": 5,
+                            "fillColor": "#337ab7",
+                            "fillAlpha": 1,
+                        }
+                    } )
+                }
 
+                setInterval( function() {
+                    chart[0].dataProvider.shift();
+                    chart[1].dataProvider.shift();
+                    chart[2].dataProvider.shift();
+                    var time = new Date();
+                    var data = self.getBalanceData();
+                    chart[0].dataProvider.push({
+                        "date": time,
+                        "balance": data.balance
+                    });
+                    chart[1].dataProvider.push({
+                        "date": time,
+                        "balance": data.flight
+                    });
+                    chart[2].dataProvider.push({
+                        "date": time,
+                        "balance": data.spend
+                    });
+                    chart[0].validateData();
+                    chart[1].validateData();
+                    chart[2].validateData();
+                }, 5000 );
+            },
+
+             getBalanceData(){
+                var campaigntId = this.campaign.id;
+                var self = this;
+
+                axios.get('http://localhost:2301/api/v1/banker/' + campaigntId, this.$root.config).then( response => {
+                    self.banker = response.data
+                }, error => {
+                    console.log(error);
+                });
+    
+                return {
+                    "balance": self.banker.balance,
+                    "flight": self.banker.flight,
+                    "spend": self.banker.spend
+                }
+            },
+
+            emptyData() {
+                var emptyData = []
+                var time = new Date();
+                var data = 0;
+                for (var i = 40; i >= 0; i--) {
+                    var d = {
+                        "date" : time - (i * 5000),
+                        "balance": data
+                    }
+                    emptyData.push(d)
+                }
+                return emptyData
+            },
 
         },
 
