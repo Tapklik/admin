@@ -40,7 +40,12 @@ const app = new Vue({
         api : 'https://api.tapklik.com/v1/',
         path: '//api.tapklik.com/',
         token: false,
-        config: {}
+        config: {},
+        account: {
+            id: null,
+            creativeId: null,
+            campaignId: null
+        }
     },
 
     mounted () {

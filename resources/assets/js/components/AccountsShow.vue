@@ -139,7 +139,7 @@
                         <tr v-for="campaign in campaigns">
                             <td>{{ campaign.id }}</td>
                             <td>
-                                <a :href="'campaigns/' + campaign.id">
+                                <a :href="accountId + '/campaigns/' + campaign.id">
                                     {{ campaign.name }}
                                 </a>
                             </td>
@@ -243,7 +243,7 @@
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <h2>Budget</h2>
-                    <span>Balance: ${{$root.twoDecimalPlaces($root.fromMicroDollars(balance.balance))}} </span>
+                    <span>Balance: ${{$root.twoDecimalPlaces($root.fromMicroDollars(balance + flight))}} ({{$root.twoDecimalPlaces($root.fromMicroDollars(flight))}}) </span>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <a class="btn btn-default pull-right" :href="accountId + '/billing'">Billing</a>
@@ -347,9 +347,8 @@
         data() {
 
             return {
-                balance: {
-                    balance: null
-                },
+                balance: 0,
+                flight: 0,
                 account: {
                     localization: {
                         
@@ -389,9 +388,8 @@
             fetchUsers() {
                 this.loading = true;
                 var self = this;
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get(this.$root.api + 'accounts/' + accountId + '/users', this.$root.config).then( response => {
+                axios.get(this.$root.api + 'accounts/' + this.account.id + '/users', this.$root.config).then( response => {
                     this.users = response.data.data;
 
                     this.loading = false;
@@ -403,12 +401,22 @@
             fetchBalance() {
                 this.loading = true;
                 var self = this;
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get(this.$root.api + 'accounts/' + accountId + '/banker/main?query=balance', this.$root.config).then( response => {
-                    this.balance = response.data.data;
+                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/main?query=balance', this.$root.config).then( response => {
+                    this.balance = response.data.data.balance;
 
                     this.loading = false;
+                }, error => {
+                    alert(error);
+                });
+            },
+
+            fetchFlight() {
+                this.loading = true;
+                var self = this;
+
+                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/flight?query=balance', this.$root.config).then( response => {
+                    self.flight = response.data.data.balance;
                 }, error => {
                     alert(error);
                 });
@@ -417,9 +425,8 @@
             getFolders() {
                 this.loading = true;
                 var self = this;
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
                 var folders = [];
-                axios.get(this.$root.api + 'creatives/' + accountId + '/folders', this.$root.config).then(response => {
+                axios.get(this.$root.api + 'creatives/' +  this.account.id + '/folders', this.$root.config).then(response => {
                     this.folders = response.data.data;
                     folders = response.data.data;
                     
@@ -429,7 +436,7 @@
                 });
                 var creatives = [];
                 for (var f in folders) {
-                    axios.get(this.$root.api + 'creatives/' + accountId + '/folders/' + folders[f].id, this.$root.config).then(response => {
+                    axios.get(this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[f].id, this.$root.config).then(response => {
                     var a = response.data;
                     creatives.push(a);
                     
@@ -444,12 +451,11 @@
             getCreatives() {
                 this.loading = true;
                 var self = this;
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
                 var folders = this.folders;
                 var creatives = [];
                 
                 for (var f in folders) {
-                    axios.get(this.$root.api + 'creatives/' + accountId + '/folders/' + folders[f].id, this.$root.config).then(response => {
+                    axios.get(this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[f].id, this.$root.config).then(response => {
                         var a = response.data.data;
                         for (var i in a) {
                             creatives.push(a[i]);
@@ -480,9 +486,8 @@
 
                 this.loading = true;
                 var self = this;
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get(this.$root.api + 'accounts/' + accountId, this.$root.config).then( response => {
+                axios.get(this.$root.api + 'accounts/' + this.accountId, this.$root.config).then( response => {
                     this.account = response.data.data;
 
                     this.loading = false;
@@ -495,9 +500,8 @@
 
                 this.loading = true;
                 var self = this;
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
 
-                axios.get(this.$root.api + 'accounts/' + accountId + '/campaigns', this.$root.config).then( response => {
+                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/campaigns', this.$root.config).then( response => {
                     this.campaigns = response.data.data;
 
                     this.loading = false;
@@ -545,9 +549,7 @@
 
             deleteUser(id) {
 
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
-
-                axios.delete(this.$root.api + 'accounts/' + accountId + '/users/' + id, this.$root.config).then(response => {
+                axios.delete(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, this.$root.config).then(response => {
                     alert('succesful deletion');
                     location.reload();
                 }, error => {
@@ -708,22 +710,21 @@
             },
 
              getBalanceData(){
-                var accountId = window.location.pathname.replace('\/accounts\/', '');
                 var self = this;
 
-                axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/main?query=balance', this.$root.config).then( response => {
+                axios.get('https://api.tapklik.com/v1/accounts/' +  this.account.id + '/banker/main?query=balance', this.$root.config).then( response => {
                     self.banker.main = response.data.data.balance
                 }, error => {
                     console.log(error);
                 });
 
-                axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/flight?query=balance', this.$root.config).then( response => {
+                axios.get('https://api.tapklik.com/v1/accounts/' +  this.account.id + '/banker/flight?query=balance', this.$root.config).then( response => {
                     self.banker.flight = response.data.data.balance
                 }, error => {
                     console.log(error);
                 });
 
-                 axios.get('https://api.tapklik.com/v1/accounts/' + accountId + '/banker/spend?query=balance', this.$root.config).then( response => {
+                 axios.get('https://api.tapklik.com/v1/accounts/' +  this.account.id + '/banker/spend?query=balance', this.$root.config).then( response => {
                     self.banker.spend = response.data.data.balance
                 }, error => {
                     console.log(error);
@@ -789,15 +790,18 @@
         watch: {
             token(value) {
                 this.fetchAccount();
-                this.fetchUsers();
-                this.fetchCampaigns();
-                this.getFolders();
-                this.fetchBalance();
             
             },
 
             folders(value) {
                 this.getCreatives();
+            },
+            account(value) {
+                this.fetchUsers();
+                this.fetchCampaigns();
+                this.getFolders();
+                this.fetchBalance();
+                this.fetchFlight();
             }
         }
     }

@@ -75,14 +75,14 @@
 <script>
     export default {
         mounted() {
-            
+            this.getIds();           
         },
 
         data() {
 
             return {
-                creativeId: this.getCreativeId(),
-                accountId: this.getAccountId(),
+                creativeId: 0,
+                accountId: 0,
                 creative: {},
                 loading: false,
                 noresult: false,
@@ -90,17 +90,13 @@
             }
         },
 
-        methods: {
-            getCreativeId() {
-                var idDraft = window.location.pathname.replace('\/accounts\/', '');
-                var id = idDraft.slice((idDraft.length - 36),idDraft.length)
-                return id;
-            },
+        methods: {  
+            getIds() {
+                var idDraft = window.location.pathname;
+                var res = idDraft.split("/");
 
-            getAccountId() {
-                var idDraft = window.location.pathname.replace('\/accounts\/', '');
-                var id = idDraft.slice(0,(idDraft.length - 47))
-                return id;
+                this.creativeId = res[4];
+                this.accountId = res[2];
             },
 
             fetchCreative() {

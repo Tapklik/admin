@@ -241,13 +241,14 @@
             this.fetchCategories();
             this.fetchTechnologies();            
             this.createChart();
+            this.getIds();
         },
 
         data() {
 
             return {
-                campaignId: this.getCampaignId(),
-                accountId: this.getAccountId(),
+                campaignId: 0,
+                accountId: 0,
                 creatives: [],
                 folders: [],
                 banker: {
@@ -550,17 +551,13 @@
                   this.geo = locations;
                 }
             },
+            
+            getIds() {
+                var idDraft = window.location.pathname;
+                var res = idDraft.split("/");
 
-            getCampaignId() {
-                var idDraft = window.location.pathname.replace('\/accounts\/', '');
-                var id = idDraft.slice((idDraft.length - 36),idDraft.length)
-                return id;
-            },
-
-            getAccountId() {
-                var idDraft = window.location.pathname.replace('\/accounts\/', '');
-                var id = idDraft.slice(0,(idDraft.length - 47))
-                return id;
+                this.campaignId = res[4];
+                this.accountId = res[2];
             },
 
             fetchCampaign() {
