@@ -146,13 +146,13 @@
                             <td>{{ campaign.start_time }}</td>
                             <td>{{ campaign.end_time }}</td>
                             <td>
-                                <a :href="adomain" v-for="adomain in campaign.adomain" target="_blank">
-                                    {{ adomain }}
+                                <a :href="campaign.adomain" target="_blank">
+                                    {{ campaign.adomain }}
                                 </a>
                             </td>
                             <td>
                                 <a :href="campaign.ctrurl" target="_blank">
-                                    link
+                                    {{campaign.ctrurl}}
                                 </a>
                             </td>
                             <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
