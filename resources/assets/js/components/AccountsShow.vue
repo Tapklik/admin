@@ -87,8 +87,12 @@
                                     {{ user.phone ? user.phone : 'N/A' }}
                                 </td>
                                 <td>
-                                    <i class="fa fa-check" v-show="user.status == 1"></i>
-                                    <i class="fa fa-ban" v-show="!user.status"></i>
+                                    <button v-if="user.status == 0" class="btn btn-danger" @click="toggleUserStatus(user.status, user.id)">
+                                        <i class="fa fa-check-circle-o"></i>
+                                    </button>
+                                    <button v-else class="btn btn-success" @click="toggleUserStatus(user.status, user.id)">
+                                        <i class="fa fa-check-circle-o"></i>
+                                    </button>
                                 </td>
                                 <td>
                                     <button class="btn btn-danger" @click="deleteUser(user.id)">
@@ -108,6 +112,7 @@
                     <h2>Campaigns</h2>
                 </div>
             </div>
+                <button @click="something()"></button>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -326,7 +331,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" @click="createNewUser()">Create</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewUser()">Create</button>
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
@@ -557,6 +562,32 @@
                 });
             },
 
+            toggleUserStatus(status, id) {
+                if(status == 0) {
+                    axios.put(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, {status: 1}, this.$root.config).then(response => {
+                        alert('status toggled');
+                        location.reload();
+                    }, error => {
+                        console.log(error);
+                    });
+                }
+                else {
+                    axios.put(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, {status: 0}, this.$root.config).then(response => {
+                        alert('status toggled');
+                        location.reload();
+                    }, error => {
+                        console.log(error);
+                    });
+                }
+            },
+
+            something() {
+                axios.put('http://104.225.218.101:10006/v1/accounts/1bfcc4ea-be27-11e7-9150-0242ac110002/users/31e85cec-be27-11e7-9106-0242ac110002', {status: 1}, this.$root.config).then(response => {
+                alert('success');
+                }, error => {
+                console.log(error);
+                });
+            },
 
             toggleStatus(id, status) {
 
@@ -626,7 +657,6 @@
                 this.loading = true;
 
                 return axios.post(this.$root.api + 'accounts/' + this.account.id + '/users', this.user, this.$root.config).then(response => {
-
                     this.fetchUsers();
                     this.loading = false;
                     this.account = false;
