@@ -86,8 +86,8 @@
                                         <label for="label-country">Country</label>
                                         <br/>
                                         <select class="form-control" id="label-country" v-model="account.country">
-                                            <option v-for="country in countriesList.data" :value="country.code">
-                                                {{ country.name }}
+                                            <option v-for="country in countriesList.data" :value="country.country">
+                                                {{ country.key }}
                                             </option>
                                         </select>
                                     </div>
@@ -102,8 +102,8 @@
                                         <label for="label-timezones">Time Zone</label>
                                         <br/>
                                         <select class="form-control" id="label-timezones" v-model="account.timezone">
-                                            <option v-for="timezone in timezonesList.data" :value="timezone.value">
-                                                {{ timezone.value }}
+                                            <option v-for="timezone in timezonesList.data" :value="timezone.text">
+                                                {{ timezone.text }}
                                             </option>
                                         </select>
                                     </div>
