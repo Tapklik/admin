@@ -75,7 +75,12 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody>                           
+                            <tr v-show="userLoader == true">
+                                <td colspan="11" class="loader text-center">
+                                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                                </td>
+                            </tr>
                             <tr v-for="user in users">
                                 <td>
                                     {{ user.first_name }} {{ user.last_name }}
@@ -384,22 +389,24 @@
                     spend: 0
                 },
                 creatives: {},
-                accountId: window.location.pathname.replace('\/accounts\/', '')
+                accountId: window.location.pathname.replace('\/accounts\/', ''),
+                userLoader: true
             }
         },
 
         methods: {
 
             fetchUsers() {
-                this.loading = true;
+                this.userLoader = true;
                 var self = this;
 
                 axios.get(this.$root.api + 'accounts/' + this.account.id + '/users', this.$root.config).then( response => {
                     this.users = response.data.data;
 
-                    this.loading = false;
+                    this.userLoader = false;
                 }, error => {
                     alert(error);
+                    this.userLoader = false;
                 });
             },
 
@@ -653,17 +660,16 @@
                 $('#_modal-create-new-user').modal();
             },
 
-            createNewUser: function () {
-                this.loading = true;
+            createNewUser() {
+                this.users = [];
+                this.userLoader = true;
 
                 return axios.post(this.$root.api + 'accounts/' + this.account.id + '/users', this.user, this.$root.config).then(response => {
+
                     this.fetchUsers();
-                    this.loading = false;
-                    this.account = false;
                     this.closeModal();
                 }, error => {
-
-                    this.loading = false;
+                    this.fetchUsers();
                     this.closeModal();
                 });
             },
