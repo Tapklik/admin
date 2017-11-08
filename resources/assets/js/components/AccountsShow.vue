@@ -151,7 +151,7 @@
                             <td>{{ campaign.start_time }}</td>
                             <td>{{ campaign.end_time }}</td>
                             <td>
-                                <a :href="campaign.adomain" target="_blank">
+                                <a :href="'http://' + campaign.adomain" target="_blank">
                                     {{ campaign.adomain }}
                                 </a>
                             </td>
