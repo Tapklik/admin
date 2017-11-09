@@ -597,27 +597,27 @@
             },
 
             toggleStatus(id, status) {
+                this.loading = true;
+                this.campaigns = [];
 
                if (status == 'active') {
                 
                     axios.put(this.$root.api + 'campaigns/' + id, {status: 'stopped'}, this.$root.config).then(response => {
-                    alert('success');
+                        this.fetchCampaigns();
                     }, error => {
                     console.log(error);
                     });
                 }
                 else if(status == 'stopped') {
                     axios.put(this.$root.api + 'campaigns/' + id, {status: 'archived'}, this.$root.config).then(response => {
-                    alert('success');
-                    location.reload();
+                        this.fetchCampaigns();
                     }, error => {
                     console.log(error);
                     });
                 }
                 else {
                     axios.put(this.$root.api + 'campaigns/' + id, {status: 'active'}, this.$root.config).then(response => {
-                    alert('success');
-                    location.reload();
+                        this.fetchCampaigns();
                     }, error => {
                     console.log(error);
                     });
