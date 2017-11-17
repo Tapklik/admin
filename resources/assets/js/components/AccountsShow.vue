@@ -5,7 +5,7 @@
                 <div class="col-xs-12">
                     <h1 class="title">{{ account.name }}</h1>
 
-                    <button class="btn btn-default pull-right" @click="openCreateAccount()">
+                    <button class="btn btn-default pull-right" @click="openCreateUser()">
                         <i class="fa fa-plus"></i> Create new user
                     </button>
                 </div>
@@ -179,10 +179,10 @@
                             </td>
                             <td>
                                 <button class="btn"
-                                        :class="{ 'btn-success': campaign.status=='active', 'btn-danger': campaign.status=='stopped', 'btn': campaign.status=='archived' }"
                                         @click="toggleStatus(campaign.id , campaign.status)">
-                                    <i class="fa fa-check-circle-o"></i>
+                                    Change Status
                                 </button>
+                                {{campaign.status}}
                             </td>
                             <td>
                                 <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
@@ -357,6 +357,8 @@
         data() {
 
             return {
+
+                statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
                 balance: 0,
                 flight: 0,
                 account: {
@@ -656,7 +658,7 @@
                 });
             },
 
-            openCreateAccount() {
+            openCreateUser() {
                 $('#_modal-create-new-user').modal();
             },
 

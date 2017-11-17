@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-md-8">
-                <h1 class="title pull-left">Accounts</h1>
+                <h1 class="title pull-left">Accountsss</h1>
 
                 <button class="btn btn-default pull-right" @click="openCreateAccount()">
                     <i class="fa fa-plus"></i> Create new account
@@ -169,7 +169,7 @@
 
         methods: {
 
-            fetchAccounts: function (token) {
+            fetchAccounts(token) {
 
                 this.loading = true;
                 var self = this;
@@ -183,7 +183,7 @@
                 });
             },
 
-            fetchCountries: function () {
+            fetchCountries() {
 
                 axios.get('/data/countries').then( response => {
                     this.countriesList = response;
@@ -192,7 +192,7 @@
                 });
             },
 
-            fetchTimezones: function () {
+            fetchTimezones() {
 
                 axios.get('/data/timezones').then( response => {
                     this.timezonesList = response;
@@ -201,7 +201,7 @@
                 });
             },
 
-            fetchLanguages: function () {
+            fetchLanguages() {
 
                 axios.get('/data/languages').then( response => {
                     this.languagesList = response;
@@ -256,7 +256,7 @@
                 $('#_modal-create-new-account').modal();
             },
 
-            createNewAccount: function () {
+            createNewAccount() {
                 this.loading = true;
 
                 return axios.post(this.$root.api + 'accounts', this.account, this.$root.config).then(response => {
@@ -324,7 +324,7 @@
         },
 
         watch: {
-            token: function (value) {
+            token(value) {
                 this.fetchAccounts();
             }
         }
