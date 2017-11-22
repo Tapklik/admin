@@ -117,7 +117,6 @@
                     <h2>Campaigns</h2>
                 </div>
             </div>
-                <button @click="something()"></button>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -178,11 +177,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="btn"
-                                        @click="toggleStatus(campaign.id , campaign.status)">
-                                    Change Status
-                                </button>
-                                {{campaign.status}}
+                                <select  @change="toggleStatus(campaign.id, campaign.status)" v-model="campaign.status">
+                                    <option v-for="s in statuses" :value="s">{{s}}</option>
+                                </select>
                             </td>
                             <td>
                                 <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
@@ -357,7 +354,6 @@
         data() {
 
             return {
-
                 statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
                 balance: 0,
                 flight: 0,
@@ -590,40 +586,15 @@
                 }
             },
 
-            something() {
-                axios.put('http://104.225.218.101:10006/v1/accounts/1bfcc4ea-be27-11e7-9150-0242ac110002/users/31e85cec-be27-11e7-9106-0242ac110002', {status: 1}, this.$root.config).then(response => {
-                alert('success');
-                }, error => {
-                console.log(error);
-                });
-            },
-
             toggleStatus(id, status) {
                 this.loading = true;
                 this.campaigns = [];
-
-               if (status == 'active') {
                 
-                    axios.put(this.$root.api + 'campaigns/' + id, {status: 'stopped'}, this.$root.config).then(response => {
+                    axios.put(this.$root.api + 'campaigns/' + id, {status: status}, this.$root.config).then(response => {
                         this.fetchCampaigns();
                     }, error => {
                     console.log(error);
                     });
-                }
-                else if(status == 'stopped') {
-                    axios.put(this.$root.api + 'campaigns/' + id, {status: 'archived'}, this.$root.config).then(response => {
-                        this.fetchCampaigns();
-                    }, error => {
-                    console.log(error);
-                    });
-                }
-                else {
-                    axios.put(this.$root.api + 'campaigns/' + id, {status: 'active'}, this.$root.config).then(response => {
-                        this.fetchCampaigns();
-                    }, error => {
-                    console.log(error);
-                    });
-                }
             },
 
             openUsers(id) {
