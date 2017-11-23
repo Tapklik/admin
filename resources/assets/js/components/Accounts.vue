@@ -119,6 +119,41 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <h5>BILLING DETAILS</h5>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-3">
+                                        <label for="label-city">Company</label>
+                                        <br/>
+                                        <input type="text" class="form-control" id="label-city" v-model="account.company" />
+                                    </div>
+
+                                    <div class="col-xs-12 col-md-3">
+                                        <label for="label-city">Country</label>
+                                        <br/>
+                                        <input type="text" class="form-control" id="label-city" v-model="account.billing_country" />
+                                    </div>
+                                    <div class="col-xs-12 col-md-3">
+                                        <label for="label-timezones">City</label>
+                                        <br/>
+                                        <input type="text" class="form-control" id="label-city" v-model="account.billing_city" />
+                                    </div>
+                                    <div class="col-xs-12 col-md-3">
+                                        <label for="label-languages">Email</label>
+                                        <br/>
+                                        <input type="text" class="form-control" id="label-city" v-model="account.billing_email" />
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <label for="label-languages">Address</label>
+                                        <br/>
+                                        <textarea cols="40" rows="5" style="height: 100px" type="text" class="form-control" id="label-city" v-model="account.billing_address" /></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="form-group">
                                 <div class="row">
@@ -157,7 +192,18 @@
 
             return {
                 accounts: {},
-                account: {},
+                account: {
+                    name: '',
+                    country: '',
+                    city: '',
+                    language: '',
+                    status: 1,
+                    company: '',
+                    billing_email: '',
+                    billing_address: '',
+                    billing_country: '',
+                    billing_city: ''
+                },
                 countriesList: {},
                 timezonesList: {},
                 languagesList: {},
