@@ -109,6 +109,7 @@
                 noresult: false,
                 token: this.token,
                 bill: {
+                    invoice_id: 'TZ0001ARG125878',
                     amount: 0,
                     description: 'cc payment',
                     type: 'billing'
@@ -139,6 +140,7 @@
             },
             collectBill() {
                 return {
+                    invoice_id: 'TZ0001ARG125878',
                     credit: this.$root.toMicroDollars(this.bill.amount),
                     description: this.bill.description,
                     type: "billing"                    
