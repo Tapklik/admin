@@ -41,7 +41,10 @@
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Budget Type</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.budget.data.type"/>
+                        <select class="form-control" v-model="campaign.budget.data.type">
+                            <option value="daily">Daily</option>
+                            <option value="campaign">Campaign</option>
+                        </select>
                     </div>
                 </div>
             </div>
