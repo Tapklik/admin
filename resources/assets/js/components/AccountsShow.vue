@@ -210,18 +210,18 @@
                     </tr>
                 </thead>
             <tbody class="vcenter">
-            <tr v-show="loading == true">
+            <tr v-if="creativesLoader == true">
                 <td colspan="11" class="loader text-center">
                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                 </td>
             </tr>
-            <tr v-show="noresult">
+            <tr v-else-if="noresult">
                 <td colspan="11">
                     Sorry but theres nothing here... yet :)
                 </td>
             </tr>
 
-            <tr v-for="c in creatives">
+            <tr v-else v-for="c in creatives">
                 <td>{{ c.id }}</td>
                 <td>
                     <a :href=" accountId + '/creatives/' + c.id">
@@ -388,14 +388,22 @@
                 },
                 creatives: {},
                 accountId: window.location.pathname.replace('\/accounts\/', ''),
-                userLoader: true
+                userLoader: true,
+                creativesLoader: true
             }
         },
 
         methods: {
+            deleteCreative(id) {
+                this.creativesLoader = true;
+                axios.delete(this.$root.api + 'creatives/' + id, this.$root.config).then( response => {
+                    this.getCreatives();
+                }, error => {
+                    alert(error);
+                });
+            },
 
             fetchUsers() {
-                this.userLoader = true;
                 var self = this;
 
                 axios.get(this.$root.api + 'accounts/' + this.account.id + '/users', this.$root.config).then( response => {
@@ -459,7 +467,6 @@
             },
 
             getCreatives() {
-                this.loading = true;
                 var self = this;
                 var folders = this.folders;
                 var creatives = [];
@@ -470,11 +477,11 @@
                         for (var i in a) {
                             creatives.push(a[i]);
                         }
-                        this.loading = false;
                 }, error => {
                     alert(error);
                 });
                 }
+                this.creativesLoader = false;
                 this.creatives = creatives;
             },
 
@@ -484,7 +491,7 @@
                     declined: 'approved',
                     pending: 'approved'
                 };
-
+                this.creativesLoader = true;
                 axios.put(this.$root.api + 'creatives/' + id, {status: toggleBag[status]}, this.$root.config).then(response => {
                     this.getCreatives();
                 }, error => {
@@ -560,8 +567,7 @@
             deleteUser(id) {
 
                 axios.delete(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, this.$root.config).then(response => {
-                    alert('succesful deletion');
-                    location.reload();
+                    this.fetchUsers();
                 }, error => {
                     console.log(error);
                 });
@@ -570,16 +576,14 @@
             toggleUserStatus(status, id) {
                 if(status == 0) {
                     axios.put(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, {status: 1}, this.$root.config).then(response => {
-                        alert('status toggled');
-                        location.reload();
+                        this.fetchUsers();
                     }, error => {
                         console.log(error);
                     });
                 }
                 else {
                     axios.put(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, {status: 0}, this.$root.config).then(response => {
-                        alert('status toggled');
-                        location.reload();
+                        this.fetchUsers();
                     }, error => {
                         console.log(error);
                     });
