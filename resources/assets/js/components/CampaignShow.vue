@@ -317,7 +317,8 @@
                 os: [],
                 gender: ['M','F'],
                 searchCountry: '',
-                geo: []
+                geo: [],
+                updateCounter: 0
 
             }
         },
@@ -338,12 +339,11 @@
 
             updateCampaignDetails(){
                 
-
                 var payload = this.collectCampaign();
 
                 axios.put(this.$root.api + 'campaigns/' + this.campaign.id, payload, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
 
                 }, error => {
                     this.alert = true;
@@ -359,7 +359,7 @@
 
                 axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/cat', payload, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
                 }, error => {
                     this.alert = true;
                     this.error = true;
@@ -373,7 +373,7 @@
 
                 axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/users', payload, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
                 }, error => {
                     this.alert = true;
                     this.error = true;
@@ -388,7 +388,7 @@
 
                 axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/geo', {geo: payload}, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
                 }, error => {
                     this.alert = true;
                     this.error = true;
@@ -403,7 +403,7 @@
 
                 axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/device/type', {types: payload.types}, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
                 }, error => {
                     this.alert = true;
                     this.error = true;
@@ -412,7 +412,7 @@
                 });
                 axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/device/model', {models: payload.models}, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
                 }, error => {
                     this.alert = true;
                     this.error = true;
@@ -421,7 +421,7 @@
                 });
                 axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/device/os', {os: payload.os}, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
                 }, error => {
                     this.alert = true;
                     this.error = true;
@@ -436,7 +436,7 @@
 
                 axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/budget', payload, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
                 }, error => {
                     this.alert = true;
                     this.error = true;
@@ -451,7 +451,7 @@
 
                 axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/creatives', {creatives: payload}, this.$root.config).then(response => {
                     
-                    this.something = this.something + 1;
+                    this.updateCounter = this.updateCounter + 1;
                 }, error => {
                     this.alert = true;
                     this.error = true;
@@ -741,6 +741,10 @@
         },
 
         watch: {
+            updateCounter(value) {
+                if(value == 9) window.location.pathname = 'accounts/' + this.accountId;
+            },
+
             token(value) {
                 this.fetchCampaign();
                 this.getFolders();
