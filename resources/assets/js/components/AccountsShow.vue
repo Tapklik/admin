@@ -172,7 +172,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a :href="generateUri('api', campaign.id)"  class="btn btn-primary" target="_blank">
+                                <a @click="openJSON(campaign)"  class="btn btn-primary" target="_blank">
                                     View
                                 </a>
                             </td>
@@ -281,7 +281,26 @@
                 </div>
             </div>
         </div>
-
+        <div class="modal fade" id="_modal-show-json" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">JSON</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                {{openedJSON}}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewUser()">Create</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
         <div class="modal fade" id="_modal-create-new-user" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -360,6 +379,7 @@
                 statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
                 balance: 0,
                 flight: 0,
+                openedJSON: {},
                 account: {
                     localization: {
                         
@@ -638,6 +658,11 @@
 
             openCreateUser() {
                 $('#_modal-create-new-user').modal();
+            },
+
+            openJSON(json) {
+                this.openedJSON = json;
+                $('#_modal-show-json').modal();
             },
 
             createNewUser() {
