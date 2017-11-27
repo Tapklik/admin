@@ -16,7 +16,7 @@
                     <table class="table">
                         <tr>
                             <td class="col-sm-3">
-                                <b> Id: </b> 
+                                <b> Idhufdshfhu: </b> 
                             </td>
                             <td class="col-sm-9">
                                 <span class="muted">{{account.id}}</span>
@@ -182,7 +182,10 @@
                                 </select>
                             </td>
                             <td>
-                                <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
+                                <button v-if="campaign.status == 'draft'" class="btn btn-danger" @click="deleteCampaign(campaign.id)">
+                                    <i class="fa fa-check-circle-o"></i>
+                                </button>
+                                <button v-else :disabled="true" class="btn btn-danger" @click="archiveCampaign(campaign.id)">
                                     <i class="fa fa-check-circle-o"></i>
                                 </button>
                             </td>
