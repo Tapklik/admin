@@ -16,7 +16,7 @@
                     <table class="table">
                         <tr>
                             <td class="col-sm-3">
-                                <b> Id: </b> 
+                                <b> Idhufdshfhu: </b> 
                             </td>
                             <td class="col-sm-9">
                                 <span class="muted">{{account.id}}</span>
@@ -172,7 +172,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a :href="generateUri('api', campaign.id)"  class="btn btn-primary" target="_blank">
+                                <a @click="openJSON(campaign)"  class="btn btn-primary" target="_blank">
                                     View
                                 </a>
                             </td>
@@ -182,7 +182,10 @@
                                 </select>
                             </td>
                             <td>
-                                <button class="btn btn-danger" @click="deleteCampaign(campaign.id)">
+                                <button v-if="campaign.status == 'draft'" class="btn btn-danger" @click="deleteCampaign(campaign.id)">
+                                    <i class="fa fa-check-circle-o"></i>
+                                </button>
+                                <button v-else :disabled="true" class="btn btn-danger" @click="archiveCampaign(campaign.id)">
                                     <i class="fa fa-check-circle-o"></i>
                                 </button>
                             </td>
@@ -210,18 +213,18 @@
                     </tr>
                 </thead>
             <tbody class="vcenter">
-            <tr v-show="loading == true">
+            <tr v-if="creativesLoader == true">
                 <td colspan="11" class="loader text-center">
                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                 </td>
             </tr>
-            <tr v-show="noresult">
+            <tr v-else-if="noresult">
                 <td colspan="11">
                     Sorry but theres nothing here... yet :)
                 </td>
             </tr>
 
-            <tr v-for="c in creatives">
+            <tr v-else v-for="c in creatives">
                 <td>{{ c.id }}</td>
                 <td>
                     <a :href=" accountId + '/creatives/' + c.id">
@@ -278,7 +281,26 @@
                 </div>
             </div>
         </div>
-
+        <div class="modal fade" id="_modal-show-json" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">JSON</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                {{openedJSON}}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewUser()">Create</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
         <div class="modal fade" id="_modal-create-new-user" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -357,6 +379,7 @@
                 statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
                 balance: 0,
                 flight: 0,
+                openedJSON: {},
                 account: {
                     localization: {
                         
@@ -388,14 +411,22 @@
                 },
                 creatives: {},
                 accountId: window.location.pathname.replace('\/accounts\/', ''),
-                userLoader: true
+                userLoader: true,
+                creativesLoader: true
             }
         },
 
         methods: {
+            deleteCreative(id) {
+                this.creativesLoader = true;
+                axios.delete(this.$root.api + 'creatives/' + id, this.$root.config).then( response => {
+                    this.getCreatives();
+                }, error => {
+                    alert(error);
+                });
+            },
 
             fetchUsers() {
-                this.userLoader = true;
                 var self = this;
 
                 axios.get(this.$root.api + 'accounts/' + this.account.id + '/users', this.$root.config).then( response => {
@@ -459,7 +490,6 @@
             },
 
             getCreatives() {
-                this.loading = true;
                 var self = this;
                 var folders = this.folders;
                 var creatives = [];
@@ -470,11 +500,11 @@
                         for (var i in a) {
                             creatives.push(a[i]);
                         }
-                        this.loading = false;
                 }, error => {
                     alert(error);
                 });
                 }
+                this.creativesLoader = false;
                 this.creatives = creatives;
             },
 
@@ -484,7 +514,7 @@
                     declined: 'approved',
                     pending: 'approved'
                 };
-
+                this.creativesLoader = true;
                 axios.put(this.$root.api + 'creatives/' + id, {status: toggleBag[status]}, this.$root.config).then(response => {
                     this.getCreatives();
                 }, error => {
@@ -560,8 +590,7 @@
             deleteUser(id) {
 
                 axios.delete(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, this.$root.config).then(response => {
-                    alert('succesful deletion');
-                    location.reload();
+                    this.fetchUsers();
                 }, error => {
                     console.log(error);
                 });
@@ -570,16 +599,14 @@
             toggleUserStatus(status, id) {
                 if(status == 0) {
                     axios.put(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, {status: 1}, this.$root.config).then(response => {
-                        alert('status toggled');
-                        location.reload();
+                        this.fetchUsers();
                     }, error => {
                         console.log(error);
                     });
                 }
                 else {
                     axios.put(this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, {status: 0}, this.$root.config).then(response => {
-                        alert('status toggled');
-                        location.reload();
+                        this.fetchUsers();
                     }, error => {
                         console.log(error);
                     });
@@ -631,6 +658,11 @@
 
             openCreateUser() {
                 $('#_modal-create-new-user').modal();
+            },
+
+            openJSON(json) {
+                this.openedJSON = json;
+                $('#_modal-show-json').modal();
             },
 
             createNewUser() {

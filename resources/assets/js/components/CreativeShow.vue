@@ -126,6 +126,7 @@
             editCreative() {
                 axios.put(this.$root.api + 'creatives/' + this.creativeId, this.collectCreative(), this.$root.config).then(response => {
                     this.fetchCreative();
+                    window.location.pathname = 'accounts/' + this.accountId;
                 }, error => {
                     alert(error);
                 });

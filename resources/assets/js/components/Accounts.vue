@@ -170,8 +170,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="createNewAccount()">Create</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" @click="cleanModalDetails()">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewAccount()">Create</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -197,6 +197,7 @@
                     country: '',
                     city: '',
                     language: '',
+                    timezone: '',
                     status: 1,
                     company: '',
                     billing_email: '',
@@ -214,7 +215,20 @@
         },
 
         methods: {
-
+            cleanModalDetails() {
+                this.account.name = '',
+                this.account.country = '',
+                this.account.city = '',
+                this.account.language = '',
+                this.account.status = 1,
+                this.account.company = '',
+                this.account.billing_email = '',
+                this.account.billing_address = '',
+                this.account.billing_country = '',
+                this.account.billing_city = '',
+                this.account.timezone = ''
+            },
+    
             fetchAccounts(token) {
 
                 this.loading = true;
@@ -259,9 +273,9 @@
             deleteAccount(id) {
 
                 axios.delete(this.$root.api + 'accounts/' + id, this.$root.config).then( response => {
-                    alert('succesful deletion');
+                    this.fetchAccounts();
                 }, error => {
-                    console.log(error);
+                    alert(error);
                 });
             },
 
@@ -306,7 +320,7 @@
                 this.loading = true;
 
                 return axios.post(this.$root.api + 'accounts', this.account, this.$root.config).then(response => {
-
+                    this.cleanModalDetails();
                     this.fetchAccounts();
                     this.loading = false;
                     this.account = false;
