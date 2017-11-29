@@ -1,10 +1,13 @@
 <header class="clearfix">
     <div class="col-md-2">
-        <h1>
-            <img src="//tapklik.com/assets/images/logo.png" alt="Logo" />
+        <h1 class="clearfix">
+            <img src="//tapklik.com/assets/images/logo.png" alt="Logo"/>
         </h1>
     </div>
-    <div class="col-md-10">
+    <div class="col-md-1">
+        <small class="pull-right" style="font-size: 14px; color: #fff; margin-top: 25px; ">v0.1.1</small>
+    </div>
+    <div class="col-md-9">
         <nav>
             <ul>
                 <li class="{{ Request::is('dashboard') ? 'selected' : '' }}">
