@@ -60,7 +60,7 @@
                     'email': this.email,
                     'password': this.password
                 }).then(response => {
-                    this.token = atob(response.data.token);
+                    this.token = response.data.token;
                     this.isLoading = false;
                 }, error => {
                     this.error = error.data.error;
@@ -78,7 +78,7 @@
                     token: this.token
                 }).then(response => {
 
-                    window.location = '/dashboard';
+                   window.location = '/dashboard';
                 }, error => {
 
                     swal('Error', error.data.error, 'error');
