@@ -20,6 +20,7 @@ Vue.component('campaigns', require('./components/Campaigns.vue'));
 Vue.component('campaign-create', require('./components/CampaignsCreate.vue'));
 Vue.component('campaigns-all', require('./components/CampaignsAll.vue'));
 Vue.component('campaign-show', require('./components/CampaignShow.vue'));
+Vue.component('campaign-creatives-show', require('./components/CampaignCreativesShow.vue'));
 Vue.component('creative', require('./components/CreativeShow.vue'));
 Vue.component('creatives', require('./components/Creatives.vue'));
 Vue.component('dashboard', require('./components/Dashboard.vue'));
@@ -54,7 +55,6 @@ const app = new Vue({
 
     methods: {
         getApiToken() {
-
             axios.get('/core/token').then(response => {
                 this.token = response.data.token;
         }, error => {
@@ -71,18 +71,14 @@ const app = new Vue({
         },
 
         twoDecimalPlaces(value) {
-            if(value) {
-                return value.toFixed(2);
-            } else {
-                return null;
-            }
+            if(value) return value.toFixed(2); 
+            else return null;
         }
     },
     
     watch: {
         token(value) {
             if(value == false) return;
-
             this.$children[0].token = value;
             this.config = {headers: {'Authorization': "Bearer " + this.token}};
         }

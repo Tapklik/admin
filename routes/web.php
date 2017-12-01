@@ -104,6 +104,11 @@ Route::get('auth', [
         'uses' => 'AccountCampaignsController@show'
     ]);
 
+    Route::get('accounts/{id}/campaigns/{cid}/creatives', [
+        'as'   => 'accounts.campaigns.display',
+        'uses' => 'AccountCampaignsController@display'
+    ]);
+
     Route::get('accounts/{id}/creatives', [
         'as'   => 'accounts.noroute',
         'uses' => 'AccountsController@noroute'

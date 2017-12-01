@@ -17,4 +17,8 @@ class AccountCampaignsController extends Controller
 
 		return view('accounts.campaigns.show', compact('cid'));
 	}
+	public function display ($id, $cid) {
+
+		return view('accounts.campaigns.display', compact('cid'));
+	}
 }

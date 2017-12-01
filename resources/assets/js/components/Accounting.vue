@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        mounted() {
+      /* mounted() {
         },
 
         data() {
@@ -114,7 +114,7 @@
             token(value) {
 
             }
-        }
+        } */
     }
 
 </script>

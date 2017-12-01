@@ -167,7 +167,7 @@
                             <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
                             <td>${{ $root.fromMicroDollars(campaign.bid) }}</td>
                             <td>
-                                <a :href="generateUri('creatives', campaign.id)"  class="btn btn-primary">
+                                <a :href="'/accounts/'+ accountId +'/campaigns/'+campaign.id+'/creatives'"  class="btn btn-primary">
                                     View
                                 </a>
                             </td>
@@ -804,11 +804,11 @@
                     break;
 
                     case 'creatives':
-                    endpoint += 'creatives';
+                    endpoint += 'creatives/' + id;
                     break;
                 }
 
-                return '/accounts/' + id + '/' + endpoint;
+                return endpoint;
             }
         },
 
