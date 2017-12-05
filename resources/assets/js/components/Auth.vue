@@ -60,7 +60,7 @@
                     'email': this.email,
                     'password': this.password
                 }).then(response => {
-                    this.token = response.data.token;
+                    this.token = window.atob(response.data.token);
                     this.isLoading = false;
                 }, error => {
                     this.error = error.data.error;
