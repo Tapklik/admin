@@ -78,9 +78,7 @@
                                 <label for="label-approved">Attributes</label>
                                 <br/>
                                 <select class="form-control" multiple id="label-approved" v-model="creative.attr.data">
-                                    <option value="banner">Banner</option>
-                                    <option value="video">Video</option>
-                                    <option value="native">Native</option>
+                                    <option v-for="attribute in attributes" :value="attribute.value">{{attribute.description}}</option>
                                 </select>
                             </div>
                         </div>
@@ -244,7 +242,7 @@
 
             fetchAttributes() {
                 axios.get('/data/attributes').then(response => {
-                    this.attributes = response;
+                    this.attributes = response.data;
                 }, error => {
                     alert(error);
                 });
@@ -313,6 +311,14 @@
 
             editCreative() {
                 axios.put(this.$root.api + 'creatives/' + this.creativeId, this.collectCreative(), this.$root.config).then(response => {
+                    this.editAttributes();
+                }, error => {
+                    alert(error);
+                });
+            },
+
+            editAttributes() {
+                axios.put(this.$root.api + 'creatives/' + this.creativeId + '/attr', {attr: this.creative.attr.data}, this.$root.config).then(response => {
                     this.fetchCreative();
                     window.location.pathname = 'accounts/' + this.accountId;
                 }, error => {

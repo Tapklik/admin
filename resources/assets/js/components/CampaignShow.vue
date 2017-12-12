@@ -707,11 +707,11 @@
                 }, 5000 );
             },
 
-             getBalanceData(){
-                var campaigntId = this.campaign.id;
+            getBalanceData(){
+                var campaignId = this.campaign.id;
                 var self = this;
 
-                axios.get('http://localhost:2301/api/v1/banker/' + campaigntId, this.$root.config).then( response => {
+                axios.get(this.$root.erlang_api + '/api/v1/banker/' + campaignId, this.$root.config).then( response => {
                     self.banker = response.data
                 }, error => {
                     console.log(error);
