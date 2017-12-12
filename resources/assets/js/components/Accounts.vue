@@ -245,7 +245,7 @@
 
             fetchCountries() {
 
-                axios.get('/data/countries').then( response => {
+                axios.get('/data/countries').then(response => {
                     this.countriesList = response;
                 }, error => {
                     console.log(error);

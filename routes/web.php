@@ -221,9 +221,16 @@ Route::get('data/countries/{code}/{id}', function ($code, $id) {
 
 Route::get('data/timezones', function () {
 
-	$timezones = json_decode(file_get_contents('./data/timezones.json'), TRUE);
+    $timezones = json_decode(file_get_contents('./data/timezones.json'), TRUE);
 
-	return response()->json($timezones);
+    return response()->json($timezones);
+});
+
+Route::get('data/attributes', function () {
+
+    $attributes = json_decode(file_get_contents('./data/attributes.json'), TRUE);
+
+    return response()->json($attributes);
 });
 
 Route::get('data/languages', function () {

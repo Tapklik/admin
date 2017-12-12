@@ -74,7 +74,7 @@
             fetchBid() {
                 var self = this;
                 var bidId = window.location.pathname.replace('\/reports\/', '');
-                axios.get('http://45.76.95.115:2301/api/bids/' + bidId, this.$root.config).then( response => {
+                axios.get(this.$root.erlang_api + 'api/bids/' + bidId, this.$root.config).then( response => {
                     self.bid = response.data;
                 }, error => {
                     console.log(error);

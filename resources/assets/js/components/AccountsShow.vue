@@ -16,7 +16,7 @@
                     <table class="table">
                         <tr>
                             <td class="col-sm-3">
-                                <b> Idhufdshfhu: </b> 
+                                <b> Id: </b> 
                             </td>
                             <td class="col-sm-9">
                                 <span class="muted">{{account.id}}</span>
@@ -233,7 +233,7 @@
                 </td>
                 <td>{{ c.class }}</td>
                 <td>{{ c.w }}x{{ c.h}}</td>
-                <td> <img width="70px" :src="c.thumb"> </td>
+                <td> <a :href="c.iurl" target="_blank"><img width="70px" :src="c.thumb"></a> </td>
                 <td>
                     <button :class="{'btn btn-success': c.approved == 'approved', 'btn btn-danger': c.approved != 'approved'}" @click="toggleApproval(c.id, c.approved)">
                         <i class="fa fa-check-circle-o"></i>
