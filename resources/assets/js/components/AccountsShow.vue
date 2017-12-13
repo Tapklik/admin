@@ -285,22 +285,23 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">JSON</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">JSON</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            {{openedJSON}}
                         </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                {{openedJSON}}
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewUser()">Create</button>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewUser()">Create</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
         <div class="modal fade" id="_modal-create-new-user" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -753,19 +754,19 @@
              getBalanceData(){
                 var self = this;
 
-                axios.get('https://api.tapklik.com/v1/accounts/' +  this.account.id + '/banker/main?query=balance', this.$root.config).then( response => {
+                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/main?query=balance', this.$root.config).then( response => {
                     self.banker.main = response.data.data.balance
                 }, error => {
                     console.log(error);
                 });
 
-                axios.get('https://api.tapklik.com/v1/accounts/' +  this.account.id + '/banker/flight?query=balance', this.$root.config).then( response => {
+                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/flight?query=balance', this.$root.config).then( response => {
                     self.banker.flight = response.data.data.balance
                 }, error => {
                     console.log(error);
                 });
 
-                 axios.get('https://api.tapklik.com/v1/accounts/' +  this.account.id + '/banker/spend?query=balance', this.$root.config).then( response => {
+                 axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/spend?query=balance', this.$root.config).then( response => {
                     self.banker.spend = response.data.data.balance
                 }, error => {
                     console.log(error);

@@ -711,7 +711,7 @@
                 var campaignId = this.campaign.id;
                 var self = this;
 
-                axios.get(this.$root.erlang_api + '/api/v1/banker/' + campaignId, this.$root.config).then( response => {
+                axios.get(this.$root.erlang_api + 'banker/' + campaignId, this.$root.config).then( response => {
                     self.banker = response.data
                 }, error => {
                     console.log(error);

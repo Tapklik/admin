@@ -130,7 +130,7 @@
                 var nodes = this.selectedNodes;
                 var self = this;
                 var time = new Date()
-                axios.get(this.$root.erlang_api + 'api/stats', this.$root.config).then( response => {
+                axios.get(this.$root.erlang_api + 'stats', this.$root.config).then( response => {
                     if(campaigns=='' || nodes == ''){
                         self.stats = response.data
                     }
@@ -274,7 +274,7 @@
 
             fetchBids() {
                 var self = this;
-                axios.get(this.$root.erlang_api + 'api/bids', this.$root.config).then( response => {
+                axios.get(this.$root.erlang_api + 'bids', this.$root.config).then( response => {
                     self.bids = response.data;
                 }, error => {
                     console.log(error);
@@ -391,7 +391,6 @@
             token(value) {
                 this.fetchBids();
             },
-
             
             stats(value) {
                 this.fetchNodes();

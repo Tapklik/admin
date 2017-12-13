@@ -83,6 +83,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label class="radio-inline"><input type="radio" v-model="invocation_code" value="iframe">iFrame</label>
+                            <label class="radio-inline"><input type="radio" v-model="invocation_code" value="js">JS</label>
+                            <div class="well">
+                                {{selected_invocation_code_text}}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-xs-4" style="margin-top: 20px;">
                     <div :style="'background-image: url('+creative.iurl+'); width: 100%; background-size: cover;'">
@@ -94,35 +103,38 @@
                 </div>
             </div>   
         </div>
-        <hr/> 
-        <div class="row">
-            <div class="col-xs-8">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <label for="label-city">CTR URL</label>
-                            <br/>
-                            <input type="text" class="form-control" id="label-city" v-model="creative.ctrurl" />
-                        </div>
-                        <div class="col-xs-12">
-                            <label for="label-city">Tag #1</label>
-                            <br/>
-                            <input type="text" class="form-control" id="label-city" v-model="tags[0]" />
-                        </div>
-                        <div class="col-xs-12">
-                            <label for="label-city">Tag #2</label>
-                            <br/>
-                            <input type="text" class="form-control" id="label-city" v-model="tags[1]" />
-                        </div>
-                        <div class="col-xs-12">
-                            <label for="label-city">Tag #3</label>
-                            <br/>
-                            <input type="text" class="form-control" id="label-city" v-model="tags[2]" />
-                        </div>
-                        <div class="col-xs-12">
-                            <label for="label-city">Tag #4</label>
-                            <br/>
-                            <input type="text" class="form-control" id="label-city" v-model="tags[3]" />
+        <hr />
+        <hr />
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label for="label-city">CTR URL</label>
+                                <br/>
+                                <input type="text" class="form-control" id="label-city" v-model="creative.ctrurl" />
+                            </div>
+                            <div class="col-xs-12">
+                                <label for="label-city">Tag #1</label>
+                                <br/>
+                                <input type="text" class="form-control" id="label-city" v-model="tags[0]" />
+                            </div>
+                            <div class="col-xs-12">
+                                <label for="label-city">Tag #2</label>
+                                <br/>
+                                <input type="text" class="form-control" id="label-city" v-model="tags[1]" />
+                            </div>
+                            <div class="col-xs-12">
+                                <label for="label-city">Tag #3</label>
+                                <br/>
+                                <input type="text" class="form-control" id="label-city" v-model="tags[2]" />
+                            </div>
+                            <div class="col-xs-12">
+                                <label for="label-city">Tag #4</label>
+                                <br/>
+                                <input type="text" class="form-control" id="label-city" v-model="tags[3]" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,68 +149,58 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Name</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Adomain</th>
                     <th>CTR URL</th>
-                    <th>Budget</th>
-                    <th>Daily</th>
-                    <th>Creatives</th>
-                    <th>JSON</th>
-                    <th>Status</th>
-                    <th>Delete</th>
+                    <th>Empty</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody class="vcenter">
                 <tr v-for="campaign in campaigns">
-                    <td>{{ campaign.id }}</td>
                     <td>
-                        <a :href="accountId + '/campaigns/' + campaign.id">
-                            {{ campaign.name }}
-                        </a>
-                    </td>
-                    <td>{{ campaign.start_time }}</td>
-                    <td>{{ campaign.end_time }}</td>
-                    <td>
-                        <a :href="'http://' + campaign.adomain" target="_blank">
-                            {{ campaign.adomain }}
-                        </a>
+                        {{ campaign.name }}
                     </td>
                     <td>
-                        <a :href="campaign.ctrurl" target="_blank">
-                            {{campaign.ctrurl}}
-                        </a>
-                    </td>
-                    <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
-                    <td>${{ $root.fromMicroDollars(campaign.bid) }}</td>
-                    <td>
-                        <a :href="'/accounts/'+ accountId +'/campaigns/'+campaign.id+'/creatives'"  class="btn btn-primary">
-                            View
-                        </a>
+                        {{campaign.ctrurl}}
+                    </a>
                     </td>
                     <td>
+                    </td>
+                    <td>
+                        <a @click="openJSON('js', campaign.id)"  class="btn btn-primary" target="_blank">
+                            JS
+                        </a>
+                        <a @click="openJSON('iframe', campaign.id)"  class="btn btn-primary" target="_blank">
+                            iFrame
+                        </a>
                         <a @click="openJSON(campaign)"  class="btn btn-primary" target="_blank">
                             View
                         </a>
                     </td>
-                    <td>
-                        <select  @change="toggleStatus(campaign.id, campaign.status)" v-model="campaign.status">
-                            <option v-for="s in statuses" :value="s">{{s}}</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button v-if="campaign.status == 'draft'" class="btn btn-danger" @click="deleteCampaign(campaign.id)">
-                            <i class="fa fa-check-circle-o"></i>
-                        </button>
-                        <button v-else :disabled="true" class="btn btn-danger" @click="archiveCampaign(campaign.id)">
-                            <i class="fa fa-check-circle-o"></i>
-                        </button>
-                    </td>
                 </tr>
             </tbody>
         </table>
+        <div class="modal fade" id="_modal-show-invocation" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">JSON</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            {{selected_invocation_code_text}}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewUser()">Create</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
     </div>
 </template>
 
@@ -212,7 +214,8 @@
 
             return {
                 campaigns: [],
-                selection: 'js',
+                invocation_code: 'js',
+                selected_invocation_code_text: '',
                 creativeId: 0,
                 accountId: 0,
                 creative: {
@@ -230,6 +233,19 @@
         },
 
         methods: {
+
+            openJSON(invocation_code, campaign_id) {
+                this.getSelectedInvocationCodeText(invocation_code, campaign_id)
+                $('#_modal-show-invocation').modal();
+            },
+
+            getSelectedInvocationCodeText(invocation_code, campaign_id) {
+                axios.get(this.$root.api + 'core/invocation', {attributes: this.creative.attr.data, campaign_id: campaign_id, creative_id: this.creativeId, type: invocation_code}, this.$root.config).then(response => {
+                    this.selected_invocation_code_text = response;
+                }, error=> {
+                    alert(error);
+                });
+            },
 
             fetchCountries() {
 
@@ -254,6 +270,7 @@
             },
 
             splitCtrurl() {
+                if(this.creative.ctrurl == null) return;
                 var url = this.creative.ctrurl;
                 var splitCtrurl = url.split("?");
                 this.creative.ctrurl = splitCtrurl[0];
@@ -318,7 +335,7 @@
             },
 
             editAttributes() {
-                axios.put(this.$root.api + 'creatives/' + this.creativeId + '/attr', {attr: this.creative.attr.data}, this.$root.config).then(response => {
+                axios.post(this.$root.api + 'creatives/' + this.creativeId + '/attr', this.creative.attr.data, this.$root.config).then(response => {
                     this.fetchCreative();
                     window.location.pathname = 'accounts/' + this.accountId;
                 }, error => {
@@ -346,6 +363,9 @@
             },
             creative(value) {
                 this.splitCtrurl();
+            },
+            invocation_code(value) {
+                this.getSelectedInvocationCodeText();
             }
         }
     }
