@@ -104,7 +104,6 @@
             </div>   
         </div>
         <hr />
-        <hr />
         <div class="form-group">
             <div class="row">
                 <div class="col-xs-8">
@@ -363,9 +362,6 @@
             },
             creative(value) {
                 this.splitCtrurl();
-            },
-            invocation_code(value) {
-                this.getSelectedInvocationCodeText();
             }
         }
     }
