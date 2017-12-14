@@ -1,40 +1,34 @@
 <template>
     <div>
+
+        <!-- HEADER START -->
         <div class="row">
             <div class="col-md-8">
                 <h1 class="title pull-left">Bid Details</h1>
             </div>
         </div>
+        <!-- HEADER END -->
 
         <hr/>
 
+        <!-- BID DETAILS START -->
         <div class="row">
-            <div class="col-md-2">
-                ID: 
-            </div>        
-            <div class="col-md-4">
-                {{bid.id}}
-            </div>            
+            <div class="col-md-2"> ID: </div>        
+            <div class="col-md-4"> {{ bid.id }} </div>            
         </div>
         <div class="row">
-            <div class="col-md-2">
-                RSP_TIME: 
-            </div>        
-            <div class="col-md-4">
-                {{bid.rsp_time}}
-            </div>            
+            <div class="col-md-2"> RSP_TIME: </div>        
+            <div class="col-md-4"> {{ bid.rsp_time }} </div>            
         </div>
         <div class="row">
-            <div class="col-md-2">
-                TIME
-            </div>        
-            <div class="col-md-4">
-                {{bid.time}}
-            </div>            
+            <div class="col-md-2"> TIME </div>        
+            <div class="col-md-4"> {{ bid.time }} </div>            
         </div>
+        <!-- BID DETAILS END -->
 
         <hr/>
 
+        <!-- BID ADDITIONAL DETAILS START -->
         <div class="row">
             <div class="col-md-8">
                 <h1 class="title pull-left">Other Details</h1>
@@ -51,6 +45,8 @@
                 </tr>
             </tbody>
         </table>
+        <!-- BID ADDITIONAL DETAILS END -->
+
     </div>
 </template>
 
@@ -60,43 +56,45 @@
         },
 
         data() {
-
             return {
-                loading: false,
-                noresult: false,
+                //ESSENTIALS
                 token: this.token,
+                bid_id: window.location.pathname.replace('\/reports\/', ''),
+
+                //BID
                 bid: {},
-                bidKeys: []
+                bid_keys: []
             }
         },
 
         methods: {
-            fetchBid() {
-                var self = this;
-                var bidId = window.location.pathname.replace('\/reports\/', '');
-                axios.get(this.$root.erlang_api + 'bids/' + bidId, this.$root.config).then( response => {
-                    self.bid = response.data;
-                }, error => {
-                    console.log(error);
-                });
-            },
-            fetchBidKeys() {
-                var a = this.bid;
-                var b = Object.keys(a);
-                this.bidKeys = b;
-            }
-        },
 
-        computed: {
-    
+            //BID
+            getBid() {
+                axios.get(
+                    this.$root.erlang_api + 'bids/' + this.bid_id, 
+                    this.$root.config
+                ).then(response => {
+                        this.bid = response.data;
+                    }, error => {
+                        console.log(error);
+                    }
+                );
+            },
+            getBidKeys() {
+                var bid = this.bid;
+                var keys = Object.keys(bid);
+                this.bid_keys = keys;
+            }
         },
 
         watch: {
             token(value) {
-                this.fetchBid();
+                this.getBid();
             },
+
             bid(value) {
-                this.fetchBidKeys();
+                this.getBidKeys();
             }
         }
     }
