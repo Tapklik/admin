@@ -11,14 +11,12 @@ class AccountsController extends Controller
 	}
 
 	public function show ($id)
-	{
-	
+	{	
 		return view('accounts.show', compact('id'));
 		
 	}
 
 	public function noroute() {
-
 		return view('accounts.noroute');
 	}
 }

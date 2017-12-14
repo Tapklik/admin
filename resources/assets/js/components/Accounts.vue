@@ -245,7 +245,7 @@
 
             fetchCountries() {
 
-                axios.get('/data/countries').then(response => {
+                axios.get('/data/countries.json').then(response => {
                     this.countriesList = response;
                 }, error => {
                     console.log(error);
@@ -254,7 +254,7 @@
 
             fetchTimezones() {
 
-                axios.get('/data/timezones').then( response => {
+                axios.get('/data/timezones.json').then( response => {
                     this.timezonesList = response;
                 }, error => {
                     console.log(error);
@@ -263,7 +263,7 @@
 
             fetchLanguages() {
 
-                axios.get('/data/languages').then( response => {
+                axios.get('/data/languages.json').then( response => {
                     this.languagesList = response;
                 }, error => {
                     console.log(error);

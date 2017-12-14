@@ -173,34 +173,6 @@ Route::get('data/countries/{code}/{id}', function ($code, $id) {
 	]);
 });
 
-Route::get('data/timezones', function () {
-
-    $timezones = json_decode(file_get_contents('./data/timezones.json'), TRUE);
-
-    return response()->json($timezones);
-});
-
-Route::get('data/attributes', function () {
-
-    $attributes = json_decode(file_get_contents('./data/attributes.json'), TRUE);
-
-    return response()->json($attributes);
-});
-
-Route::get('data/languages', function () {
-
-	$languages = json_decode(file_get_contents('./data/languages.json'), TRUE);
-
-	return response()->json($languages);
-});
-
-Route::get('data/categories', function () {
-
-	$categories = json_decode(file_get_contents('./data/categories.json'), TRUE);
-
-	return response()->json($categories);
-});
-
 Route::get('test', function () {
 
 	$country = \App\Country::with(['cities'])->find(1);

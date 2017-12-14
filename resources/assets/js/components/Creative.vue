@@ -242,7 +242,7 @@
 
             fetchCountries() {
 
-                axios.get('/data/countries').then(response => {
+                axios.get('/data/countries.json').then(response => {
                     this.countriesList = response;
                 }, error => {
                     console.log(error);
@@ -250,7 +250,7 @@
             },
 
             fetchAttributes() {
-                axios.get('/data/attributes').then(response => {
+                axios.get('/data/attributes.json').then(response => {
                     this.attributes = response.data;
                 }, error => {
                     alert(error);
