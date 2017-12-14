@@ -10,7 +10,7 @@
                     <h1 class="title">{{ account.name }}</h1>
                 </div>
                 <div class="col-xs-6">
-                    <button class="btn btn-default pull-right" @click="openCreateUser()">
+                    <button class="btn btn-default pull-right" @click="openModal('#_modal-create-new-user')">
                         <i class="fa fa-plus"></i> Create new user
                     </button>
                 </div>
@@ -28,28 +28,28 @@
                         <b>ID: </b> 
                     </div>
                     <div class="col-sm-9">
-                        <span class="muted">{{account.id}}</span>
+                        <span class="muted">{{ account.id }}</span>
                     </div>
                     <div class="col-sm-3">
                         <b>Status: </b> 
                     </div>
                     <div class="col-sm-9">
                         <span class="label" :class="account.status ? 'label-success' : 'label-danger'">
-                            {{account.status ? 'Active' : 'Inactive'}}
+                            {{ account.status ? 'Active' : 'Inactive' }}
                         </span>
                     </div>
                     <div class="col-sm-3">
                         <b>Localization: </b> 
                     </div>
                     <div class="col-sm-9">
-                        <span>{{account.localization.country}} {{account.localization.city}}</span> <br>
-                        <span>{{account.localization.timezone}}</span>
+                        <span>{{ account.localization.country }} {{ account.localization.city }}</span> <br>
+                        <span>{{ account.localization.timezone }}</span>
                     </div>
                     <div class="col-sm-3">
                         <b>Language: </b> 
                     </div>
                     <div class="col-sm-9">
-                        <span>{{account.localization.language}}</span>  
+                        <span>{{ account.localization.language }}</span>  
                     </div>
                 </div>
                 <!-- ACCOUNT DETAILS (LEFT 5/12) END -->
@@ -181,31 +181,39 @@
                         </td>
                         <td>
                             <a :href="campaign.ctrurl" target="_blank">
-                                {{campaign.ctrurl}}
+                                {{ campaign.ctrurl }}
                             </a>
                         </td>
                         <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
                         <td>${{ $root.fromMicroDollars(campaign.bid) }}</td>
                         <td>
-                            <a :href="'/accounts/'+ account_id +'/campaigns/'+campaign.id+'/creatives'"  class="btn btn-primary">
+                            <a 
+                            :href="'/accounts/' + account_id + '/campaigns/' + campaign.id + '/creatives'" 
+                            class="btn btn-primary"
+                            >
                                 View
                             </a>
                         </td>
                         <td>
-                            <a @click="openJSON(campaign)"  class="btn btn-primary" target="_blank">
+                            <a @click="openModal('#_modal-show-json', campaign)" class="btn btn-primary" target="_blank">
                                 View
                             </a>
                         </td>
                         <td>
-                            <select  @change="toggleStatus(campaign.id, campaign.status)" v-model="campaign.status">
-                                <option v-for="s in statuses" :value="s">{{s}}</option>
+                            <select  
+                            @change="toggleCampaignStatus(campaign.id, campaign.status)" 
+                            v-model="campaign.status">
+                                <option v-for="s in statuses" :value="s">{{ s }}</option>
                             </select>
                         </td>
                         <td>
-                            <button v-if="campaign.status == 'draft'" class="btn btn-danger" @click="deleteCampaign(campaign.id)">
-                                <i class="fa fa-check-circle-o"></i>
-                            </button>
-                            <button v-else :disabled="true" class="btn btn-danger" @click="archiveCampaign(campaign.id)">
+                            <button 
+                            id="delete"
+                            :ref="campaign.id"
+                            :disabled="campaign.status != 'draft'"  
+                            class="btn btn-danger" 
+                            @click="deleteCampaign(campaign.id)"
+                            >
                                 <i class="fa fa-check-circle-o"></i>
                             </button>
                         </td>
@@ -252,23 +260,36 @@
                     </tr>
                     <!-- EMPTY TABLE MESSAGE END -->
 
-                    <tr v-else v-for="c in creatives">
-                        <td>{{ c.id }}</td>
+                    <tr v-else v-for="creative in creatives">
+                        <td>{{ creative.id }}</td>
                         <td>
-                            <a :href=" account_id + '/creatives/' + c.id">
-                                {{ c.name }}
+                            <a :href=" account_id + '/creatives/' + creative.id">
+                                {{ creative.name }}
                             </a>
                         </td>
-                        <td>{{ c.class }}</td>
-                        <td>{{ c.w }}x{{ c.h}}</td>
-                        <td> <a :href="c.iurl" target="_blank"><img width="70px" :src="c.thumb"></a> </td>
+                        <td>{{ creative.class }}</td>
+                        <td>{{ creative.w }}x{{ creative.h}}</td>
+                        <td> 
+                            <a :href="creative.iurl" target="_blank">
+                                <img width="70px" :src="creative.thumb">
+                            </a> 
+                        </td>
                         <td>
-                            <button :class="{'btn btn-success': c.approved == 'approved', 'btn btn-danger': c.approved != 'approved'}" @click="toggleApproval(c.id, c.approved)">
+                            <button 
+                            :ref="creative.id"
+                            id="toggle"
+                            :class="creative.approved == 'approved' ? 'btn btn-success': 'btn btn-danger'" 
+                            @click="toggleCreativeStatus(creative.id, creative.approved)"
+                            >
                                 <i class="fa fa-check-circle-o"></i>
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger" @click="deleteCreative(c.id)">
+                            <button
+                            :ref="creative.id"
+                            id="delete" 
+                            class="btn btn-danger" 
+                            @click="deleteCreative(creative.id)">
                                 <i class="fa fa-check-circle-o"></i>
                             </button>
                         </td>
@@ -279,11 +300,15 @@
 
             <hr/>
 
-            <!-- BUDGET START -->
+            <!-- BILLING START -->
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <h2>Budget</h2>
-                    <span>Balance: ${{$root.twoDecimalPlaces($root.fromMicroDollars(balance + flight))}} ({{$root.twoDecimalPlaces($root.fromMicroDollars(flight))}}) </span>
+                    <span>
+                        Balance: $
+                        {{$root.twoDecimalPlaces($root.fromMicroDollars(banker.main + banker.flight))}} 
+                        ({{$root.twoDecimalPlaces($root.fromMicroDollars(banker.flight))}}) 
+                    </span>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <a class="btn btn-default pull-right" :href="account_id + '/billing'">Billing</a>
@@ -310,7 +335,7 @@
                     </div>
                 </div>
             </div>
-            <!-- BUDGET END -->
+            <!-- BILLING END -->
 
         </div>
         <!-- VISIBLE PART END -->
@@ -422,14 +447,11 @@
         data() {
 
             return {
-                user_status_button_loading: false,
-                users_table_empty: false,
-                campaigns_table_empty: false,
-                creatives_table_empty: false,
-                statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
-                balance: 0,
-                flight: 0,
-                opened_json: {},
+                //ESSENTIALS
+                token: '',
+                account_id: window.location.pathname.replace('\/accounts\/', ''),
+
+                //ACCOUNT DETAILS
                 account: {
                     id: '',
                     name: '',
@@ -448,7 +470,33 @@
                         timezone: ''
                     }
                 },
-                users: {},
+
+                //USERS 
+                users: [],
+                users_table_loading: true,
+                users_table_empty: false,
+
+                //CAMPAIGNS
+                campaigns: [],
+                opened_json: {},
+                campaigns_table_loading: true,
+                campaigns_table_empty: false,
+
+                //CREATIVES
+                creatives: [],
+                folders:[],
+                creatives_table_loading: true,
+                creatives_table_empty: false,
+                statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
+
+                //BILLING
+                banker: {
+                    main: 0,
+                    flight: 0,
+                    spend: 0
+                },
+
+                //CREATE NEW USER MODAL
                 new_user: {
                     first_name: '',
                     last_name: '',
@@ -456,24 +504,12 @@
                     phone: '',
                     password: ''
                 },
-                token: false,
-                campaigns: [],
-                folders:[],
-                banker: {
-                    main: 0,
-                    flight: 0,
-                    spend: 0
-                },
-                users_table_loading: true,
-                creatives: {},
-                account_id: window.location.pathname.replace('\/accounts\/', ''),
-                creatives_table_loading: true,
-                campaigns_table_loading: true
             }
         },
 
         methods: {
 
+            //OVERALL
             buttonLoading(action, condition, id) {
                 for(var button in this.$refs[id]) {
                     var targetted_button = this.$refs[id][button].id == action ? button : targetted_button;
@@ -482,151 +518,70 @@
                             this.$refs[id][targetted_button].children[0].className = 'fa fa-check-circle-o';
             },
 
-            deleteCreative(id) {
-                this.creatives_table_loading = true;
-                axios.delete(this.$root.api + 'creatives/' + id, this.$root.config).then( response => {
-                    this.getCreatives();
-                }, error => {
-                    alert(error);
-                });
+            openModal(identifier, json) {
+                this.opened_json = json ? json : '';
+                $(identifier).modal();
+            },
+            
+            //NEW USER MODAL
+            createNewUser() {
+                this.users = [];
+                this.users_table_loading = true;
+                axios.post(
+                    this.$root.api + 'accounts/' + this.account.id + '/users', 
+                    this.new_user,
+                    this.$root.config
+                ).then(response => {
+                        this.closeCreateNewUser();
+                        this.getUsers();
+                    }, error => {
+                        this.closeCreateNewUser();
+                        this.getUsers();
+                    }
+                );
             },
 
-            fetchUsers() {
+            //ACCOUNT DETAILS
+            getAccount() {
                 var self = this;
 
-                axios.get(this.$root.api + 'accounts/' + this.account.id + '/users', this.$root.config).then( response => {
-                    this.users = response.data.data;
+                axios.get(
+                    this.$root.api + 'accounts/' + this.account_id, 
+                    this.$root.config
+                ).then(response => {
+                        this.account = response.data.data;
+                    }, error => {
 
-                    this.users_table_loading = false;
-                }, error => {
-                    alert(error);
-                    this.users_table_loading = false;
-                });
+                    }
+                );
             },
 
-            fetchBalance() {
-                var self = this;
-
-                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/main?query=balance', this.$root.config).then( response => {
-                    this.balance = response.data.data.balance;
-                }, error => {
-                    alert(error);
-                });
-            },
-
-            fetchFlight() {
-                var self = this;
-
-                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/flight?query=balance', this.$root.config).then( response => {
-                    self.flight = response.data.data.balance;
-                }, error => {
-                    alert(error);
-                });
-            },
-
-            getFolders() {
-                this.loading = true;
-                var self = this;
-                var folders = [];
-                axios.get(this.$root.api + 'creatives/' +  this.account.id + '/folders', this.$root.config).then(response => {
-                    this.folders = response.data.data;
-                    folders = response.data.data;
-                    
-                    this.loading = false;
-                }, error => {
-                    alert(error);
-                });
-                var creatives = [];
-                for (var f in folders) {
-                    axios.get(this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[f].id, this.$root.config).then(response => {
-                    var a = response.data;
-                    creatives.push(a);
-                    
-                    this.loading = false;
-                }, error => {
-                    alert(error);
-                });
-                }
-                this.creatives = creatives;
-            },
-
-            getCreatives() {
-                var self = this;
-                var folders = this.folders;
-                var creatives = [];
-                
-                for (var f in folders) {
-                    axios.get(this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[f].id, this.$root.config).then(response => {
-                        var a = response.data.data;
-                        for (var i in a) {
-                            creatives.push(a[i]);
-                        }
-                }, error => {
-                    alert(error);
-                });
-                }
-                this.creatives_table_loading = false;
-                this.creatives = creatives;
-            },
-
-            toggleApproval(id, status) {
-                var toggleBag = {
-                    approved: 'declined',
-                    declined: 'approved',
-                    pending: 'approved'
-                };
-                this.creatives_table_loading = true;
-                axios.put(this.$root.api + 'creatives/' + id, {status: toggleBag[status]}, this.$root.config).then(response => {
-                    this.getCreatives();
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            fetchAccount() {
-                var self = this;
-
-                axios.get(this.$root.api + 'accounts/' + this.account_id, this.$root.config).then( response => {
-                    this.account = response.data.data;
-                    this.loading = false;
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            fetchCampaigns() {
-                this.campaigns_table_loading = true;
-                var self = this;
-                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/campaigns', this.$root.config).then( response => {
-                    this.campaigns = response.data.data;
-                    this.campaigns_table_loading = false;
-                }, error => {
-                    this.campaigns_table_loading = false;
-                });
-            },
-
-            deleteCampaign(id) {
-
-                axios.delete(this.$root.api + 'campaigns/' + id, this.$root.config).then( response => {
-                    alert('succesful deletion');
-                    location.reload();
-                }, error => {
-                    console.log(error);
-                });
+            //USERS
+            getUsers() {
+                axios.get(
+                    this.$root.api + 'accounts/' + this.account.id + '/users', 
+                    this.$root.config
+                ).then(response => {
+                        this.users = response.data.data;
+                        this.users_table_loading = false;
+                    }, error => {
+                        this.users_table_loading = false;
+                    }
+                );
             },
 
             deleteUser(id) {
-                this.buttonLoading('delete',true, id);
+                this.buttonLoading('delete', true, id);
 
                 axios.delete(
                     this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, 
                     this.$root.config
                 ).then(response => {
-                        this.fetchUsers();
                         this.buttonLoading('delete', false, id);
+                        this.getUsers();
                     }, error => {
-                        this.fetchUsers();
                         this.buttonLoading('delete', false, id);
+                        this.getUsers();
                     }
                 );
             },
@@ -637,82 +592,189 @@
 
                 axios.put(
                     this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, 
-                    { status: status }, 
+                    {status: status}, 
                     this.$root.config
                 ).then(response => {
                         this.buttonLoading('toggle', false, id);
-                        this.fetchUsers();
+                        this.getUsers();
                     }, error => {
                         this.buttonLoading('toggle', false, id);
-                        this.fetchUsers();
+                        this.getUsers();
                     }
                 );
             },
 
-            toggleStatus(id, status) {
-                this.campaigns = [];
-                
-                    axios.put(this.$root.api + 'campaigns/' + id, {status: status}, this.$root.config).then(response => {
-                        this.fetchCampaigns();
+            //CAMPAIGNS
+            getCampaigns() {
+                this.campaigns_table_loading = true;
+
+                axios.get(
+                    this.$root.api + 'accounts/' +  this.account.id + '/campaigns', 
+                    this.$root.config
+                ).then(response => {
+                        this.campaigns = response.data.data;
+                        this.campaigns_table_loading = false;
                     }, error => {
-                    console.log(error);
-                    });
+                        this.campaigns_table_loading = false;
+                    }
+                );
             },
 
-            openUsers(id) {
-                axios.get(this.$root.api + 'accounts/' + id + '/users', this.$root.config).then( response => {
-                    this.users = response.data;
+            deleteCampaign(id) {
+                this.buttonLoading('delete', true, id);
 
-                    $('#_modal-users').modal();
-
-                }, error => {
-                    alert(error);
-                });
+                axios.delete(
+                    this.$root.api + 'campaigns/' + id, 
+                    this.$root.config
+                ).then(response => {
+                        this.buttonLoading('delete', true, id);
+                        this.getCampaigns();        
+                    }, error => {
+                        this.buttonLoading('delete', true, id);
+                        this.getCampaigns();
+                    }
+                );
             },
 
-            openSettings(id) {
-                axios.get(this.$root.api + 'accounts/' + id, this.$root.config).then(response => {
+            toggleCampaignStatus(id, status) {
+                this.campaigns_table_loading = true;
 
-                    this.account = response.data;
-                    this.loading = false;
-
-                    $('#_modal-edit-account').modal();
-                }, error => {
-                    console.log(error);
-                });
+                axios.put(
+                    this.$root.api + 'campaigns/' + id, 
+                    {status: status}, 
+                    this.$root.config
+                ).then(response => {
+                        this.getCampaigns();
+                    }, error => {
+                        this.getCampaigns();
+                    }
+                );
             },
 
-            openCreateUser() {
-                $('#_modal-create-new-user').modal();
+            //CREATIVES
+            getFolders() {
+                axios.get(
+                    this.$root.api + 'creatives/' +  this.account.id + '/folders', 
+                    this.$root.config
+                ).then(response => {
+                        this.folders = response.data.data;
+                    }, error => {
+                    
+                    }
+                );
             },
 
-            openJSON(json) {
-                this.opened_json = json;
-                $('#_modal-show-json').modal();
+            getCreatives() {
+                var folders = this.folders;
+                for (var folder in folders) {
+                    axios.get(
+                        this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[folder].id, 
+                        this.$root.config
+                    ).then(response => {
+                            this.creatives.push(response.data.data);
+                            this.creatives = [].concat.apply([], this.creatives);
+                        }, error => {
+
+                        }
+                    );
+                }
+                this.creatives_table_loading = false;
             },
 
-            createNewUser() {
-                this.users = [];
-                this.users_table_loading = true;
+            toggleCreativeStatus(id, status) {
+                var toggleBag = {
+                    approved: 'declined',
+                    declined: 'approved',
+                    pending: 'approved'
+                };
+                this.buttonLoading('toggle', true, id);
 
-                return axios.post(this.$root.api + 'accounts/' + this.account.id + '/users', this.new_user, this.$root.config).then(response => {
-
-                    this.fetchUsers();
-                    this.closeModal();
-                }, error => {
-                    this.fetchUsers();
-                    this.closeModal();
-                });
+                axios.put(
+                    this.$root.api + 'creatives/' + id, 
+                    {status: toggleBag[status]}, 
+                    this.$root.config
+                ).then(response => {
+                        this.buttonLoading('toggle', false, id);
+                        this.getCreatives();
+                    }, error => {
+                        this.buttonLoading('toggle', false, id);
+                        this.getCreatives();
+                    }
+                );
             },
 
-            closeModal() {
-                $('#_modal-create-new-user').modal('close');
+            deleteCreative(id) {
+                this.creatives_table_loading = true;
+
+                axios.delete(
+                    this.$root.api + 'creatives/' + id, 
+                    this.$root.config
+                ).then(response => {
+                        this.buttonLoading('delete', false, id);
+                        this.getCreatives();
+                    }, error => {
+                        this.buttonLoading('delete', false, id);
+                        this.getCreatives();
+                    }
+                );
             },
 
+            //BILLING
+            getMain() {
+                axios.get(
+                    this.$root.api + 'accounts/' +  this.account.id + '/banker/main?query=balance', 
+                    this.$root.config
+                ).then(response => {
+                        this.banker.main = response.data.data.balance;
+                    }, error => {
+                    
+                    }
+                );
+            },
+
+            getFlight() {
+                axios.get(
+                    this.$root.api + 'accounts/' +  this.account.id + '/banker/flight?query=balance', 
+                    this.$root.config
+                ).then(response => {
+                        this.banker.flight = response.data.data.balance;
+                    }, error => {
+
+                    }
+                );
+            },
+
+            getSpend() {
+                axios.get(
+                    this.$root.api + 'accounts/' +  this.account.id + '/banker/spend?query=balance', 
+                    this.$root.config
+                ).then(response => {
+                        this.banker.spend = response.data.data.balance
+                    }, error => {
+
+                    }
+                );
+            },
+
+             getBalanceData(){
+                this.getMain();
+                this.getFlight();
+                this.getSpend();
+
+                var balance = ((this.banker.main + this.banker.flight)/1000000).toFixed(2);
+
+                return {
+                    "balance": balance,
+                    "flight": this.banker.flight,
+                    "spend": this.banker.spend
+                }
+            },
+
+            //CHARTS
             createChart() {
                 var self = this; 
                 var chart = [];
-                for( var c = 0; c <= 2; c++) {
+                for(var c = 0; c <= 2; c++) {
                     chart[c] = AmCharts.makeChart( 'chartdiv_' + c, {
                       "type": "serial",
                       "theme": "light",
@@ -776,35 +838,6 @@
                 }, 5000 );
             },
 
-             getBalanceData(){
-                var self = this;
-
-                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/main?query=balance', this.$root.config).then( response => {
-                    self.banker.main = response.data.data.balance
-                }, error => {
-                    console.log(error);
-                });
-
-                axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/flight?query=balance', this.$root.config).then( response => {
-                    self.banker.flight = response.data.data.balance
-                }, error => {
-                    console.log(error);
-                });
-
-                 axios.get(this.$root.api + 'accounts/' +  this.account.id + '/banker/spend?query=balance', this.$root.config).then( response => {
-                    self.banker.spend = response.data.data.balance
-                }, error => {
-                    console.log(error);
-                });
-    
-                var balance = ((self.banker.main + self.banker.flight)/1000000).toFixed(2)
-                return {
-                    "balance": balance,
-                    "flight": self.banker.flight,
-                    "spend": self.banker.spend
-                }
-            },
-
             emptyData() {
                 var emptyData = []
                 var time = new Date();
@@ -818,56 +851,23 @@
                 }
                 return emptyData
             },
-
-            generateUri(type, id) {
-
-                var endpoint = '';
-
-                switch(type) {
-
-                    case 'campaigns':
-                    endpoint += 'campaigns';
-                    break;
-
-                    case 'creatives':
-                    endpoint += 'creatives/' + id;
-                    break;
-                }
-
-                return endpoint;
-            }
-        },
-
-        computed: {
-
-            filterByUsers() {
-                if (typeof this.users.data == 'undefined') return;
-
-                var self = this;
-
-                var results = this.users.data.filter( function(item) {
-
-                    return item.first_name.toLowerCase().indexOf(self.searchUsers.toLowerCase()) > -1;
-                });
-
-                return results;
-            }
         },
 
         watch: {
             token(value) {
-                this.fetchAccount();
+                this.getAccount();
             },
 
             folders(value) {
                 this.getCreatives();
             },
+
             account(value) {
-                this.fetchUsers();
-                this.fetchCampaigns();
                 this.getFolders();
-                this.fetchBalance();
-                this.fetchFlight();
+                this.getUsers();
+                this.getCampaigns();
+                this.getMain();
+                this.getFlight();
             }
         }
     }
