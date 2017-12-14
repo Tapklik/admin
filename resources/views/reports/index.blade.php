@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-<reports></reports>
+<reporting></reporting>
 @stop
 
 @section('footer-js-header')

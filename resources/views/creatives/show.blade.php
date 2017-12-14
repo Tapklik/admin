@@ -9,5 +9,5 @@
 @stop
 
 @section('content')
-    <creative-show></creative-show>
+    <creative></creative>
 @stop

@@ -5,5 +5,5 @@
 @stop
 
 @section('content')
-<accounts-show></accounts-show>
+<account></account>
 @stop

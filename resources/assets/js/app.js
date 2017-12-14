@@ -15,22 +15,15 @@ require('./bootstrap');
 
 /*Vue.component('tk-datepicker', require('vue-datepicker'));*/
 Vue.component('accounts', require('./components/Accounts.vue'));
-Vue.component('accounts-show', require('./components/AccountsShow.vue'));
-Vue.component('campaigns', require('./components/Campaigns.vue'));
-Vue.component('campaign-create', require('./components/CampaignsCreate.vue'));
-Vue.component('campaigns-all', require('./components/CampaignsAll.vue'));
-Vue.component('campaign-show', require('./components/CampaignShow.vue'));
-Vue.component('campaign-creatives-show', require('./components/CampaignCreativesShow.vue'));
-Vue.component('creative', require('./components/CreativeShow.vue'));
-Vue.component('creatives', require('./components/Creatives.vue'));
+Vue.component('account', require('./components/Account.vue'));
+Vue.component('campaign', require('./components/Campaign.vue'));
+Vue.component('campaign-creatives', require('./components/CampaignCreatives.vue'));
+Vue.component('creative', require('./components/Creative.vue'));
 Vue.component('dashboard', require('./components/Dashboard.vue'));
-Vue.component('creatives-all', require('./components/CreativesAll.vue'));
-Vue.component('creative-show', require('./components/CreativesShow.vue'));
-Vue.component('reports', require('./components/Reports.vue'));
-Vue.component('users', require('./components/Users.vue'));
+Vue.component('reporting', require('./components/Reporting.vue'));
 Vue.component('accounting', require('./components/Accounting.vue'));
-Vue.component('billing', require('./components/BillingShow.vue'));
-Vue.component('bid-show', require('./components/BidShow.vue'));
+Vue.component('billing', require('./components/Billing.vue'));
+Vue.component('bid', require('./components/Bid.vue'));
 
 /*LOGIN COMPONENT*/
 Vue.component('auth', require('./components/Auth.vue'));

@@ -21,9 +21,15 @@
                 </select>
             </div> 
             <div class="col-xs-2">
-                <button class="btn btn-default">get</button>
-                <button class="btn btn-default">else</button>
-                <button class="btn btn-default">here</button>
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-print"></span>
+                </button>
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-tags"></span>
+                </button>
             </div>              
             <div class="col-xs-3">
                 <button class="btn btn-default">Preview</button>
@@ -83,22 +89,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <label class="radio-inline"><input type="radio" v-model="invocation_code" value="iframe">iFrame</label>
-                            <label class="radio-inline"><input type="radio" v-model="invocation_code" value="js">JS</label>
-                            <div class="well">
-                                {{selected_invocation_code_text}}
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="col-xs-4" style="margin-top: 20px;">
-                    <div :style="'background-image: url('+creative.iurl+'); width: 100%; background-size: cover;'">
-                        <img :src="creative.iurl" width="100%" style="visibility: hidden">
-                    </div><br />
-                    <div class="form-group">
-                        <button class="btn btn-default" style="float: right;" @click="editCreative()">Edit</button>
+                <div class="col-xs-4">
+                    <div class="well" style="margin-top: 50px">
+                        <img style="display: block; margin:auto" :src="creative.thumb" />
                     </div>
                 </div>
             </div>   
@@ -215,8 +209,8 @@
                 campaigns: [],
                 invocation_code: 'js',
                 selected_invocation_code_text: '',
-                creativeId: 0,
-                accountId: 0,
+                creative_id: 0,
+                account_id: 0,
                 creative: {
                     attr: {
                         data: []
@@ -239,7 +233,7 @@
             },
 
             getSelectedInvocationCodeText(invocation_code, campaign_id) {
-                axios.get(this.$root.api + 'core/invocation', {attributes: this.creative.attr.data, campaign_id: campaign_id, creative_id: this.creativeId, type: invocation_code}, this.$root.config).then(response => {
+                axios.get(this.$root.api + 'core/invocation', {attributes: this.creative.attr.data, campaign_id: campaign_id, creative_id: this.creative_id, type: invocation_code}, this.$root.config).then(response => {
                     this.selected_invocation_code_text = response;
                 }, error=> {
                     alert(error);
@@ -283,11 +277,11 @@
                 this.loading = true;
                 var self = this;
 
-                axios.get(this.$root.api + 'accounts/' +  this.accountId + '/campaigns', this.$root.config).then( response => {
+                axios.get(this.$root.api + 'accounts/' +  this.account_id + '/campaigns', this.$root.config).then( response => {
                     var self = this;
                     var campaigns = response.data.data;
                     this.campaigns = campaigns.filter(c => 
-                        c.creatives.data.map(cr => cr.id).indexOf(self.creativeId) !== -1
+                        c.creatives.data.map(cr => cr.id).indexOf(self.creative_id) !== -1
                     );
                     this.loading = false;
                 }, error => {
@@ -298,12 +292,12 @@
             getIds() {
                 var idDraft = window.location.pathname;
                 var res = idDraft.split("/");
-                this.creativeId = res[4];
-                this.accountId = res[2];
+                this.creative_id = res[4];
+                this.account_id = res[2];
             },
 
             fetchCreative() {
-                axios.get(this.$root.api + 'creatives/' + this.creativeId, this.$root.config).then(response => {
+                axios.get(this.$root.api + 'creatives/' + this.creative_id, this.$root.config).then(response => {
                     this.creative = response.data.data;
                     this.loading = false;
                 }, error => {
@@ -326,7 +320,7 @@
             },
 
             editCreative() {
-                axios.put(this.$root.api + 'creatives/' + this.creativeId, this.collectCreative(), this.$root.config).then(response => {
+                axios.put(this.$root.api + 'creatives/' + this.creative_id, this.collectCreative(), this.$root.config).then(response => {
                     this.editAttributes();
                 }, error => {
                     alert(error);
@@ -334,16 +328,16 @@
             },
 
             editAttributes() {
-                axios.post(this.$root.api + 'creatives/' + this.creativeId + '/attr', this.creative.attr.data, this.$root.config).then(response => {
+                axios.post(this.$root.api + 'creatives/' + this.creative_id + '/attr', this.creative.attr.data, this.$root.config).then(response => {
                     this.fetchCreative();
-                    window.location.pathname = 'accounts/' + this.accountId;
+                    window.location.pathname = 'accounts/' + this.account_id;
                 }, error => {
                     alert(error);
                 });
             },
 
             editCreativeStatus() {
-                axios.put(this.$root.api + 'creatives/' + this.creativeId, {status: this.creative.approved}, this.$root.config).then(response => {
+                axios.put(this.$root.api + 'creatives/' + this.creative_id, {status: this.creative.approved}, this.$root.config).then(response => {
                 }, error => {
                     alert(error);
                 });
