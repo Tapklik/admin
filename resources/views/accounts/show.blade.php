@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('breadcrumbs')
- 
+ 	Account #{{ $id }}
 @stop
 
 @section('content')

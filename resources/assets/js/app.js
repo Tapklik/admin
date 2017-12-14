@@ -48,6 +48,7 @@ const app = new Vue({
     },
 
     methods: {
+
         getApiToken() {
             axios.get('/core/token').then(response => {
                 this.token = response.data.token;

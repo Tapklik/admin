@@ -1,347 +1,344 @@
 <template>
     <div>
-
-        <!-- VISIBLE PART START-->
-        <div>
             
-            <!-- HEADER START -->
-            <div class="row">
-                <div class="col-xs-6">
-                    <h1 class="title">{{ account.name }}</h1>
-                </div>
-                <div class="col-xs-6">
-                    <button class="btn btn-default pull-right" @click="openModal('#_modal-create-new-user')">
-                        <i class="fa fa-plus"></i> Create new user
-                    </button>
-                </div>
+        <!-- HEADER START -->
+        <div class="row">
+            <div class="col-xs-6">
+                <h1 class="title">{{ account.name }}</h1>
             </div>
-            <!-- HEADER END -->
-            
-            <hr/>
-
-            <!-- ACCOUNT DETAILS & USERS START -->
-            <div class="row">
-
-                <!-- ACCOUNT DETAILS (LEFT 5/12) START -->
-                <div class="col-sm-5">
-                    <div class="col-sm-3">
-                        <b>ID: </b> 
-                    </div>
-                    <div class="col-sm-9">
-                        <span class="muted">{{ account.id }}</span>
-                    </div>
-                    <div class="col-sm-3">
-                        <b>Status: </b> 
-                    </div>
-                    <div class="col-sm-9">
-                        <span class="label" :class="account.status ? 'label-success' : 'label-danger'">
-                            {{ account.status ? 'Active' : 'Inactive' }}
-                        </span>
-                    </div>
-                    <div class="col-sm-3">
-                        <b>Localization: </b> 
-                    </div>
-                    <div class="col-sm-9">
-                        <span>{{ account.localization.country }} {{ account.localization.city }}</span> <br>
-                        <span>{{ account.localization.timezone }}</span>
-                    </div>
-                    <div class="col-sm-3">
-                        <b>Language: </b> 
-                    </div>
-                    <div class="col-sm-9">
-                        <span>{{ account.localization.language }}</span>  
-                    </div>
-                </div>
-                <!-- ACCOUNT DETAILS (LEFT 5/12) END -->
-
-                <!-- USERS (RIGHT 7/12) START -->
-                <div class="col-sm-7">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Status</th>
-                                <th>Delete User</th>
-                            </tr>
-                        </thead>
-                        <tbody>        
-
-                            <!-- TABLE LOADER START -->                   
-                            <tr v-if="users_table_loading">
-                                <td colspan="11" class="loader text-center">
-                                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                                </td>
-                            </tr>
-                            <!-- TABLE LOADER END -->                          
-                            
-                            <!-- EMPTY TABLE MESSAGE START -->
-                            <tr v-else-if="users_table_empty">
-                                <td colspan="11">
-                                    Sorry but theres nothing here... yet :)
-                                </td>
-                            </tr>
-                            <!-- EMPTY TABLE MESSAGE END -->
-
-                            <tr v-for="user in users">
-                                <td>{{ user.first_name }} {{ user.last_name }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>{{ user.phone ? user.phone : 'N/A' }}</td>
-                                <td>
-                                    <button 
-                                    id="toggle"
-                                    :ref="user.id"
-                                    class="btn" 
-                                    :class="user.status ? 'btn-success' : 'btn-danger'" 
-                                    @click="toggleUserStatus(user.status, user.id)" 
-                                    >
-                                        <i 
-                                        class="fa" 
-                                        :class="user_status_button_loading ? 'fa-circle-o-notch fa-spin' : 'fa-check-circle-o'"
-                                        >
-                                        </i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button 
-                                    id="delete"
-                                    :ref="user.id"
-                                    class="btn btn-danger" 
-                                    @click="deleteUser(user.id)"
-                                    >
-                                        <i class="fa fa-check-circle-o"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- USERS (RIGHT 7/12) END -->
-
+            <div class="col-xs-6">
+                <button class="btn btn-default pull-right" @click="openModal('#_modal-create-new-user')">
+                    <i class="fa fa-plus"></i> Create new user
+                </button>
             </div>
-            <!-- ACCOUNT DETAILS & USERS END -->
+        </div>
+        <!-- HEADER END -->
+        
+        <hr/>
 
-            <hr/>
+        <!-- ACCOUNT DETAILS & USERS START -->
+        <div class="row">
 
-            <!-- CAMPAIGNS START -->
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>Campaigns</h2>
+            <!-- ACCOUNT DETAILS (LEFT 5/12) START -->
+            <div class="col-sm-5">
+                <div class="col-sm-3">
+                    <b>ID: </b> 
                 </div>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Adomain</th>
-                        <th>CTR URL</th>
-                        <th>Budget</th>
-                        <th>Daily</th>
-                        <th>Creatives</th>
-                        <th>JSON</th>
-                        <th>Status</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody class="vcenter">
-
-                    <!-- TABLE LOADER START -->
-                    <tr v-show="campaigns_table_loading">
-                        <td colspan="11" class="loader text-center">
-                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                        </td>
-                    </tr>
-                    <!-- TABLE LOADER END -->
-                    
-                    <!-- EMPTY TABLE MESSAGE START -->
-                    <tr v-show="campaigns_table_empty">
-                        <td colspan="11">
-                            Sorry but theres nothing here... yet :)
-                        </td>
-                    </tr>
-                    <!-- EMPTY TABLE MESSAGE END -->
-
-                    <tr v-for="campaign in campaigns">
-                        <td>{{ campaign.id }}</td>
-                        <td>
-                            <a :href="account_id + '/campaigns/' + campaign.id">
-                                {{ campaign.name }}
-                            </a>
-                        </td>
-                        <td>{{ campaign.start_time }}</td>
-                        <td>{{ campaign.end_time }}</td>
-                        <td>
-                            <a :href="'http://' + campaign.adomain" target="_blank">
-                                {{ campaign.adomain }}
-                            </a>
-                        </td>
-                        <td>
-                            <a :href="campaign.ctrurl" target="_blank">
-                                {{ campaign.ctrurl }}
-                            </a>
-                        </td>
-                        <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
-                        <td>${{ $root.fromMicroDollars(campaign.bid) }}</td>
-                        <td>
-                            <a 
-                            :href="'/accounts/' + account_id + '/campaigns/' + campaign.id + '/creatives'" 
-                            class="btn btn-primary"
-                            >
-                                View
-                            </a>
-                        </td>
-                        <td>
-                            <a @click="openModal('#_modal-show-json', campaign)" class="btn btn-primary" target="_blank">
-                                View
-                            </a>
-                        </td>
-                        <td>
-                            <select  
-                            @change="toggleCampaignStatus(campaign.id, campaign.status)" 
-                            v-model="campaign.status">
-                                <option v-for="s in statuses" :value="s">{{ s }}</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button 
-                            id="delete"
-                            :ref="campaign.id"
-                            :disabled="campaign.status != 'draft'"  
-                            class="btn btn-danger" 
-                            @click="deleteCampaign(campaign.id)"
-                            >
-                                <i class="fa fa-check-circle-o"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- CAMPAIGNS END -->
-
-            <hr/>
-
-            <!-- CREATIVES START -->
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>Creatives</h2>
+                <div class="col-sm-9">
+                    <span class="muted">{{ account.id }}</span>
                 </div>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Class</th>
-                        <th>Dimensions</th>
-                        <th>Image</th>
-                        <th>Approve</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody class="vcenter">
-
-                    <!-- TABLE LOADER START -->
-                    <tr v-if="creatives_table_loading">
-                        <td colspan="11" class="loader text-center">
-                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                        </td>
-                    </tr>
-                    <!-- TABLE LOADER END -->
-
-                    <!-- EMPTY TABLE MESSAGE START -->
-                    <tr v-else-if="creatives_table_empty">
-                        <td colspan="11">
-                            Sorry but theres nothing here... yet :)
-                        </td>
-                    </tr>
-                    <!-- EMPTY TABLE MESSAGE END -->
-
-                    <tr v-else v-for="creative in creatives">
-                        <td>{{ creative.id }}</td>
-                        <td>
-                            <a :href=" account_id + '/creatives/' + creative.id">
-                                {{ creative.name }}
-                            </a>
-                        </td>
-                        <td>{{ creative.class }}</td>
-                        <td>{{ creative.w }}x{{ creative.h}}</td>
-                        <td> 
-                            <a :href="creative.iurl" target="_blank">
-                                <img width="70px" :src="creative.thumb">
-                            </a> 
-                        </td>
-                        <td>
-                            <button 
-                            :ref="creative.id"
-                            id="toggle"
-                            :class="creative.approved == 'approved' ? 'btn btn-success': 'btn btn-danger'" 
-                            @click="toggleCreativeStatus(creative.id, creative.approved)"
-                            >
-                                <i class="fa fa-check-circle-o"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button
-                            :ref="creative.id"
-                            id="delete" 
-                            class="btn btn-danger" 
-                            @click="deleteCreative(creative.id)">
-                                <i class="fa fa-check-circle-o"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>  
-            <!-- CREATIVES END -->          
-
-            <hr/>
-
-            <!-- BILLING START -->
-            <div class="row">
-                <div class="col-xs-12 col-md-6">
-                    <h2>Budget</h2>
-                    <span>
-                        Balance: $
-                        {{$root.twoDecimalPlaces($root.fromMicroDollars(banker.main + banker.flight))}} 
-                        ({{$root.twoDecimalPlaces($root.fromMicroDollars(banker.flight))}}) 
+                <div class="col-sm-3">
+                    <b>Status: </b> 
+                </div>
+                <div class="col-sm-9">
+                    <span class="label" :class="account.status ? 'label-success' : 'label-danger'">
+                        {{ account.status ? 'Active' : 'Inactive' }}
                     </span>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <a class="btn btn-default pull-right" :href="account_id + '/billing'">Billing</a>
+                <div class="col-sm-3">
+                    <b>Localization: </b> 
+                </div>
+                <div class="col-sm-9">
+                    <span>{{ account.localization.country }} {{ account.localization.city }}</span> <br>
+                    <span>{{ account.localization.timezone }}</span>
+                </div>
+                <div class="col-sm-3">
+                    <b>Language: </b> 
+                </div>
+                <div class="col-sm-9">
+                    <span>{{ account.localization.language }}</span>  
                 </div>
             </div>
-            <br>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="col-md-12 panel panel-default">
-                        <h4>Balance </h4>
-                        <div id="chartdiv_0" style="height: 300px;"></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="col-md-12 panel panel-default">
-                        <h4> In-Flight </h4>
-                        <div id="chartdiv_1" style="height: 300px;"></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="col-md-12 panel panel-default">
-                        <h4>Total Spend</h4>
-                        <div id="chartdiv_2" style="height: 300px;"></div>
-                    </div>
-                </div>
+            <!-- ACCOUNT DETAILS (LEFT 5/12) END -->
+
+            <!-- USERS (RIGHT 7/12) START -->
+            <div class="col-sm-7">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Delete User</th>
+                        </tr>
+                    </thead>
+                    <tbody>        
+
+                        <!-- TABLE LOADER START -->                   
+                        <tr v-if="users_table_loading">
+                            <td colspan="11" class="loader text-center">
+                                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                            </td>
+                        </tr>
+                        <!-- TABLE LOADER END -->                          
+                        
+                        <!-- EMPTY TABLE MESSAGE START -->
+                        <tr v-else-if="users_table_empty">
+                            <td colspan="11">
+                                Sorry but theres nothing here... yet :)
+                            </td>
+                        </tr>
+                        <!-- EMPTY TABLE MESSAGE END -->
+
+                        <tr v-for="user in users">
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone ? user.phone : 'N/A' }}</td>
+                            <td>
+                                <button 
+                                id="toggle"
+                                :ref="user.id"
+                                class="btn" 
+                                :class="user.status ? 'btn-success' : 'btn-danger'" 
+                                @click="toggleUserStatus(user.status, user.id)" 
+                                >
+                                    <i 
+                                    class="fa" 
+                                    :class="user_status_button_loading ? 'fa-circle-o-notch fa-spin' : 'fa-check-circle-o'"
+                                    >
+                                    </i>
+                                </button>
+                            </td>
+                            <td>
+                                <button 
+                                id="delete"
+                                :ref="user.id"
+                                class="btn btn-danger" 
+                                @click="deleteUser(user.id)"
+                                >
+                                    <i class="fa fa-check-circle-o"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <!-- BILLING END -->
+            <!-- USERS (RIGHT 7/12) END -->
 
         </div>
-        <!-- VISIBLE PART END -->
+        <!-- ACCOUNT DETAILS & USERS END -->
+
+        <hr/>
+
+        <!-- CAMPAIGNS START -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Campaigns</h2>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Adomain</th>
+                    <th>CTR URL</th>
+                    <th>Budget</th>
+                    <th>Daily</th>
+                    <th>Creatives</th>
+                    <th>JSON</th>
+                    <th>Status</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody class="vcenter">
+
+                <!-- TABLE LOADER START -->
+                <tr v-show="campaigns_table_loading">
+                    <td colspan="11" class="loader text-center">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    </td>
+                </tr>
+                <!-- TABLE LOADER END -->
+                
+                <!-- EMPTY TABLE MESSAGE START -->
+                <tr v-show="campaigns_table_empty">
+                    <td colspan="11">
+                        Sorry but theres nothing here... yet :)
+                    </td>
+                </tr>
+                <!-- EMPTY TABLE MESSAGE END -->
+
+                <tr v-for="campaign in campaigns">
+                    <td>{{ campaign.id }}</td>
+                    <td>
+                        <a :href="account_id + '/campaigns/' + campaign.id">
+                            {{ campaign.name }}
+                        </a>
+                    </td>
+                    <td>{{ campaign.start_time }}</td>
+                    <td>{{ campaign.end_time }}</td>
+                    <td>
+                        <a :href="'http://' + campaign.adomain" target="_blank">
+                            {{ campaign.adomain }}
+                        </a>
+                    </td>
+                    <td>
+                        <a :href="campaign.ctrurl" target="_blank">
+                            {{ campaign.ctrurl }}
+                        </a>
+                    </td>
+                    <td>${{ $root.fromMicroDollars(campaign.budget.data.amount) }}</td>
+                    <td>${{ $root.fromMicroDollars(campaign.bid) }}</td>
+                    <td>
+                        <a 
+                        :href="'/accounts/' + account_id + '/campaigns/' + campaign.id + '/creatives'" 
+                        class="btn btn-primary"
+                        >
+                            View
+                        </a>
+                    </td>
+                    <td>
+                        <a 
+                        @click="openModal('#_modal-show-json', campaign)" 
+                        class="btn btn-primary" 
+                        target="_blank"
+                        >
+                            View
+                        </a>
+                    </td>
+                    <td>
+                        <select  
+                        @change="toggleCampaignStatus(campaign.id, campaign.status)" 
+                        v-model="campaign.status">
+                            <option v-for="s in statuses" :value="s">{{ s }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button 
+                        id="delete"
+                        :ref="campaign.id"
+                        :disabled="campaign.status != 'draft'"  
+                        class="btn btn-danger" 
+                        @click="deleteCampaign(campaign.id)"
+                        >
+                            <i class="fa fa-check-circle-o"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- CAMPAIGNS END -->
+
+        <hr/>
+
+        <!-- CREATIVES START -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Creatives</h2>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Dimensions</th>
+                    <th>Image</th>
+                    <th>Approve</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody class="vcenter">
+
+                <!-- TABLE LOADER START -->
+                <tr v-if="creatives_table_loading">
+                    <td colspan="11" class="loader text-center">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    </td>
+                </tr>
+                <!-- TABLE LOADER END -->
+
+                <!-- EMPTY TABLE MESSAGE START -->
+                <tr v-else-if="creatives_table_empty">
+                    <td colspan="11">
+                        Sorry but theres nothing here... yet :)
+                    </td>
+                </tr>
+                <!-- EMPTY TABLE MESSAGE END -->
+
+                <tr v-else v-for="creative in creatives">
+                    <td>{{ creative.id }}</td>
+                    <td>
+                        <a :href=" account_id + '/creatives/' + creative.id">
+                            {{ creative.name }}
+                        </a>
+                    </td>
+                    <td>{{ creative.class }}</td>
+                    <td>{{ creative.w }}x{{ creative.h}}</td>
+                    <td> 
+                        <a :href="creative.iurl" target="_blank">
+                            <img width="70px" :src="creative.thumb">
+                        </a> 
+                    </td>
+                    <td>
+                        <button 
+                        :ref="creative.id"
+                        id="toggle"
+                        :class="creative.approved == 'approved' ? 'btn btn-success': 'btn btn-danger'" 
+                        @click="toggleCreativeStatus(creative.id, creative.approved)"
+                        >
+                            <i class="fa fa-check-circle-o"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                        :ref="creative.id"
+                        id="delete" 
+                        class="btn btn-danger" 
+                        @click="deleteCreative(creative.id)">
+                            <i class="fa fa-check-circle-o"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>  
+        <!-- CREATIVES END -->          
+
+        <hr/>
+
+        <!-- BILLING START -->
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h2>Budget</h2>
+                <span>
+                    Balance: $
+                    {{$root.twoDecimalPlaces($root.fromMicroDollars(banker.main + banker.flight))}} 
+                    ({{$root.twoDecimalPlaces($root.fromMicroDollars(banker.flight))}}) 
+                </span>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <a class="btn btn-default pull-right" :href="account_id + '/billing'">Billing</a>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col-md-12 panel panel-default">
+                    <h4>Balance </h4>
+                    <div id="chartdiv_0" style="height: 300px;"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12 panel panel-default">
+                    <h4> In-Flight </h4>
+                    <div id="chartdiv_1" style="height: 300px;"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12 panel panel-default">
+                    <h4>Total Spend</h4>
+                    <div id="chartdiv_2" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- BILLING END -->
 
         <!-- MODALS START -->
-
         <!-- CAMPAIGN JSON MODAL START-->    
         <div class="modal fade" id="_modal-show-json" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -434,6 +431,7 @@
             </div>
         </div>
         <!-- CREATE NEW USER END-->
+        <!-- MODALS END -->
 
     </div>
 </template>
@@ -445,7 +443,6 @@
         },
 
         data() {
-
             return {
                 //ESSENTIALS
                 token: '',
@@ -509,7 +506,7 @@
 
         methods: {
 
-            //OVERALL
+            //OVERALL        
             buttonLoading(action, condition, id) {
                 for(var button in this.$refs[id]) {
                     var targetted_button = this.$refs[id][button].id == action ? button : targetted_button;
@@ -522,7 +519,7 @@
                 this.opened_json = json ? json : '';
                 $(identifier).modal();
             },
-            
+
             //NEW USER MODAL
             createNewUser() {
                 this.users = [];
@@ -562,6 +559,7 @@
                     this.$root.api + 'accounts/' + this.account.id + '/users', 
                     this.$root.config
                 ).then(response => {
+                        this.users_table_empty = response.data.data == '' ? true : false; 
                         this.users = response.data.data;
                         this.users_table_loading = false;
                     }, error => {
@@ -606,12 +604,11 @@
 
             //CAMPAIGNS
             getCampaigns() {
-                this.campaigns_table_loading = true;
-
                 axios.get(
                     this.$root.api + 'accounts/' +  this.account.id + '/campaigns', 
                     this.$root.config
                 ).then(response => {
+                        this.campaigns_table_empty = response.data.data == '' ? true : false;
                         this.campaigns = response.data.data;
                         this.campaigns_table_loading = false;
                     }, error => {
@@ -673,6 +670,7 @@
                     ).then(response => {
                             this.creatives.push(response.data.data);
                             this.creatives = [].concat.apply([], this.creatives);
+                            this.creatives_table_empty = this.creatives == '' ? true : false;
                         }, error => {
 
                         }
@@ -761,7 +759,7 @@
                 this.getFlight();
                 this.getSpend();
 
-                var balance = ((this.banker.main + this.banker.flight)/1000000).toFixed(2);
+                var balance = this.$root.fromMicroDollars(this.banker.main + this.banker.flight).toFixed(2);
 
                 return {
                     "balance": balance,
