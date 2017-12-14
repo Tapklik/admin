@@ -62,8 +62,7 @@
                 bid_id: window.location.pathname.replace('\/reports\/', ''),
 
                 //BID
-                bid: {},
-                bid_keys: []
+                bid: {}
             }
         },
 
@@ -80,21 +79,12 @@
                         console.log(error);
                     }
                 );
-            },
-            getBidKeys() {
-                var bid = this.bid;
-                var keys = Object.keys(bid);
-                this.bid_keys = keys;
             }
         },
 
         watch: {
             token(value) {
                 this.getBid();
-            },
-
-            bid(value) {
-                this.getBidKeys();
             }
         }
     }
