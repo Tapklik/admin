@@ -1,31 +1,47 @@
 <template>
+
+    <!-- LOGIN START -->
     <div class="widget-body" style="margin-left:40%; margin-top: 20px;">
-            <div class="col-xs-12 col-md-4">
-                <div class="form-group">
-                    <div class="row">
-                        <label for="label-email">Email</label>
-                        <input type="text" id="label-email" class="form-control" placeholder="you@email.com" v-model="credentials.email" />
-                    </div>
+        <div class="col-xs-12 col-md-4">
+            <div class="form-group">
+                <div class="row">
+                    <label for="label-email">Email</label>
+                    <input 
+                    type="text" 
+                    id="label-email" 
+                    class="form-control" 
+                    placeholder="you@email.com" 
+                    v-model="credentials.email" 
+                    />
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <div class="row">
-                        <label for="label-password">Password</label>
-                        <input type="password" id="label-password" class="form-control" placeholder="password" v-model="credentials.password" />
-                    </div>
+            <div class="form-group">
+                <div class="row">
+                    <label for="label-password">Password</label>
+                    <input 
+                    type="password" 
+                    id="label-password" 
+                    class="form-control" 
+                    placeholder="password" 
+                    v-model="credentials.password" 
+                    />
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <div class="row clearfix">
-                        <button class="btn btn-primary pull-right" @click="login()">
-                            <i class="fa fa-lock" v-show="!login_button_loading"></i>
-                            <i class="fa fa-refresh fa-spin" v-show="login_button_loading"></i>
-                            Login
-                        </button>
-                    </div>
+            <div class="form-group">
+                <div class="row clearfix">
+                    <button class="btn btn-primary pull-right" @click="login()">
+                        <i class="fa fa-lock" v-show="!login_button_loading"></i>
+                        <i class="fa fa-refresh fa-spin" v-show="login_button_loading"></i>
+                        Login
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- LOGIN END -->
+    
 </template>
 
 <script>
@@ -34,9 +50,11 @@
         },
 
         data() {
-
             return {
-                token: null,
+                //ESSENTIALS
+                token: '',
+
+                //LOGIN
                 credentials: {
                     email: '',
                     password: ''
@@ -47,6 +65,7 @@
 
         methods: {
 
+            //LOGIN
             login () {
                 this.login_button_loading = true;
                 
@@ -61,7 +80,7 @@
         },
 
         watch: {
-            token () {
+            token() {
                 if(this.token == null) return; // prevent endless loop
                 // Need to save this to local session
                 axios.post('/core/token', {
