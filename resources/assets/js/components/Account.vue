@@ -7,7 +7,10 @@
                 <h1 class="title">{{ account.name }}</h1>
             </div>
             <div class="col-xs-6">
-                <button class="btn btn-default pull-right" @click="openModal('#_modal-create-new-user')">
+                <button 
+                class="btn btn-default pull-right" 
+                @click="openModal('#_modal-create-new-user')"
+                >
                     <i class="fa fa-plus"></i> Create new user
                 </button>
             </div>
@@ -31,7 +34,10 @@
                     <b>Status: </b> 
                 </div>
                 <div class="col-sm-9">
-                    <span class="label" :class="account.status ? 'label-success' : 'label-danger'">
+                    <span 
+                    class="label" 
+                    :class="account.status ? 'label-success' : 'label-danger'"
+                    >
                         {{ account.status ? 'Active' : 'Inactive' }}
                     </span>
                 </div>
@@ -94,8 +100,9 @@
                                 @click="toggleUserStatus(user.status, user.id)" 
                                 >
                                     <i 
-                                    class="fa" 
-                                    :class="user_status_button_loading ? 'fa-circle-o-notch fa-spin' : 'fa-check-circle-o'"
+                                    :class="user_status_button_loading ? 
+                                    'fa fa-circle-o-notch fa-spin' : 
+                                    'fa fa-check-circle-o'"
                                     >
                                     </i>
                                 </button>
@@ -204,7 +211,7 @@
                         <select  
                         @change="toggleCampaignStatus(campaign.id, campaign.status)" 
                         v-model="campaign.status">
-                            <option v-for="s in statuses" :value="s">{{ s }}</option>
+                            <option v-for="status in statuses" :value="status">{{ status }}</option>
                         </select>
                     </td>
                     <td>
@@ -355,8 +362,21 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewUser()">Create</button>
+                        <button 
+                        type="button" 
+                        class="btn btn-default" 
+                        data-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                        <button 
+                        type="button" 
+                        class="btn btn-primary" 
+                        data-dismiss="modal" 
+                        @click="createNewUser()"
+                        >
+                            Create
+                        </button>
                     </div>
                 </div>
             </div>
@@ -385,12 +405,22 @@
                                 <div class="col-xs-12 col-md-6">
                                     <label for="label-first-name">First Name</label>
                                     <br/>
-                                    <input type="text" id="label-first-name" class="form-control" v-model="new_user.first_name"/>
+                                    <input 
+                                    type="text" 
+                                    id="label-first-name" 
+                                    class="form-control" 
+                                    v-model="new_user.first_name"
+                                    />
                                 </div>
                                 <div class="col-xs-12 col-md-6">
                                     <label for="label-last-name">Last Name</label>
                                     <br/>
-                                    <input type="text" id="label-last-name" class="form-control" v-model="new_user.last_name"/>
+                                    <input 
+                                    type="text" 
+                                    id="label-last-name" 
+                                    class="form-control" 
+                                    v-model="new_user.last_name"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -401,13 +431,22 @@
                                     <div class="col-xs-12 col-md-6">
                                         <label for="label-email">E-mail</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-email" v-model="new_user.email"/>
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="label-email" 
+                                        v-model="new_user.email"
+                                        />
                                     </div>
-
                                     <div class="col-xs-12 col-md-6">
                                         <label for="label-phone-number">Phone number</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-phone-number" v-model="new_user.phone" />
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="label-phone-number" 
+                                        v-model="new_user.phone" 
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -417,14 +456,32 @@
                                     <div class="col-xs-12">
                                         <label for="label-password">Password</label>
                                         <br/>
-                                        <input type="password" class="form-control" id="label-password" v-model="new_user.password"/>
+                                        <input 
+                                        type="password" 
+                                        class="form-control" 
+                                        id="label-password" 
+                                        v-model="new_user.password"
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewUser()">Create</button>
+                            <button 
+                            type="button" 
+                            class="btn btn-default" 
+                            data-dismiss="modal"
+                            >
+                                Close
+                            </button>
+                            <button 
+                            type="button" 
+                            class="btn btn-primary" 
+                            data-dismiss="modal" 
+                            @click="createNewUser()"
+                            >
+                                Create
+                            </button>
                         </div>
                     </div>
                 </div>
