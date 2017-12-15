@@ -1,33 +1,51 @@
 <template>
     <div>
+        <!-- HEADER START -->
         <div class="row">
             <div class="col-md-12">
-                <h2 class="title pull-left">Edit Campaign {{campaignId}}</h2>
-
-                <button class="btn btn-primary pull-right" @click="updateCampaign()">
+                <h2 class="title pull-left">
+                    Edit Campaign {{campaign_id}}
+                </h2>
+                <button 
+                class="btn btn-primary pull-right" 
+                @click="updateCampaign()"
+                >
                     Edit
                 </button>
             </div>
         </div>
-        <hr/>
+        <!-- HEADER END -->
+        
+        <hr />
+        
+        <!-- DETAILS START -->
         <div class="row">
             <div class="col-md-12">
                 <h4 class="title pull-left">Details</h4>
             </div>
         </div>
-        <hr/>
         <div class="form-group">
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Name</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.name" />
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.name" 
+                        />
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Click-Through URL</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.ctrurl"/>
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.ctrurl"
+                        />
                     </div>
                 </div>
             </div>
@@ -36,12 +54,20 @@
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Advertiser Domain</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.adomain" />
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.adomain" 
+                        />
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Budget Type</label>
                         <br/>
-                        <select class="form-control" v-model="campaign.budget.data.type">
+                        <select 
+                        class="form-control" 
+                        v-model="campaign.budget.data.type"
+                        >
                             <option value="daily">Daily</option>
                             <option value="campaign">Campaign</option>
                         </select>
@@ -53,12 +79,22 @@
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Date From</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.start_time" />
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.start_time" 
+                        />
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Date To</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.end_time"/>
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.end_time"
+                        />
                     </div>
                 </div>
             </div>
@@ -67,12 +103,22 @@
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Budget</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.budget.data.amount" />
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.budget.data.amount" 
+                        />
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Bid</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.bid"/>
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.bid"
+                        />
                     </div>
                 </div>
             </div>
@@ -81,69 +127,95 @@
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Pacing</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.budget.data.pacing" />
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.budget.data.pacing" 
+                        />
                     </div>
                 </div>
             </div>
         </div>
+        <!-- DETAILS END -->
+        
         <hr>
+        
+        <!-- CATEGORIES START -->
         <div class="row">
             <div class="col-md-12">
                 <h4 class="title pull-left">Categories</h4>
             </div>
         </div>
-        <hr/>
         <div class="form-group">
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
                         <label for="label-city">Selected Categories</label>
                         <br/>
-                        <div v-for="c in categoriesList" class="col-xs-12 col-md-3">
-                            <input type="checkbox" :value="c.code" v-model="campaign.cat.data">
-                            {{c.type}}
+                        <div v-for="category in categories" class="col-xs-12 col-md-3">
+                            <input 
+                            type="checkbox" 
+                            :value="category.code" 
+                            v-model="campaign.cat.data"
+                            >
+                            {{category.type}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <hr>
+        <!-- CATEGORIES END -->
+
+        <hr />
+
+        <!-- CREATIVES START -->
         <div class="row">
             <div class="col-md-12">
                 <h4 class="title pull-left">Creatives</h4>
             </div>
         </div>
-        <hr/>
         <div class="form-group">
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
                         <label for="label-city">Selected Creatives</label>
                         <br/>
-                        <div v-for="c in creatives" class="col-xs-12 col-md-4">
-                            <input type="checkbox" :value="c" v-model="campaign.creatives.data">
-                            {{c.id}}
+                        <div v-for="creative in creatives" class="col-xs-12 col-md-4">
+                            <input 
+                            type="checkbox" 
+                            :value="creative" 
+                            v-model="campaign.creatives.data"
+                            >
+                            {{creative.id}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- CREATIVES END -->
+
         <hr/>
+
+        <!-- TARGETTING START -->
         <div class="row">
             <div class="col-md-12">
                 <h4 class="title pull-left">Targetting</h4>
             </div>
         </div>
-        <hr>
         <div class="form-group">
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
                         <label for="label-city">Devices</label>
                         <br/>
-                        <div v-for="t in types" class="col-xs-12 col-md-4">
-                            <input type="checkbox" :value="t.device_id" v-model="campaign.device.data.type">
-                            {{t.type}}
+                        <div v-for="type in types" class="col-xs-12 col-md-4">
+                            <input 
+                            type="checkbox" 
+                            :value="type.device_id" 
+                            v-model="campaign.device.data.type"
+                            >
+                            {{type.type}}
                         </div>
                     </div>
                 </div>
@@ -154,7 +226,11 @@
                         <label for="label-city">Browsers</label>
                         <br/>
                         <div v-for="u in ua" class="col-xs-12 col-md-2">
-                            <input type="checkbox" :value="u.device_id" v-model="campaign.device.data.ua">
+                            <input 
+                            type="checkbox" 
+                            :value="u.device_id" 
+                            v-model="campaign.device.data.ua"
+                            >
                             {{u.type}}
                         </div>
                     </div>
@@ -166,7 +242,11 @@
                         <label for="label-city">Operating Systems</label>
                         <br/>
                         <div v-for="o in os" class="col-xs-12 col-md-2">
-                            <input type="checkbox" :value="o.device_id" v-model="campaign.device.data.os">
+                            <input 
+                            type="checkbox" 
+                            :value="o.device_id" 
+                            v-model="campaign.device.data.os"
+                            >
                             {{o.type}}
                         </div>
                     </div>
@@ -177,18 +257,32 @@
                     <div class="col-xs-12 col-md-3">
                         <label for="label-city">Age Group</label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.user.data.age.min" />
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.user.data.age.min" 
+                        />
                     </div>
                     <div class="col-xs-12 col-md-3">
                         <label for="label-city"></label>
                         <br/>
-                        <input type="text" class="form-control" id="label-city" v-model="campaign.user.data.age.max"/>
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="label-city" 
+                        v-model="campaign.user.data.age.max"
+                        />
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <label for="label-city">Gender</label>
                         <br/>
                         <div v-for="g in gender" class="col-xs-12 col-md-2">
-                            <input type="checkbox" :value="g" v-model="campaign.user.data.gender">
+                            <input 
+                            type="checkbox" 
+                            :value="g" 
+                            v-model="campaign.user.data.gender"
+                            >
                             {{g}}
                         </div>
                     </div>
@@ -199,22 +293,33 @@
                     <div class="col-xs-12 col-md-12">
                         <label for="label-city">Geo</label>
                         <br/>
-                        <input type="text" @keyup="reloadGeo()" v-model="searchCountry">
+                        <input 
+                        type="text" 
+                        @keyup="getGeo()" 
+                        v-model="search_geo"
+                        >
                         <div v-for="g in geo" class="col-xs-12 col-md-2">
-                            <input type="checkbox" :value="g" v-model="campaign.geo.data">
+                            <input 
+                            type="checkbox" 
+                            :value="g" 
+                            v-model="campaign.geo.data"
+                            />
                             {{g}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- TARGETTING END -->
+
         <hr/>
+        
+        <!-- CHARTS START -->
         <div class="row">
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-12">
                 <h2>Campaign balance</h2>
             </div>
         </div>
-        <br>
         <div class="row">
             <div class="col-md-4">
                 <div class="col-md-12 panel panel-default">
@@ -235,14 +340,16 @@
                 </div>
             </div>
         </div>
+        <!-- CHARTS END -->
+
     </div>
 </template>
 
 <script>
     export default {
         mounted() {
-            this.fetchCategories();
-            this.fetchTechnologies();            
+            this.getCategories();
+            this.getTechnologies();            
             this.createChart();
             this.getIds();
         },
@@ -250,15 +357,26 @@
         data() {
 
             return {
-                campaignId: 0,
-                accountId: 0,
-                creatives: [],
+                //ESSENTIALS
+                campaign_button_loading: false,
+                token: this.token,
+                campaign_id: '',
+                account_id: '',
+                updates_counter: 0,
+
+                //CAMPAIGN LISTS
+                categories: [],
+                technologies: [],
+                types: [],
+                ua: [],
+                os: [],
                 folders: [],
-                banker: {
-                    main: 0,
-                    flight: 0,
-                    spend: 0
-                },
+                creatives: [],
+                gender: ['M','F'],
+                geo: [],
+
+                //CAMPAIGN
+                search_geo: '',
                 campaign: {
                     name: '',
                     adomain: '',
@@ -307,177 +425,121 @@
                         }
                     }
                 },
-                loading: false,
-                noresult: false,
-                token: this.token,
-                categoriesList: [],
-                technologiesList: [],
-                types: [],
-                ua: [],
-                os: [],
-                gender: ['M','F'],
-                searchCountry: '',
-                geo: [],
-                updateCounter: 0
+
+                //CHARTS
+                banker: {
+                    main: 0,
+                    flight: 0,
+                    spend: 0
+                },
 
             }
         },
 
         methods: {
+            //OVERALL
+            getIds() {
+                var idDraft = window.location.pathname;
+                var res = idDraft.split("/");
 
-            updateCampaign () {
-                this.ajax = true;
-
-                this.updateCampaignDetails();
-                this.updateCampaignCategories();
-                this.updateCampaignUser();
-                this.updateCampaignGeography();
-                this.updateCampaignDevice();
-                this.updateCampaignBudget();
-                this.updateCampaignCreatives();
+                this.campaign_id = res[4];
+                this.account_id = res[2];
             },
 
-            updateCampaignDetails(){
+            //CAMPAIGN LISTS
+            getCategories() {
+                axios.get(
+                    '/data/categories.json'
+                ).then(response => {
+                        this.categories = response.data;
+                    }, error => {
+
+                    }
+                );
+            },
+
+            getTechnologies() {
+                axios.get(
+                    '/data/technologies.json'
+                ).then(response => {
+                        this.technologies = response.data;
+                    }, error => {
+
+                    }
+                );
+            },
+
+            getGeo() {
+                var start_search = this.search_geo.length >= 3 ? true : false;
+                var locations = this.campaign.geo.data;
                 
-                var payload = this.collectCampaign();
-
-                axios.put(this.$root.api + 'campaigns/' + this.campaign.id, payload, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
+                if(start_search){
+                    axios.get(
+                        this.$root.api + 'core/search/geo?key=' + this.search_geo, 
+                        this.$root.config
+                    ).then(response => {
+                            this.geo = response.data.data;
+                            for(var l in locations) {
+                                this.geo.push(locations[l]);
+                            }
+                        }, error => {
+                        
+                        }
+                    );
+                }
+                
+                else {
+                  this.geo = locations;
+                }
             },
 
-            updateCampaignCategories(){
-
-                var payload = this.collectCategories();
-
-                axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/cat', payload, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
+            getFolders() {
+                axios.get(
+                    this.$root.api + 'creatives/' + this.account_id + '/folders', 
+                    this.$root.config
+                ).then(response => {
+                        this.folders = response.data.data;
+                    }, error => {
+                        alert(error);
+                    }
+                );
             },
 
-            updateCampaignUser(){
-                var payload = this.collectUser();
+            getCreatives() {
+                var folders = this.folders;
 
-                axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/users', payload, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
+                for (var folder in folders) {
+                    axios.get(
+                        this.$root.api + 'creatives/' + this.account_id + '/folders/' + folders[folder].id, 
+                        this.$root.config
+                    ).then(response => {
+                            console.log(response.data.data);
+                            this.creatives.push(response.data.data);
+                            this.creatives = [].concat.apply([], this.creatives);
+                        }, error => {
+
+                        }
+                    );
+                }
             },
 
-            updateCampaignGeography(){
+            //CAMPAIGN
+            getCampaign() {
+                axios.get(
+                    this.$root.api + 'campaigns/' + this.campaign_id, 
+                    this.$root.config
+                ).then(response => {
+                        this.campaign = response.data.data;
+                        this.geo = this.campaign.geo.data;
+                    }, error => {
 
-                var payload = this.collectGeography();
-
-                axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/geo', {geo: payload}, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
-            },
-
-            updateCampaignDevice(){
-
-                var payload = this.collectDevices();
-
-                axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/device/type', {types: payload.types}, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
-                axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/device/model', {models: payload.models}, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
-                axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/device/os', {os: payload.os}, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
-            },
-
-            updateCampaignBudget()
-            {
-                var payload = this.collectBudget();
-
-                axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/budget', payload, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
-            },
-
-            updateCampaignCreatives() {
-
-                var payload = this.collectCreatives();
-
-                axios.post(this.$root.api + 'campaigns/' + this.campaign.id + '/creatives', {creatives: payload}, this.$root.config).then(response => {
-                    
-                    this.updateCounter = this.updateCounter + 1;
-                }, error => {
-                    this.alert = true;
-                    this.error = true;
-                    this.success = false;
-                    this.alertMessage = 'Something went wrong';
-                });
+                    }
+                );
             },
 
             collectCampaign() {
-                if (this.campaign.status == 'draft') {   
-                    return {
-                        name: this.campaign.name,
-                        description: '',
-                        start: this.campaign.start_time,
-                        end: this.campaign.end_time,
-                        bid: this.campaign.bid,
-                        ctrurl: this.campaign.ctrurl,
-                        adomain: this.campaign.adomain,
-                        test: this.campaign.test,
-                        status: 'active',
-                        weight: this.campaign.weight,
-                        node: this.campaign.node
-                    };
-                }
-                else {
-
+                var status = this.campaign.status == 'draft' ? 'active' : this.campaign.status;
+                
                 return {
                     name: this.campaign.name,
                     description: '',
@@ -487,11 +549,10 @@
                     ctrurl: this.campaign.ctrurl,
                     adomain: this.campaign.adomain,
                     test: this.campaign.test,
-                    status: this.campaign.status,
+                    status: status,
                     weight: this.campaign.weight,
                     node: this.campaign.node
                 };
-                }
             },
 
             collectCategories() {
@@ -503,143 +564,67 @@
             },
 
             collectGeography() {
-                return this.campaign.geo.data.map(function (geo) {
-                    return geo.id;
-                });
+                return this.campaign.geo.data.map(geo => geo.id);
             },
 
-            collectDevices() {
+            collectDevices(key) {
+                
                 return {
                     types: this.campaign.device.data.type,
                     models: this.campaign.device.data.ua,
-                    os: this.campaign.device.data.os,
+                    operating_systems: this.campaign.device.data.os,
                 };
             },
 
             collectBudget() {
-
                 return this.campaign.budget.data;
             },
 
             collectCreatives() {
-
-                var ids = [];
-
-                for(var i in this.campaign.creatives.data)
-                {
-                    ids.push(this.campaign.creatives.data[i].id);
-                }
-
+                var ids = this.campaign.creatives.data.map(creative => creative.id);
                 return ids;
             },
 
-            reloadGeo() {
-                var locations = this.campaign.geo.data;
-                if(this.searchCountry.length >= 3){
-                    axios.get(this.$root.api + 'core/search/geo?key=' + this.searchCountry, this.$root.config).then(response => {
-                            this.geo = response.data.data;
-                            for(var l in locations) {
-                                this.geo.push(locations[l]);
-                            }
+            updateCampaignPartly(method,extension, payload) {
+                if(method=='put')
+                    axios.put(
+                        this.$root.api + 'campaigns/' + this.campaign.id + extension, 
+                        payload, 
+                        this.$root.config
+                    ).then(response => {
+                            this.updates_counter = this.updates_counter + 1;
                         }, error => {
-                            this.alert = true;
-                            this.error = true;
-                            this.success = false;
-                            this.alertMessage = 'Something went wrong';
+
                         }
-                    )
-                }
-                
-                else {
-                  this.geo = locations;
-                }
-            },
-            
-            getIds() {
-                var idDraft = window.location.pathname;
-                var res = idDraft.split("/");
-
-                this.campaignId = res[4];
-                this.accountId = res[2];
-            },
-
-            fetchCampaign() {
-                axios.get(this.$root.api + 'campaigns/' + this.campaignId, this.$root.config).then(response => {
-                    this.campaign = response.data.data;
-                    this.geo = this.campaign.geo.data;
+                    );
+                else if(method == 'post') {
+                    axios.post(
+                        this.$root.api + 'campaigns/' + this.campaign.id + extension, 
+                        payload, 
+                        this.$root.config
+                    ).then(response => {
+                            this.updates_counter = this.updates_counter + 1;
+                        }, error => {
                     
-                    this.loading = false;
-                }, error => {
-                    alert(error);
-                });
-            },
-
-            fetchCategories() {
-
-                axios.get('/data/categories.json').then(response => {
-                    this.categoriesList = response.data;
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            fetchTechnologies() {
-
-                axios.get('/data/technologies.json').then(response => {
-                    this.technologiesList = response.data;
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            getFolders() {
-                this.loading = true;
-                var self = this;
-                var accountId = this.accountId;
-                var folders = [];
-                axios.get(this.$root.api + 'creatives/' + accountId + '/folders', this.$root.config).then(response => {
-                    this.folders = response.data.data;
-                    folders = response.data.data;
-                    
-                    this.loading = false;
-                }, error => {
-                    alert(error);
-                });
-                var creatives = [];
-                for (var f in folders) {
-                    axios.get(this.$root.api + 'creatives/' + accountId + '/folders/' + folders[f].id, this.$root.config).then(response => {
-                    var a = response.data;
-                    creatives.push(a);
-                    
-                    this.loading = false;
-                }, error => {
-                    alert(error);
-                });
-                }
-                this.creatives = creatives;
-            },
-
-            getCreatives() {
-                this.loading = true;
-                var self = this;
-                var accountId = this.accountId;
-                var folders = this.folders;
-                var creatives = [];
-                
-                for (var f in folders) {
-                    axios.get(this.$root.api + 'creatives/' + accountId + '/folders/' + folders[f].id, this.$root.config).then(response => {
-                        var a = response.data.data;
-                        for (var i in a) {
-                            creatives.push(a[i]);
                         }
-                        this.loading = false;
-                }, error => {
-                    alert(error);
-                });
+                    );
                 }
-                this.creatives = creatives;
             },
 
+            updateCampaign () {
+                this.campaign_button_loading = true;
+                this.updateCampaignPartly('put', '', this.collectCampaign());
+                this.updateCampaignPartly('post', '/cat', this.collectCategories());
+                this.updateCampaignPartly('post', '/users', this.collectUser());
+                this.updateCampaignPartly('post', '/geo', {geo: this.collectGeography()});
+                this.updateCampaignPartly('post', '/device/type', {types: this.collectDevices().types});
+                this.updateCampaignPartly('post', '/device/model', {models: this.collectDevices().models});
+                this.updateCampaignPartly('post', '/device/os', {os: this.collectDevices().operating_systems});
+                this.updateCampaignPartly('post', '/budget', this.collectBudget());
+                this.updateCampaignPartly('post', '/creatives', {creatives: this.collectCreatives()});
+            },
+
+            //CHARTS
             createChart() {
                 var self = this; 
                 var chart = [];
@@ -708,10 +693,9 @@
             },
 
             getBalanceData(){
-                var campaignId = this.campaign.id;
                 var self = this;
 
-                axios.get(this.$root.erlang_api + 'banker/' + campaignId, this.$root.config).then( response => {
+                axios.get(this.$root.erlang_api + 'banker/' + this.campaign_id, this.$root.config).then( response => {
                     self.banker = response.data
                 }, error => {
                     console.log(error);
@@ -741,12 +725,12 @@
         },
 
         watch: {
-            updateCounter(value) {
-                if(value == 9) window.location.pathname = 'accounts/' + this.accountId;
+            updates_counter(value) {
+                if(value == 9) window.location.pathname = 'accounts/' + this.account_id;
             },
 
             token(value) {
-                this.fetchCampaign();
+                this.getCampaign();
                 this.getFolders();
             },
             
@@ -754,11 +738,14 @@
                 this.getCreatives();
             },
 
-            technologiesList(value) {
+            technologies(value) {
                 this.types = value.devices; 
                 this.ua = value.browsers;
                 this.os = value.operatingsystems;
             },
+            campaign(value) {
+                this.collectCreatives();
+            }
 
         }
     }
