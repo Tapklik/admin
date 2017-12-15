@@ -1,10 +1,17 @@
 <template>
     <div>
+
+        <!-- HEADER START -->
         <div class="row">
             <div class="col-xs-12">
                 <h2>Creatives</h2>
             </div>
         </div>
+        <!-- HEADER END -->
+
+        <hr />
+
+        <!-- CAMPAIGN CREATIVES START -->
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -18,39 +25,62 @@
                 </tr>
             </thead>
             <tbody class="vcenter">
-                <tr v-if="creativesLoader == true">
+
+                <!-- TABLE LOADER START -->
+                <tr v-if="creatives_table_loading">
                     <td colspan="11" class="loader text-center">
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                     </td>
                 </tr>
-                <tr v-else-if="noresult">
+                <!-- TABLE LOADER END -->
+
+                <!-- EMPTY TABLE MESSAGE START -->
+                <tr v-else-if="creatives_table_empty">
                     <td colspan="11">
                         Sorry but theres nothing here... yet :)
                     </td>
                 </tr>
-                <tr v-else v-for="c in campaign.creatives.data">
-                    <td>{{ c.id }}</td>
+                <!-- EMPTY TABLE MESSAGE END -->
+
+                <tr v-else v-for="creative in campaign_creatives">
+                    <td>{{ creative.id }}</td>
                     <td>
-                        <a :href=" accountId + '/creatives/' + c.id">
-                            {{ c.name }}
+                        <a :href=" account_id + '/creatives/' + creative.id">
+                            {{ creative.name }}
                         </a>
                     </td>
-                    <td>{{ c.class }}</td>
-                    <td>{{ c.w }}x{{ c.h}}</td>
-                    <td>  <a :href="c.iurl" target="_blank"><img width="70px" :src="c.thumb"></a> </td>
+                    <td>{{ creative.class }}</td>
+                    <td>{{ creative.w }}x{{ creative.h}}</td>
+                    <td>  
+                        <a :href="creative.iurl" target="_blank">
+                            <img width="70px" :src="creative.thumb">
+                        </a> 
+                    </td>
                     <td>
-                        <button :class="{'btn btn-success': c.approved == 'approved', 'btn btn-danger': c.approved != 'approved'}" @click="toggleApproval(c.id, c.approved)">
+                        <button 
+                        :ref="creative.id"
+                        id="toggle"
+                        :class="creative.approved == 'approved' ? 'btn btn-success' : 'btn btn-danger'" 
+                        @click="toggleCreativeStatus(creative.id, creative.approved)"
+                        >
                             <i class="fa fa-check-circle-o"></i>
                         </button>
                     </td>
                     <td>
-                        <button class="btn btn-danger" @click="deleteCreative(c.id)">
+                        <button
+                        :ref="creative.id"
+                        id="delete" 
+                        class="btn btn-danger" 
+                        @click="deleteCreative(creative.id)"
+                        >
                             <i class="fa fa-check-circle-o"></i>
                         </button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <!-- CAMPAIGN CREATIVES END -->
+
     </div>
 </template>
 
@@ -61,113 +91,93 @@
         },
 
         data() {
-
             return {
-                noresult: false,
-                creativesLoader: true,
-                campaignId: 0,
-                accountId: 0,
-                campaign: {
-                    name: '',
-                    adomain: '',
-                    ctrurl: '',
-                    bid: 0,
-                    exchange: 1,
-                    test: 1,
-                    weight: 1,
-                    status: '',
-                    total: 1,
-                    start_time: null,
-                    end_time: null,
-                    geo: {
-                        data: []
-                    },
-                    cat: {
-                        data: []
-                    },
-                    creatives: {
-                        data: []
-                    },
-                    budget: {
-                        data: {
-                            amount: 0,
-                            pacing: '',
-                            type: '',
-                        }
-                    },
-                    device: {
-                        data: {
-                            type: [],
-                            make: [],
-                            model: [],
-                            os: [],
-                            ua: [],
-                        }
-                    },
-                    user: {
-                        data: {
-                            gender: [],
-                            age: {
-                                min: null,
-                                max: null
-                            }
-                        }
-                    }
-                },
+                //ESSENTIALS
+                campaign_id: '',
+                account_id: '',
                 token: this.token,
+
+                //CREATIVES
+                creatives_table_loading: true,
+                creatives_table_empty: false,
+                campaign_creatives: [],
             }
         },
 
         methods: {
+            //OVERALL
+            getIds() {
+                var idDraft = window.location.pathname;
+                var res = idDraft.split("/");
 
-            toggleApproval(id, status) {
+                this.campaign_id = res[4];
+                this.account_id = res[2];
+            },
+
+            buttonLoading(action, condition, id) {
+                for(var button in this.$refs[id]) {
+                    var targetted_button = this.$refs[id][button].id == action ? button : targetted_button;
+                }
+                condition ? this.$refs[id][targetted_button].children[0].className = 'fa fa-circle-o-notch fa-spin' : 
+                            this.$refs[id][targetted_button].children[0].className = 'fa fa-check-circle-o';
+            },
+
+            //CAMPAIGN CREATIVES 
+            getCampaignCreatives() {
+                axios.get(
+                    this.$root.api + 'campaigns/' + this.campaign_id, 
+                    this.$root.config
+                ).then(response => {
+                        this.campaign_creatives = response.data.data.creatives.data;
+                        this.creatives_table_loading = false;
+                    }, error => {
+                        this.creatives_table_loading = false;
+                    }
+                );
+            },
+
+            toggleCreativeStatus(id, status) {
                 var toggleBag = {
                     approved: 'declined',
                     declined: 'approved',
                     pending: 'approved'
                 };
-                this.creativesLoader = true;
-                axios.put(this.$root.api + 'creatives/' + id, {status: toggleBag[status]}, this.$root.config).then(response => {
-                    this.fetchCampaign();
-                }, error => {
-                    console.log(error);
-                });
+                this.buttonLoading('toggle', true, id);
+
+                axios.put(
+                    this.$root.api + 'creatives/' + id, 
+                    { status: toggleBag[status] }, 
+                    this.$root.config
+                ).then(response => {
+                        this.buttonLoading('toggle', false, id);
+                        this.getCampaignCreatives();
+                    }, error => {
+                        this.buttonLoading('toggle', false, id);
+                        this.getCampaignCreatives();
+                    }
+                );
             },
 
             deleteCreative(id) {
-                this.creativesLoader = true;
-                axios.delete(this.$root.api + 'creatives/' + id, this.$root.config).then( response => {
-                    this.fetchCampaign();
-                }, error => {
-                    alert(error);
-                });
-            },
+                this.buttonLoading('delete', true, id);
 
-            getIds() {
-                var idDraft = window.location.pathname;
-                var res = idDraft.split("/");
-
-                this.campaignId = res[4];
-                this.accountId = res[2];
-            },
-
-            fetchCampaign() {
-                axios.get(this.$root.api + 'campaigns/' + this.campaignId, this.$root.config).then(response => {
-                    this.campaign = response.data.data;
-                    this.geo = this.campaign.geo.data;
-                    this.creativesLoader = false;
-                    
-                    this.loading = false;
-                }, error => {
-                    this.creativesLoader = false;
-                    alert(error);
-                });
-            },
+                axios.delete(
+                    this.$root.api + 'creatives/' + id, 
+                    this.$root.config
+                ).then(response => {
+                        this.buttonLoading('delete', false, id);
+                        this.fetchCampaign();
+                    }, error => {
+                        this.buttonLoading('delete', false, id);
+                        this.fetchCampaign();
+                    }
+                );
+            }
         },
 
         watch: {
             token(value) {
-                this.fetchCampaign();
+                this.getCampaignCreatives();
             }
         }
     }

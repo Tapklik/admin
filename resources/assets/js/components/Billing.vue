@@ -159,7 +159,6 @@
         },
 
         data() {
-
             return {
                 //ESSENTIALS
                 token: this.token,
@@ -191,7 +190,7 @@
             },
 
             //BILLS
-            fetchBills() {            
+            getBills() {            
                 axios.get(
                     this.$root.api + 'accounts/' + this.account_id + '/banker/main?type=billing', 
                     this.$root.config
@@ -204,8 +203,6 @@
                     }
                 );
             },
-
-
 
             //CREATE NEW BILL
             openCreateNewBill() {
@@ -221,17 +218,17 @@
                     this.$root.config
                 ).then(response => {
                         this.bills_table_loading = false;
-                        this.fetchBills();
+                        this.getBills();
                     }, error => {
                         this.bills_table_loading = false;
-                        this.fetchBills();
+                        this.getBills();
                     }
                 );
             }
         },
 
         computed: {
-            
+
             filtered_bills() {
                 var self = this;
 
@@ -245,7 +242,7 @@
 
         watch: {
             token(value) {
-                this.fetchBills()
+                this.getBills()
             }
         }
     }

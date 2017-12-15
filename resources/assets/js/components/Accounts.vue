@@ -36,7 +36,7 @@
             <tbody class="vcenter">
                 
                 <!-- TABLE LOADER START -->
-                <tr v-show="accounts_table_loading">
+                <tr v-if="accounts_table_loading">
                     <td colspan="11" class="loader text-center">
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                     </td>
@@ -44,7 +44,7 @@
                 <!-- TABLE LOADER END -->
                 
                 <!-- EMPTY TABLE MESSAGE START -->
-                <tr v-show="accounts_table_empty">
+                <tr v-else-if="accounts_table_empty">
                     <td colspan="11">
                         Sorry but I can't find anything relating to <strong>{{ search_accounts }}</strong>
                     </td>
