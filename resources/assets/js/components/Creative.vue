@@ -1,11 +1,17 @@
 <template>
     <div>
+
+        <!-- HEADER START -->
         <div class="row">
             <div class="col-md-8">
                 <h1 class="title pull-left">Edit</h1>
             </div>
         </div>
+        <!-- HEADER END -->
+
         <hr />
+
+        <!-- ACTION BAR START -->
         <div class="row">
             <div class="col-xs-2"></div>
             <div class="col-xs-2">
@@ -43,7 +49,11 @@
                 </a>
             </div>               
         </div>
+        <!-- ACTION BAR END -->
+
         <hr />     
+        
+        <!-- CREATIVE START -->
         <div class="form-group">
             <div class="row">
                 <div class="col-xs-8">
@@ -140,7 +150,11 @@
                 </div>
             </div>   
         </div>
+        <!-- CREATIVE END -->
+
         <hr />
+
+        <!-- CTRURL START -->
         <div class="form-group">
             <div class="row">
                 <div class="col-xs-8">
@@ -201,7 +215,11 @@
                 </div>
             </div>
         </div>
+        <!-- CTRURL END -->
+
         <hr />
+
+        <!-- CAMPAIGNS START -->
         <div class="row">
             <div class="col-xs-12">
                 <h2>Campaigns</h2>
@@ -217,7 +235,24 @@
                 </tr>
             </thead>
             <tbody class="vcenter">
-                <tr v-for="campaign in campaigns">
+
+                <!-- TABLE LOADER START -->                   
+                <tr v-if="campaigns_table_loading">
+                    <td colspan="11" class="loader text-center">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    </td>
+                </tr>
+                <!-- TABLE LOADER END -->                          
+                
+                <!-- EMPTY TABLE MESSAGE START -->
+                <tr v-else-if="campaigns_table_empty">
+                    <td colspan="11">
+                        Sorry but theres nothing here... yet :)
+                    </td>
+                </tr>
+                <!-- EMPTY TABLE MESSAGE END -->
+
+                <tr v-else v-for="campaign in campaigns">
                     <td>{{ campaign.name }}</td>
                     <td>{{campaign.ctrurl}}</td>
                     <td></td>
@@ -244,6 +279,9 @@
                 </tr>
             </tbody>
         </table>
+        <!-- CAMPAIGNS START -->
+
+        <!-- INVOCATION CODE MODAL START -->
         <div class="modal fade" id="_modal-show-invocation" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -280,9 +318,11 @@
                             Create
                         </button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
+                </div>
+            </div>
         </div>
+        <!-- INVOCATION CODE MODAL START -->
+
     </div>
 </template>
 
@@ -293,64 +333,69 @@
         },
 
         data() {
-
             return {
-                campaigns: [],
-                invocation_code: 'js',
-                selected_invocation_code_text: '',
-                creative_id: 0,
-                account_id: 0,
+                //ESSENTIALS
+                token: this.token,
+                creative_id: '',
+                account_id: '',
+
+                //ACTIONS
+
+                //CREATIVE
+                attributes: [],
                 creative: {
+                    adm: '',
+                    approved: '',
                     attr: {
                         data: []
-                    }
+                    },
+                    class: '',
+                    ctrurl: '',
+                    expdir: 0,
+                    folder: {
+                        key: 0,
+                        name: ''
+                    },
+                    h: 0,
+                    html: '',
+                    iurl: '',
+                    id: '',
+                    name: '',
+                    pos: 0,
+                    responsive: false,
+                    thumb: '',
+                    type: 0,
+                    w: 0
                 },
-                loading: false,
-                noresult: false,
-                token: this.token,
+
+                //CTRURL
                 tags: ['','','',''],
-                attributes: [],
-                countries: []
+
+                //CAMPAIGNS
+                campaigns: [],
+                campaigns_table_loading: true,
+                campaigns_table_empty: false,
+                invocation_code: 'js',
+
+                //INVOCATION CODE MODAL
+                selected_invocation_code_text: ''
             }
         },
 
         methods: {
 
-            openJSON(invocation_code, campaign_id) {
-                this.getSelectedInvocationCodeText(invocation_code, campaign_id)
-                $('#_modal-show-invocation').modal();
+            //OVERALL
+            getIds() {
+                var pathname = window.location.pathname;
+                var ids = pathname.split("/");
+                this.creative_id = ids[4];
+                this.account_id = ids[2];
             },
 
-            getSelectedInvocationCodeText(invocation_code, campaign_id) {
-                axios.get(
-                    this.$root.api + 'core/invocation', 
-                    {
-                        attributes: this.creative.attr.data, 
-                        campaign_id: campaign_id, 
-                        creative_id: this.creative_id, 
-                        type: invocation_code
-                    }, 
-                    this.$root.config
-                ).then(response => {
-                        this.selected_invocation_code_text = response;
-                    }, error=> {
-
-                    }
-                );
-            },
-
-            fetchCountries() {
-                axios.get(
-                    '/data/countries.json'
-                ).then(response => {
-                        this.countriesList = response;
-                    }, error => {
-
-                    }
-                );
-            },
-
-            fetchAttributes() {
+            //ACTIONS
+            
+            //CREATIVE            
+            getAttributes() {
                 axios.get(
                     '/data/attributes.json'
                 ).then(response => {
@@ -361,51 +406,8 @@
                 );
             },
 
-            getFilledTags() {
-                var tags = this.tags;
-                return tags.filter(t => t !== '')
-            },
 
-            splitCtrurl() {
-                if(this.creative.ctrurl == null) return;
-                var url = this.creative.ctrurl;
-                var splitCtrurl = url.split("?");
-                this.creative.ctrurl = splitCtrurl[0];
-                for(var i = 1; i < splitCtrurl.length; i++) {
-                    this.tags[i-1] = splitCtrurl[i]; 
-                }
-            },
-
-            fetchCampaigns() {
-
-                this.loading = true;
-                var self = this;
-
-                axios.get(
-                    this.$root.api + 'accounts/' +  this.account_id + '/campaigns', 
-                    this.$root.config
-                ).then( response => {
-                        var self = this;
-                        var campaigns = response.data.data;
-                        this.campaigns = campaigns.filter(c => 
-                            c.creatives.data.map(
-                            cr => cr.id).indexOf(self.creative_id) !== -1
-                        );
-                        this.loading = false;
-                    }, error => {
-                        console.log(error);
-                    }
-                );
-            },
-
-            getIds() {
-                var idDraft = window.location.pathname;
-                var res = idDraft.split("/");
-                this.creative_id = res[4];
-                this.account_id = res[2];
-            },
-
-            fetchCreative() {
+            getCreative() {
                 axios.get(
                     this.$root.api + 'creatives/' + this.creative_id, 
                     this.$root.config
@@ -451,7 +453,7 @@
                     this.creative.attr.data, 
                     this.$root.config
                 ).then(response => {
-                        this.fetchCreative();
+                        this.getCreative();
                         window.location.pathname = 'accounts/' + this.account_id;
                     }, error => {
 
@@ -467,7 +469,73 @@
                 ).then(response => {
                 
                     }, error => {
-                        alert(error);
+
+                    }
+                );
+            },
+
+            
+            //CTRURL
+            splitCtrurl() {
+                if(this.creative.ctrurl == null) return;
+                
+                var ctrurl = this.creative.ctrurl;
+                var split_ctrurl = ctrurl.split("?"); //split the ctrurl and put in an array
+                this.creative.ctrurl = split_ctrurl[0]; //assign the first value to ctrurl
+                for(var i = 1; i < split_ctrurl.length; i++) {
+                    this.tags[i-1] = split_ctrurl[i]; //others are assigned to tags
+                }
+            },
+
+            getFilledTags() {
+                var tags = this.tags;
+                return tags.filter(tag => tag !== '')
+            },
+            
+            //CAMPAIGNS
+            getCampaigns() {
+                axios.get(
+                    this.$root.api + 'accounts/' +  this.account_id + '/campaigns', 
+                    this.$root.config
+                ).then(response => {
+                        var self = this;
+                        var campaigns = response.data.data;
+                        this.campaigns = campaigns.filter(campaign => 
+                            campaign.creatives.data.map(creative => 
+                                creative.id).indexOf(self.creative_id) !== -1
+                        );
+                        this.campaigns_table_empty = this.campaigns == '' ? true : false; 
+                        this.campaigns_table_loading = false;
+                    }, error => {
+                        this.campaigns_table_loading = false;
+                    }
+                );
+            },
+
+            //INVOCATION CODE MODAL
+            openJSON(invocation_code, campaign_id) {
+                this.getSelectedInvocationCodeText(invocation_code, campaign_id);
+                $('#_modal-show-invocation').modal();
+            },
+
+            collectInvocationCode(invocation_code, campaign_id) {
+                return {
+                    attributes: this.creative.atr.data,
+                    campaign_id: campaign_id,
+                    creative_id: this.creative_id,
+                    type: invocation_code
+                }
+            },
+
+            getSelectedInvocationCodeText(invocation_code, campaign_id) {
+                axios.get(
+                    this.$root.api + 'core/invocation', 
+                    this.collectInvocationCode(invocation_code, campaign_id), 
+                    this.$root.config
+                ).then(response => {
+                        this.selected_invocation_code_text = response;
+                    }, error=> {
+
                     }
                 );
             }
@@ -478,10 +546,9 @@
 
         watch: {
             token(value) {
-                this.fetchCreative();
-                this.fetchCampaigns();
-                this.fetchAttributes();
-                this.fetchCountries();
+                this.getCreative();
+                this.getCampaigns();
+                this.getAttributes();
             },
             creative(value) {
                 this.splitCtrurl();

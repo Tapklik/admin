@@ -720,6 +720,7 @@
 
             getCreatives() {
                 var folders = this.folders;
+                if (folders == '') this.creatives_table_empty = true;
                 for (var folder in folders) {
                     axios.get(
                         this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[folder].id, 
@@ -727,7 +728,7 @@
                     ).then(response => {
                             this.creatives.push(response.data.data);
                             this.creatives = [].concat.apply([], this.creatives);
-                            this.creatives_table_empty = this.creatives == '' ? true : false;
+                            this.creatives_table_empty = this.creatives == [] ? true : false;
                         }, error => {
 
                         }
