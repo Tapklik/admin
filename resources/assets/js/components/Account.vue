@@ -471,6 +471,7 @@
                             type="button" 
                             class="btn btn-default" 
                             data-dismiss="modal"
+                            @click="clearCreateNewUserModal()"
                             >
                                 Close
                             </button>
@@ -579,20 +580,27 @@
 
             //NEW USER MODAL
             createNewUser() {
-                this.users = [];
                 this.users_table_loading = true;
                 axios.post(
                     this.$root.api + 'accounts/' + this.account.id + '/users', 
                     this.new_user,
                     this.$root.config
                 ).then(response => {
-                        this.closeCreateNewUser();
+                        this.clearCreateNewUserModal();
                         this.getUsers();
                     }, error => {
-                        this.closeCreateNewUser();
+                        this.clearCreateNewUserModal();
                         this.getUsers();
                     }
                 );
+            },
+
+            clearCreateNewUserModal() {
+                this.new_user.first_name = '';
+                this.new_user.last_name = '';
+                this.new_user.email = '';
+                this.new_user.phone = '';
+                this.new_user.password = '';
             },
 
             //ACCOUNT DETAILS
@@ -761,7 +769,7 @@
             },
 
             deleteCreative(id) {
-                this.creatives_table_loading = true;
+                this.buttonLoading('delete', true, id);
 
                 axios.delete(
                     this.$root.api + 'creatives/' + id, 
