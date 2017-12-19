@@ -392,8 +392,6 @@
                 this.account_id = ids[2];
             },
 
-            //ACTIONS
-            
             //CREATIVE            
             getAttributes() {
                 axios.get(
