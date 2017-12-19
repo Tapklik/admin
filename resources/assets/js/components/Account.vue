@@ -929,8 +929,7 @@
                 this.getFolders();
                 this.getUsers();
                 this.getCampaigns();
-                this.getMain();
-                this.getFlight();
+                this.getBalanceData();
             }
         }
     }
