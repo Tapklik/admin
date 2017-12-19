@@ -611,7 +611,7 @@
             },
 
             //USERS
-            getUsers() {
+            getUsers(id) {
                 axios.get(
                     this.$root.api + 'accounts/' + this.account.id + '/users', 
                     this.$root.config
@@ -619,6 +619,10 @@
                         this.users_table_empty = response.data.data == '' ? true : false; 
                         this.users = response.data.data;
                         this.users_table_loading = false;
+                        if(id) {
+                            this.buttonLoading('delete' ,false, id);
+                            this.buttonLoading('toggle', false, id);
+                        }
                     }, error => {
                         this.users_table_loading = false;
                     }
@@ -632,11 +636,9 @@
                     this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, 
                     this.$root.config
                 ).then(response => {
-                        this.buttonLoading('delete', false, id);
-                        this.getUsers();
+                        this.getUsers(id);
                     }, error => {
-                        this.buttonLoading('delete', false, id);
-                        this.getUsers();
+                        this.getUsers(id);
                     }
                 );
             },
@@ -650,17 +652,15 @@
                     {status: status}, 
                     this.$root.config
                 ).then(response => {
-                        this.buttonLoading('toggle', false, id);
-                        this.getUsers();
+                        this.getUsers(id);
                     }, error => {
-                        this.buttonLoading('toggle', false, id);
-                        this.getUsers();
+                        this.getUsers(id);
                     }
                 );
             },
 
             //CAMPAIGNS
-            getCampaigns() {
+            getCampaigns(id) {
                 axios.get(
                     this.$root.api + 'accounts/' +  this.account.id + '/campaigns', 
                     this.$root.config
@@ -668,6 +668,7 @@
                         this.campaigns_table_empty = response.data.data == '' ? true : false;
                         this.campaigns = response.data.data;
                         this.campaigns_table_loading = false;
+                        if(id) this.buttonLoading('delete', false, id);
                     }, error => {
                         this.campaigns_table_loading = false;
                     }
@@ -681,18 +682,14 @@
                     this.$root.api + 'campaigns/' + id, 
                     this.$root.config
                 ).then(response => {
-                        this.buttonLoading('delete', true, id);
-                        this.getCampaigns();        
+                        this.getCampaigns(id);        
                     }, error => {
-                        this.buttonLoading('delete', true, id);
-                        this.getCampaigns();
+                        this.getCampaigns(id);
                     }
                 );
             },
 
             toggleCampaignStatus(id, status) {
-                this.campaigns_table_loading = true;
-
                 axios.put(
                     this.$root.api + 'campaigns/' + id, 
                     {status: status}, 
@@ -718,7 +715,7 @@
                 );
             },
 
-            getCreatives() {
+            getCreatives(id) {
                 var folders = this.folders;
                 if (folders == '') this.creatives_table_empty = true;
                 for (var folder in folders) {
@@ -726,9 +723,15 @@
                         this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[folder].id, 
                         this.$root.config
                     ).then(response => {
-                            this.creatives.push(response.data.data);
-                            this.creatives = [].concat.apply([], this.creatives);
+                            var creatives = [];
+                            creatives.push(response.data.data);
+                            creatives = [].concat.apply([], creatives);
+                            this.creatives = creatives;
                             this.creatives_table_empty = this.creatives == [] ? true : false;
+                            if(id) {
+                                this.buttonLoading('delete', false, id);
+                                this.buttonLoading('toggle', false, id);
+                            }
                         }, error => {
 
                         }
@@ -750,11 +753,9 @@
                     {status: toggleBag[status]}, 
                     this.$root.config
                 ).then(response => {
-                        this.buttonLoading('toggle', false, id);
-                        this.getCreatives();
+                        this.getCreatives(id);
                     }, error => {
-                        this.buttonLoading('toggle', false, id);
-                        this.getCreatives();
+                        this.getCreatives(id);
                     }
                 );
             },
@@ -766,11 +767,9 @@
                     this.$root.api + 'creatives/' + id, 
                     this.$root.config
                 ).then(response => {
-                        this.buttonLoading('delete', false, id);
-                        this.getCreatives();
+                        this.getCreatives(id);
                     }, error => {
-                        this.buttonLoading('delete', false, id);
-                        this.getCreatives();
+                        this.getCreatives(id);
                     }
                 );
             },
