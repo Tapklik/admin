@@ -89,7 +89,7 @@
                                         <label for="label-city">Amount</label>
                                         <br/>
                                         <input 
-                                        type="text" 
+                                        type="number" 
                                         class="form-control" 
                                         v-model="new_bill.amount" 
                                         id="label-city" 
@@ -131,6 +131,7 @@
                         type="button" 
                         class="btn btn-default" 
                         data-dismiss="modal"
+                        @click="clearNewBill()"
                         >
                             Close
                         </button>
@@ -154,16 +155,13 @@
 
 <script>
     export default {
-        mounted() {
-            this.getIds();
-        },
 
         data() {
             return {
                 //ESSENTIALS
                 token: this.token,
                 search_bills: '',
-                account_id: this.getIds(),
+                account_id: this.getAccountId(),
 
                 //BILLS
                 bills: [],
@@ -173,7 +171,7 @@
                 //CREATE NEW BILL
                 new_bill: {
                     invoice_id: 'TZ0001ARG125878',
-                    credit: 0,
+                    amount: 0,
                     description: 'cc payment',
                     type: 'billing'
                 }
@@ -183,7 +181,7 @@
         methods: {
 
             //OVERALL
-            getIds() {
+            getAccountId() {
                 var pathname = window.location.pathname;
                 var result = pathname.split("/");
                 return result[2];
@@ -209,6 +207,13 @@
                 $('#_modal-create-new-bill').modal();
             },
 
+            clearNewBill() {
+                this.new_bill.invoice_id = 'TZ0001ARG125878';
+                this.new_bill.amount = 0;
+                this.new_bill.description = 'cc payment';
+                this.new_bill.type = 'billing';
+            },
+
             createNewBill() {
                 this.bills_table_loading = true;
 
@@ -217,10 +222,10 @@
                     this.new_bill, 
                     this.$root.config
                 ).then(response => {
-                        this.bills_table_loading = false;
+                        this.clearNewBill();
                         this.getBills();
                     }, error => {
-                        this.bills_table_loading = false;
+                        this.clearNewBill();
                         this.getBills();
                     }
                 );

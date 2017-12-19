@@ -471,7 +471,7 @@
                             type="button" 
                             class="btn btn-default" 
                             data-dismiss="modal"
-                            @click="clearCreateNewUserModal()"
+                            @click="clearNewUser()"
                             >
                                 Close
                             </button>
@@ -595,7 +595,7 @@
                 );
             },
 
-            clearCreateNewUserModal() {
+            clearNewUser() {
                 this.new_user.first_name = '';
                 this.new_user.last_name = '';
                 this.new_user.email = '';
