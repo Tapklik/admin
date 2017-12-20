@@ -49,7 +49,7 @@
             <!-- EMPTY TABLE MESSAGE START -->
             <tr v-else-if="bills_table_empty">
                 <td colspan="11">
-                    Sorry but theres nothing here... yet :)
+                    Sorry but I can't find anything relating to <strong>{{ search_bills }}</strong>
                 </td>
             </tr>
             <!-- EMPTY TABLE MESSAGE END -->
@@ -238,7 +238,7 @@
                 var self = this;
 
                 var results = this.bills.filter(bill => 
-                    bill.id.indexOf(self.search_bills) != -1
+                    bill.id.toLowerCase().indexOf(self.search_bills) != -1
                 );
                 this.bills_table_empty = results == '' ? true : false;
                 return results;

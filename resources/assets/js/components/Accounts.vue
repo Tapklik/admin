@@ -5,7 +5,10 @@
         <div class="row">
             <div class="col-md-8">
                 <h1 class="title pull-left">Accounts</h1>
-                <button class="btn btn-default pull-right" @click="openCreateNewAccount()">
+                <button 
+                class="btn btn-default pull-right" 
+                @click="clearNewAccount(), openCreateNewAccount()"
+                >
                     <i class="fa fa-plus"></i> Create new account
                 </button>
             </div>
@@ -51,7 +54,7 @@
                 </tr>
                 <!-- EMPTY TABLE MESSAGE END -->
                 
-                <tr v-for="account in filtered_accounts">
+                <tr v-else v-for="account in filtered_accounts">
                     <td>
                         <a :href="'/accounts/' + account.id">
                             {{ account.name }}
@@ -255,8 +258,7 @@
                         <button 
                         type="button" 
                         class="btn btn-default" 
-                        data-dismiss="modal" 
-                        @click="cleanModalDetails()"
+                        data-dismiss="modal"
                         >
                             Close
                         </button>
@@ -336,6 +338,7 @@
                         this.accounts_table_empty = response.data.data == '' ? true : false;
                         this.accounts = response.data.data;
                         this.accounts_table_loading = false;
+                        if(id) this.buttonLoading('delete', false, id);
                     }, error => {
                         this.accounts_table_loading = false;
                     }
@@ -349,10 +352,8 @@
                     this.$root.api + 'accounts/' + id, 
                     this.$root.config
                 ).then(response => {
-                        this.buttonLoading('delete', false, id);
                         this.getAccounts();
                     }, error => {
-                        this.buttonLoading('delete', false, id);
                         this.getAccounts();
                     }
                 );
@@ -396,7 +397,7 @@
                 );
             },
 
-            cleanModalDetails() {
+            clearNewAccount() {
                 this.new_account.name = '',
                 this.new_account.country = '',
                 this.new_account.city = '',
@@ -411,15 +412,17 @@
             },
 
             createNewAccount() {
+                this.accounts_table_loading = true;
+
                 axios.post(
                     this.$root.api + 'accounts', 
                     this.new_account, 
                     this.$root.config
                 ).then(response => {
-                        this.cleanModalDetails();
+                        this.clearNewAccount();
                         this.getAccounts();
                     }, error => {
-                        this.cleanModalDetails();
+                        this.clearNewAccount();
                         this.getAccounts();
                     }
                 );
@@ -427,11 +430,12 @@
         },
 
         computed: {
+            
             filtered_accounts() {
                 var self = this;
 
                 var results = this.accounts.filter(account => 
-                    account.name.indexOf(self.search_accounts) != -1
+                    account.name.toLowerCase().indexOf(self.search_accounts) != -1
                 );
                 this.accounts_table_empty = results == '' ? true : false;
                 return results;

@@ -9,7 +9,7 @@
             <div class="col-xs-6">
                 <button 
                 class="btn btn-default pull-right" 
-                @click="openModal('#_modal-create-new-user')"
+                @click="clearNewUser(), openModal('#_modal-create-new-user')"
                 >
                     <i class="fa fa-plus"></i> Create new user
                 </button>
@@ -471,7 +471,6 @@
                             type="button" 
                             class="btn btn-default" 
                             data-dismiss="modal"
-                            @click="clearNewUser()"
                             >
                                 Close
                             </button>
@@ -536,13 +535,13 @@
                 opened_json: {},
                 campaigns_table_loading: true,
                 campaigns_table_empty: false,
+                statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
 
                 //CREATIVES
                 creatives: [],
                 folders:[],
                 creatives_table_loading: true,
                 creatives_table_empty: false,
-                statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
 
                 //BILLING
                 banker: {
@@ -785,7 +784,7 @@
             //BILLING
             getMain() {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account.id + '/banker/main?query=balance', 
+                    this.$root.api + 'accounts/' +  this.account_id + '/banker/main?query=balance', 
                     this.$root.config
                 ).then(response => {
                         this.banker.main = response.data.data.balance;
@@ -797,7 +796,7 @@
 
             getFlight() {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account.id + '/banker/flight?query=balance', 
+                    this.$root.api + 'accounts/' +  this.account_id + '/banker/flight?query=balance', 
                     this.$root.config
                 ).then(response => {
                         this.banker.flight = response.data.data.balance;
@@ -809,7 +808,7 @@
 
             getSpend() {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account.id + '/banker/spend?query=balance', 
+                    this.$root.api + 'accounts/' +  this.account_id + '/banker/spend?query=balance', 
                     this.$root.config
                 ).then(response => {
                         this.banker.spend = response.data.data.balance
