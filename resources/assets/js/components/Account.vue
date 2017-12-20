@@ -19,11 +19,9 @@
         
         <hr/>
 
-        <!-- ACCOUNT DETAILS & USERS START -->
+        <!-- ACCOUNT DETAILS START -->
         <div class="row">
-
-            <!-- ACCOUNT DETAILS (LEFT 5/12) START -->
-            <div class="col-sm-5">
+            <div class="col-sm-6">
                 <div class="col-sm-3">
                     <b>ID: </b> 
                 </div>
@@ -41,6 +39,8 @@
                         {{ account.status ? 'Active' : 'Inactive' }}
                     </span>
                 </div>
+            </div>
+            <div class="col-sm-6">
                 <div class="col-sm-3">
                     <b>Localization: </b> 
                 </div>
@@ -55,11 +55,18 @@
                     <span>{{ account.localization.language }}</span>  
                 </div>
             </div>
-            <!-- ACCOUNT DETAILS (LEFT 5/12) END -->
+        </div>
+        <!-- ACCOUNT DETAILS END -->
 
-            <!-- USERS (RIGHT 7/12) START -->
-            <div class="col-sm-7">
-                <table class="table table-striped">
+        <hr />
+
+        <!-- USERS START -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Users</h2>
+            </div>
+        </div>
+        <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -120,11 +127,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <!-- USERS (RIGHT 7/12) END -->
-
-        </div>
-        <!-- ACCOUNT DETAILS & USERS END -->
+        <!-- USERS END -->
 
         <hr/>
 

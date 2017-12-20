@@ -32,8 +32,7 @@
                     <th>Acc. Name</th>
                     <th>Acc. Id</th>
                     <th>Status</th>
-                    <th>Settings</th>
-                    <th>Delete Account</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody class="vcenter">
@@ -62,14 +61,20 @@
                     </td>
                     <td>{{ account.id }}</td>
                     <td>
-                        <i :class="account.status ? 'fa fa-check' : 'fa fa-ban'"></i>
+                        <button 
+                        id="toggle"
+                        :ref="account.id"
+                        class="btn" 
+                        :class="account.status ? 'btn-success' : 'btn-danger'" 
+                        @click="toggleAccountStatus(account.status, account.id)" 
+                        >
+                            <i class="fa fa-check-circle-o"></i>
+                        </button>
                     </td>
                     <td>
                         <button class="btn">
                             <i class="fa fa-cog"></i>
                         </button>
-                    </td>
-                    <td>
                         <button 
                         id="delete" 
                         :ref="account.id" 
@@ -77,7 +82,7 @@
                         @click="deleteAccount(account.id)"
                         >
                             <i class="fa fa-check-circle-o"></i>
-                        </button>                    
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -330,7 +335,7 @@
             },
 
             //ACCOUNTS
-            getAccounts() {
+            getAccounts(id) {
                 axios.get(
                     this.$root.api + 'accounts',
                     this.$root.config
@@ -338,9 +343,28 @@
                         this.accounts_table_empty = response.data.data == '' ? true : false;
                         this.accounts = response.data.data;
                         this.accounts_table_loading = false;
-                        if(id) this.buttonLoading('delete', false, id);
+                        if(id) {
+                            this.buttonLoading('delete', false, id);
+                            this.buttonLoading('toggle', false, id);
+                        }
                     }, error => {
                         this.accounts_table_loading = false;
+                    }
+                );
+            },
+
+            toggleAccountStatus(status ,id) {
+                var status = status ? 0 : 1;
+                this.buttonLoading('toggle', true, id);
+
+                axios.put(
+                    this.$root.api + 'accounts/' + id,
+                    { status: status },
+                    this.$root.config
+                ).then(reponse => {
+                        this.getAccounts(id);
+                    }, error => {
+                        this.getAccounts(id);
                     }
                 );
             },
@@ -352,9 +376,9 @@
                     this.$root.api + 'accounts/' + id, 
                     this.$root.config
                 ).then(response => {
-                        this.getAccounts();
+                        this.getAccounts(id);
                     }, error => {
-                        this.getAccounts();
+                        this.getAccounts(id);
                     }
                 );
             },
