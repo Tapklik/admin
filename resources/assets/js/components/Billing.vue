@@ -91,7 +91,7 @@
                                         <input 
                                         type="number" 
                                         class="form-control" 
-                                        v-model="new_bill.amount" 
+                                        v-model="new_bill.credit" 
                                         id="label-city" 
                                         />
                                     </div>
@@ -170,10 +170,8 @@
                 
                 //CREATE NEW BILL
                 new_bill: {
-                    invoice_id: 'TZ0001ARG125878',
-                    amount: 0,
-                    description: 'cc payment',
-                    type: 'billing'
+                    credit: 0,
+                    description: 'cc payment'
                 }
             }
         },
@@ -208,10 +206,17 @@
             },
 
             clearNewBill() {
-                this.new_bill.invoice_id = 'TZ0001ARG125878';
-                this.new_bill.amount = 0;
+                this.new_bill.credit = 0;
                 this.new_bill.description = 'cc payment';
-                this.new_bill.type = 'billing';
+            },
+
+            collectNewBill() {
+                return {
+                    invoice_id: 'TZ0001ARG125878',
+                    credit: this.$root.toMicroDollars(this.new_bill.credit),
+                    description: this.new_bill.description,
+                    type: 'billing'
+                }
             },
 
             createNewBill() {
@@ -219,7 +224,7 @@
 
                 axios.post(
                     this.$root.api + 'accounts/' + this.account_id + '/banker/main', 
-                    this.new_bill, 
+                    this.collectNewBill(), 
                     this.$root.config
                 ).then(response => {
                         this.clearNewBill();

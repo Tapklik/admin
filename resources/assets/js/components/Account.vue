@@ -94,7 +94,7 @@
                         </tr>
                         <!-- EMPTY TABLE MESSAGE END -->
 
-                        <tr v-for="user in users">
+                        <tr v-else v-for="user in users">
                             <td>{{ user.first_name }} {{ user.last_name }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.phone ? user.phone : 'N/A' }}</td>
