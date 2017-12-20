@@ -25,11 +25,13 @@
                         Reports
                     </a>
                 </li>
+                <!--
                 <li class="{{ Request::is('accounting') ? 'selected' : '' }}">
                     <a href="/accounting">
                         Accounting
                     </a>
                 </li>
+                -->
                 <li class="{{ Request::is('logout') ? 'selected' : '' }}">
                     <a href="/logout">
                         Logout
