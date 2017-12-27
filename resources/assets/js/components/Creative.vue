@@ -44,6 +44,8 @@
             </div>              
             <div class="col-xs-3">
                 <button class="btn btn-default">Preview</button>
+                <button class="btn btn-default">Extract HTML5</button>
+                <button class="btn btn-default">Download HTML5</button>
                 <a :href="creative.iurl">
                     <button class="btn btn-default">Download</button>
                 </a>

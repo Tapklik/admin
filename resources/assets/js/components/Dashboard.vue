@@ -266,7 +266,7 @@
                 $(identifier).modal();
             },
 
-            filterTableDataBySize(number_of_items, dataset) {
+            filterDataSize(number_of_items, dataset) {
             	var excess = dataset.length - number_of_items; //look for number of items that are more than required
             	if(excess > 0) dataset.splice(number_of_items, excess); //delete those items
             	return dataset;
@@ -279,7 +279,7 @@
                     this.$root.config
                 ).then(response => {
                         this.accounts_table_empty = response.data.data == '' ? true : false;
-                        this.accounts = this.filterTableDataBySize(10, response.data.data);
+                        this.accounts = this.filterDataSize(10, response.data.data);
                         this.accounts_table_loading = false;
                         if(id) this.buttonLoading("delete", false, id);
                     }, error => {
@@ -303,7 +303,7 @@
                     }
                 );
             },
-            
+
             deleteAccount(id) {
                 this.buttonLoading('delete', true, id);
 
@@ -325,7 +325,7 @@
                     this.$root.config
                 ).then(response => {
                         this.campaigns_table_empty = response.data.data == '' ? true : false;
-                        this.campaigns = this.filterTableDataBySize(10, response.data.data);
+                        this.campaigns = this.filterDataSize(10, response.data.data);
                         this.campaigns_table_loading = false;
                         if(id) this.buttonLoading('delete', false, id);
                     }, error => {
