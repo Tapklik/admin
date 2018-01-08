@@ -43,9 +43,10 @@
                 </button>
             </div>              
             <div class="col-xs-8">
-                <button class="btn btn-default">Preview</button>
-                <button class="btn btn-default">Extract HTML5</button>
-                <a :href="creative.asset" v-show="creative.asset">
+                <a :href="creative.iurl">
+                    <button class="btn btn-default" >Preview</button>
+                </a>
+                <a :href="creative.asset" v-show="creative_is_html5">
                     <button class="btn btn-default">Download HTML5</button>
                 </a>
                 <a :href="creative.iurl">
@@ -541,6 +542,13 @@
                     }
                 );
             }
+        },
+
+        computed: {
+            creative_is_html5() {
+                return this.creative.asset == '' ? false : true;
+            }
+
         },
 
         watch: {

@@ -5,7 +5,7 @@
         </h1>
     </div>
     <div class="col-md-1">
-        <small class="pull-right" style="font-size: 14px; color: #fff; margin-top: 25px; ">@{{ $version }}</small>
+        <small class="pull-right" style="font-size: 14px; color: #fff; margin-top: 25px; ">v0.1.3</small>
     </div>
     <div class="col-md-9">
         <nav>
