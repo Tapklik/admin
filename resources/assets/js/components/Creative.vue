@@ -42,10 +42,12 @@
                     <span class="glyphicon glyphicon-tags"></span>
                 </button>
             </div>              
-            <div class="col-xs-3">
+            <div class="col-xs-8">
                 <button class="btn btn-default">Preview</button>
                 <button class="btn btn-default">Extract HTML5</button>
-                <button class="btn btn-default">Download HTML5</button>
+                <a :href="creative.asset" v-show="creative.asset">
+                    <button class="btn btn-default">Download HTML5</button>
+                </a>
                 <a :href="creative.iurl">
                     <button class="btn btn-default">Download</button>
                 </a>
@@ -341,8 +343,6 @@
                 creative_id: '',
                 account_id: '',
 
-                //ACTIONS
-
                 //CREATIVE
                 attributes: [],
                 creative: {
@@ -385,13 +385,17 @@
         },
 
         methods: {
-
             //OVERALL
             getIds() {
                 var pathname = window.location.pathname;
                 var ids = pathname.split("/");
                 this.creative_id = ids[4];
                 this.account_id = ids[2];
+            },
+
+            //ACTIONS
+            downloadHtml() {
+
             },
 
             //CREATIVE            
@@ -405,7 +409,6 @@
                     }
                 );
             },
-
 
             getCreative() {
                 axios.get(
@@ -473,7 +476,6 @@
                     }
                 );
             },
-
             
             //CTRURL
             splitCtrurl() {
@@ -502,7 +504,7 @@
                         var campaigns = response.data.data;
                         this.campaigns = campaigns.filter(campaign => 
                             campaign.creatives.data.map(creative => 
-                                creative.id).indexOf(self.creative_id) !== -1
+                                creative.id).indexOf(self.creative_id) != -1
                         );
                         this.campaigns_table_empty = this.campaigns == '' ? true : false; 
                         this.campaigns_table_loading = false;
@@ -539,9 +541,6 @@
                     }
                 );
             }
-        },
-
-        computed: {
         },
 
         watch: {
