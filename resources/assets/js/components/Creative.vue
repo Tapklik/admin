@@ -53,6 +53,27 @@
 
         <hr />     
         
+        <!-- ADEX TABLE START -->
+        <div class="well col-xs-3" v-for="(ad, index) in adex">
+            <div class="row">
+                <h4 class="col-xs-9">{{index}}</h4>
+                <span class="label label-success col-xs-3">
+                    Approved
+                </span>
+            </div><br>
+            <div class="row">
+                <button class="col-xs-4">
+                    This button is going to do ...
+                </button>
+                <p class="col-xs-8">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc porta aliquet sagittis. Donec euismod dolor est, ...
+                </p>
+            </div>
+        </div>    
+        <!-- ADEX TABLE END -->
+        
+        <hr />
+
         <!-- CREATIVE START -->
         <div class="form-group">
             <div class="row">
@@ -279,7 +300,7 @@
                 </tr>
             </tbody>
         </table>
-        <!-- CAMPAIGNS START -->
+        <!-- CAMPAIGNS END -->
 
         <!-- INVOCATION CODE MODAL START -->
         <div class="modal fade" id="_modal-show-invocation" tabindex="-1" role="dialog">
@@ -330,6 +351,7 @@
     export default {
         mounted() {
             this.getIds();
+            this.getAdex();
         },
 
         data() {
@@ -338,6 +360,7 @@
                 token: this.token,
                 creative_id: '',
                 account_id: '',
+                adex: {},
 
                 //CREATIVE
                 attributes: [],
@@ -387,6 +410,18 @@
                 var ids = pathname.split("/");
                 this.creative_id = ids[4];
                 this.account_id = ids[2];
+            },
+
+            //ADEX
+            getAdex() {
+                axios.get(
+                    '/data/adex.json'
+                ).then(response => {
+                        this.adex = response.data;
+                    }, error => {
+
+                    }
+                );
             },
 
             //CREATIVE            

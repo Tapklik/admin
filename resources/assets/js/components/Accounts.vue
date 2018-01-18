@@ -31,8 +31,11 @@
                 <tr>
                     <th>Acc. Name</th>
                     <th>Acc. Id</th>
+                    <th>F</th>
+                    <th>V</th>
                     <th>Status</th>
                     <th>Actions</th>
+
                 </tr>
             </thead>
             <tbody class="vcenter">
@@ -60,6 +63,21 @@
                         </a>
                     </td>
                     <td>{{ account.id }}</td>
+                    <td> 
+                        <input 
+                        type="text" 
+                        v-model="account.fees.fixed" 
+                        @blur="updateFees(account.fees, account.id)" 
+                        /> 
+                    </td>
+                    <td> 
+                        <input 
+                        type="text" 
+                        v-model="account.fees.variable" 
+                        @blur="updateFees(account.fees, account.id)"
+                        /> 
+                    </td>
+                    <td></td>
                     <td>
                         <button 
                         id="toggle"
@@ -361,7 +379,7 @@
                     this.$root.api + 'accounts/' + id,
                     { status: status },
                     this.$root.config
-                ).then(reponse => {
+                ).then(response => {
                         this.getAccounts(id);
                     }, error => {
                         this.getAccounts(id);
@@ -447,6 +465,19 @@
                         this.getAccounts();
                     }, error => {
                         this.clearNewAccount();
+                        this.getAccounts();
+                    }
+                );
+            },
+
+            updateFees(fees, id) {
+                axios.put(
+                    this.$root.api + 'accounts/' + id + '/fees',
+                    fees,
+                    this.$root.config
+                ).then(response => {
+                        this.getAccounts();
+                    }, error => {
                         this.getAccounts();
                     }
                 );

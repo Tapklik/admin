@@ -538,7 +538,7 @@
                 opened_json: {},
                 campaigns_table_loading: true,
                 campaigns_table_empty: false,
-                statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
+                statuses: ['active', 'paused', 'archived', 'draft', 'not started', 'expired'],
 
                 //CREATIVES
                 creatives: [],
