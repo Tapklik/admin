@@ -279,13 +279,13 @@
                     <td></td>
                     <td>
                         <button 
-                        @click="openJSON('js', campaign.id)"
+                        @click="openJSON('adm_js', campaign.id)"
                         class="btn btn-primary"
                         >
                             JS
                         </button>
                         <button 
-                        @click="openJSON('iframe', campaign.id)"
+                        @click="openJSON('adm_iframe', campaign.id)"
                         class="btn btn-primary"
                         >
                             iFrame
@@ -542,30 +542,8 @@
 
             //INVOCATION CODE MODAL
             openJSON(invocation_code, campaign_id) {
-                this.getSelectedInvocationCodeText(invocation_code, campaign_id);
+                this.selected_invocation_code_text = this.creative[invocation_code];
                 $('#_modal-show-invocation').modal();
-            },
-
-            collectInvocationCode(invocation_code, campaign_id) {
-                return {
-                    attributes: this.creative.atr.data,
-                    campaign_id: campaign_id,
-                    creative_id: this.creative_id,
-                    type: invocation_code
-                }
-            },
-
-            getSelectedInvocationCodeText(invocation_code, campaign_id) {
-                axios.get(
-                    this.$root.api + 'core/invocation', 
-                    this.collectInvocationCode(invocation_code, campaign_id), 
-                    this.$root.config
-                ).then(response => {
-                        this.selected_invocation_code_text = response;
-                    }, error=> {
-
-                    }
-                );
             }
         },
 

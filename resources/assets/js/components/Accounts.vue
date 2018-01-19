@@ -67,14 +67,14 @@
                         <input 
                         type="text" 
                         v-model="account.fees.fixed" 
-                        @blur="updateFees(account.fees, account.id)" 
+                        @keyup="updateFees(account.fees, account.id)" 
                         /> 
                     </td>
                     <td> 
                         <input 
                         type="text" 
                         v-model="account.fees.variable" 
-                        @blur="updateFees(account.fees, account.id)"
+                        @keyup="updateFees(account.fees, account.id)"
                         /> 
                     </td>
                     <td></td>
@@ -473,7 +473,7 @@
             updateFees(fees, id) {
                 var payload = {
                     fee_fixed: fees.fixed,
-                    fee_variable: fee.variable
+                    fee_variable: fees.variable
                 };
                 axios.put(
                     this.$root.api + 'accounts/' + id + '/fees',
