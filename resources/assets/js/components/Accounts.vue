@@ -471,9 +471,13 @@
             },
 
             updateFees(fees, id) {
+                var payload = {
+                    fee_fixed: fees.fixed,
+                    fee_variable: fee.variable
+                };
                 axios.put(
                     this.$root.api + 'accounts/' + id + '/fees',
-                    fees,
+                    payload,
                     this.$root.config
                 ).then(response => {
                         this.getAccounts();
@@ -485,7 +489,6 @@
         },
 
         computed: {
-            
             filtered_accounts() {
                 var self = this;
 
