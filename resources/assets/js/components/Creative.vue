@@ -315,7 +315,7 @@
                         >
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">JSON</h4>
+                        <h4 class="modal-title">JS</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
