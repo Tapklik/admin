@@ -5,5 +5,5 @@
 @stop
 
 @section('content')
-<bid-show></bid-show>
+<bid></bid>
 @stop

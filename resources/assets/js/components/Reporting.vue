@@ -1,22 +1,34 @@
 <template>
     <div>
+
+        <!-- HEADER START -->
         <div class="row">
             <div class="col-md-8">
                 <h1 class="title pull-left">Reports</h1>
             </div>
         </div>
-        <hr/>
+        <!-- HEADER END -->
+
+        <hr />
+        
+        <!-- CHART START -->
         <div class="row">
             <div class="col-md-3">
                 <h4>Nodes</h4>
-                <span v-for="n in nodes">
-                    <input type="checkbox" :value="n" v-model="selectedNodes"> {{n}}<br>
+                <span v-for="node in nodes">
+                    <input 
+                    type="checkbox" 
+                    :value="node" 
+                    v-model="selectedNodes"
+                    /> 
+                    {{ node }} 
+                    <br />
                 </span>
             </div>
             <div class="col-md-3">
                 <h4>Selections</h4>
-                Cmp: <span v-for="c in selectedCampaigns">{{c}}, </span> <br>
-                Status: <span>{{check}}</span>
+                Cmp: <span v-for="c in selectedCampaigns">{{ c }}, </span> <br>
+                Status: <span>{{ check }}</span>
             </div>
             <div class="col-md-6">
                 <div class="col-md-12 panel panel-default">
@@ -25,7 +37,11 @@
                 </div>
             </div>
         </div>
-        <hr>
+        <!-- CHART END -->
+
+        <hr />
+
+        <!-- CAMPAIGNS CHART DATA START -->
         <div class="row">
             <div class="col-md-3">
                 <h4>Campaigns</h4>
@@ -43,17 +59,16 @@
                 </div>
             </div>
         </div>
+        <!-- CAMPAIGNS CHART DATA END -->
        
         <hr/>
        
+        <!-- BIDS START -->
         <div class="row">
             <div class="col-md-8">
                 <h1 class="title pull-left">Table</h1>
             </div>
         </div>
-
-        <hr/>
-
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -84,6 +99,7 @@
                 </tr>
             </tbody>
         </table>
+        <!-- BIDS END -->
     </div>
 </template>
 <script>
@@ -130,7 +146,7 @@
                 var nodes = this.selectedNodes;
                 var self = this;
                 var time = new Date()
-                axios.get(this.$root.erlang_api + 'api/stats', this.$root.config).then( response => {
+                axios.get(this.$root.erlang_api + 'stats', this.$root.config).then( response => {
                     if(campaigns=='' || nodes == ''){
                         self.stats = response.data
                     }
@@ -274,7 +290,7 @@
 
             fetchBids() {
                 var self = this;
-                axios.get(this.$root.erlang_api + 'api/bids', this.$root.config).then( response => {
+                axios.get(this.$root.erlang_api + 'bids', this.$root.config).then( response => {
                     self.bids = response.data;
                 }, error => {
                     console.log(error);
@@ -391,7 +407,6 @@
             token(value) {
                 this.fetchBids();
             },
-
             
             stats(value) {
                 this.fetchNodes();

@@ -27,7 +27,6 @@
             <img src="//tapklik.com/assets/images/logo.png" alt="Logo" />
         </h1>
     </div>
-    <span>v0.2.0</span>
 </header>
 
     <main id="app">

@@ -13,111 +13,65 @@ Route::get('auth', [
 	'uses' => 'AuthController@index'
 ]);
 
-    Route::get('dashboard', [
-        'as'   => 'dashboard.index',
-        'uses' => 'DashboardController@index',
-    ]);
+Route::get('dashboard', [
+    'as'   => 'dashboard.index',
+    'uses' => 'DashboardController@index',
+]);
 
-    Route::get('accounting', [
-        'as'   => 'accounting.index',
-        'uses' => 'AccountingController@index'
-    ]);
+Route::get('accounting', [
+    'as'   => 'accounting.index',
+    'uses' => 'AccountingController@index'
+]);
 
-    Route::get('creatives', [
-        'as'   => 'creatives.index',
-        'uses' => 'CreativesController@index'
-    ]);
+Route::get('reports', [
+    'as'   => 'reports.index',
+    'uses' => 'ReportsController@index'
+]);
 
-    Route::get('creatives/{id}', [
-        'as' => 'creatives.show',
-        'uses' => 'CreativesController@show'
-    ]);
+Route::get('reports/{id}', [
+    'as'   => 'bid.index',
+    'uses' => 'BidController@index'
+]);
 
-    Route::get('users', [
-        'as'   => 'users.index',
-        'uses' => 'UsersController@index'
-    ]);
+Route::get('accounts', [
+    'as'   => 'accounts.index',
+    'uses' => 'AccountsController@index'
+]);
 
-    Route::get('reports', [
-        'as'   => 'reports.index',
-        'uses' => 'ReportsController@index'
-    ]);
+Route::get('accounts/{id}', [
+    'as'   => 'accounts.show',
+    'uses' => 'AccountsController@show'
+]);
 
-    Route::get('reports/{id}', [
-        'as'   => 'bid.index',
-        'uses' => 'BidController@index'
-    ]);
+Route::get('accounts/{id}/creatives/{creativeId}', [
+    'as'   => 'accounts.campaigns.creatives.index',
+    'uses' => 'AccountCreativesController@show'
+]);
 
-    Route::get('campaigns', [
-        'as'   => 'campaigns.index',
-        'uses' => 'CampaignsController@index'
-    ]);
+Route::get('accounts/{id}/campaigns', [
+    'as'   => 'accounts.campaigns.index',
+    'uses' => 'AccountCampaignsController@index'
+]);
 
-    Route::get('campaigns/create', [
-        'as'   => 'campaigns.create',
-        'uses' => 'CampaignsController@create'
-    ]);
+Route::get('accounts/{id}/campaigns/{cid}', [
+    'as'   => 'accounts.campaigns.show',
+    'uses' => 'AccountCampaignsController@show'
+]);
 
-    Route::get('campaigns/{id}', [
-        'as'   => 'campaigns.show',
-        'uses' => 'CampaignsController@show'
-    ]);
+Route::get('accounts/{id}/campaigns/{cid}/creatives', [
+    'as'   => 'accounts.campaigns.display',
+    'uses' => 'AccountCampaignsController@display'
+]);
 
-    Route::get('campaigns/{id}/creatives', [
-        'as'   => 'campaigns.creatives.show',
-        'uses' => 'CampaignsCreativesController@show'
-    ]);
+Route::get('accounts/{id}/creatives', [
+    'as'   => 'accounts.noroute',
+    'uses' => 'AccountsController@noroute'
+]);
 
-    Route::get('campaigns/{id}/creatives/upload', [
-        'as' => 'campaigns.creatives.create',
-        'uses' => 'CreativesController@create'
-    ]);
-
-    Route::post('campaigns/{id}/creatives/upload', [
-        'as' => 'campaigns.creatives.upload',
-        'uses' => 'CreativesController@upload'
-    ]);
-
-    Route::get('accounts', [
-        'as'   => 'accounts.index',
-        'uses' => 'AccountsController@index'
-    ]);
-
-
-    Route::get('accounts/{id}', [
-        'as'   => 'accounts.show',
-        'uses' => 'AccountsController@show'
-    ]);
-
-    Route::get('accounts/{id}/creatives/{creativeId}', [
-        'as'   => 'accounts.campaigns.creatives.index',
-        'uses' => 'AccountCreativesController@show'
-    ]);
-
-    Route::get('accounts/{id}/campaigns', [
-        'as'   => 'accounts.campaigns.index',
-        'uses' => 'AccountCampaignsController@index'
-    ]);
-
-    Route::get('accounts/{id}/campaigns/{cid}', [
-        'as'   => 'accounts.campaigns.show',
-        'uses' => 'AccountCampaignsController@show'
-    ]);
-
-    Route::get('accounts/{id}/campaigns/{cid}/creatives', [
-        'as'   => 'accounts.campaigns.display',
-        'uses' => 'AccountCampaignsController@display'
-    ]);
-
-    Route::get('accounts/{id}/creatives', [
-        'as'   => 'accounts.noroute',
-        'uses' => 'AccountsController@noroute'
-    ]);
-
-    Route::get('accounts/{id}/billing', [
-        'as'   => 'billing.index',
-        'uses' => 'BillingController@index'
-    ]);
+Route::get('accounts/{id}/billing', [
+    'as'   => 'billing.index',
+    'uses' => 'BillingController@index'
+]);
 
 Route::group(
     ['prefix' => 'core'],
@@ -217,34 +171,6 @@ Route::get('data/countries/{code}/{id}', function ($code, $id) {
 		"region"      => $city->region,
 		"region_name" => $city->region_name,
 	]);
-});
-
-Route::get('data/timezones', function () {
-
-    $timezones = json_decode(file_get_contents('./data/timezones.json'), TRUE);
-
-    return response()->json($timezones);
-});
-
-Route::get('data/attributes', function () {
-
-    $attributes = json_decode(file_get_contents('./data/attributes.json'), TRUE);
-
-    return response()->json($attributes);
-});
-
-Route::get('data/languages', function () {
-
-	$languages = json_decode(file_get_contents('./data/languages.json'), TRUE);
-
-	return response()->json($languages);
-});
-
-Route::get('data/categories', function () {
-
-	$categories = json_decode(file_get_contents('./data/categories.json'), TRUE);
-
-	return response()->json($categories);
 });
 
 Route::get('test', function () {

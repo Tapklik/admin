@@ -1,72 +1,126 @@
 <template>
     <div>
+
+        <!-- HEADER START -->
         <div class="row">
             <div class="col-md-8">
                 <h1 class="title pull-left">Accounts</h1>
-
-                <button class="btn btn-default pull-right" @click="openCreateAccount()">
+                <button 
+                class="btn btn-default pull-right" 
+                @click="clearNewAccount(), openCreateNewAccount()"
+                >
                     <i class="fa fa-plus"></i> Create new account
                 </button>
             </div>
             <div class="col-md-4">
-                <input type="search" class="form-control" placeholder="Search account name..." v-model="search"/>
+                <input 
+                type="search" 
+                class="form-control" 
+                placeholder="Search account name..." 
+                v-model="search_accounts"
+                />
             </div>
         </div>
+        <!-- HEADER END -->
+
         <hr/>
+
+        <!-- ACCOUNTS START -->
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th>Acc. Name</th>
-                <th>Acc. Id</th>
-                <th>Status</th>
-                <th>Settings</th>
-                <th>Delete Account</th>
-            </tr>
+                <tr>
+                    <th>Acc. Name</th>
+                    <th>Acc. Id</th>
+                    <th>F</th>
+                    <th>V</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+
+                </tr>
             </thead>
             <tbody class="vcenter">
-            <tr v-show="loading == true">
-                <td colspan="10" class="loader text-center">
-                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                </td>
-            </tr>
-            <tr v-show="noresult">
-                <td colspan="9">
-                    Sorry but I can't find anything relating to <strong>{{ search }}</strong>
-                </td>
-            </tr>
-            <tr v-for="account in accounts">
-                <td>
-                    <a :href="'/accounts/' + account.id">
-                        {{ account.name }}
-                    </a>
-                </td>
-                <td>
-                    {{ account.id }}
-                </td>
-                <td>
-                    <i class="fa fa-check" v-show="account.status == 1"></i>
-                    <i class="fa fa-ban" v-show="!account.status"></i>
-                </td>
-                <td>
-                    <button class="btn">
-                        <i class="fa fa-cog"></i>
-                    </button>
-                </td>
-                <td>
-                    <button class="btn btn-danger" @click="deleteAccount(account.id)">
-                        <i class="fa fa-check-circle-o"></i>
-                    </button>                    
-                </td>
-            </tr>
+                
+                <!-- TABLE LOADER START -->
+                <tr v-if="accounts_table_loading">
+                    <td colspan="11" class="loader text-center">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    </td>
+                </tr>
+                <!-- TABLE LOADER END -->
+                
+                <!-- EMPTY TABLE MESSAGE START -->
+                <tr v-else-if="accounts_table_empty">
+                    <td colspan="11">
+                        Sorry but I can't find anything relating to <strong>{{ search_accounts }}</strong>
+                    </td>
+                </tr>
+                <!-- EMPTY TABLE MESSAGE END -->
+                
+                <tr v-else v-for="account in filtered_accounts">
+                    <td>
+                        <a :href="'/accounts/' + account.id">
+                            {{ account.name }}
+                        </a>
+                    </td>
+                    <td>{{ account.id }}</td>
+                    <td> 
+                        <input 
+                        type="text" 
+                        v-model="account.fees.fixed" 
+                        @keyup="updateFees(account.fees, account.id)" 
+                        /> 
+                    </td>
+                    <td> 
+                        <input 
+                        type="text" 
+                        v-model="account.fees.variable" 
+                        @keyup="updateFees(account.fees, account.id)"
+                        /> 
+                    </td>
+                    <td></td>
+                    <td>
+                        <button 
+                        id="toggle"
+                        :ref="account.id"
+                        class="btn" 
+                        :class="account.status ? 'btn-success' : 'btn-danger'" 
+                        @click="toggleAccountStatus(account.status, account.id)" 
+                        >
+                            <i class="fa fa-check-circle-o"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button 
+                        id="delete" 
+                        :ref="account.id" 
+                        class="btn btn-danger" 
+                        @click="deleteAccount(account.id)"
+                        >
+                            <i class="fa fa-check-circle-o"></i>
+                        </button>
+                    </td>
+                </tr>
             </tbody>
         </table>
+        <!-- ACCOUNTS END -->
 
+        <!-- MODALS START -->
+        <!-- CREATE NEW ACCOUNT START -->
         <div class="modal fade" id="_modal-create-new-account" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                        <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="modal" 
+                        aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         <h4 class="modal-title">Create New Account</h4>
                     </div>
                     <div class="modal-body">
@@ -74,45 +128,70 @@
                         <div class="form-group">
                             <label for="label-name">Name</label>
                             <br/>
-                            <input type="text" id="label-name" class="form-control" v-model="account.name"/>
+                            <input 
+                            type="text" 
+                            id="label-name" 
+                            class="form-control" 
+                            v-model="new_account.name"
+                            />
                         </div>
-
                         <div class="form-group">
                             <h5>LOCALIZATION</h5>
-
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-country">Country</label>
                                         <br/>
-                                        <select class="form-control" id="label-country" v-model="account.country">
-                                            <option v-for="country in countriesList.data" :value="country.country">
+                                        <select 
+                                        class="form-control" 
+                                        id="label-country" 
+                                        v-model="new_account.country"
+                                        >
+                                            <option 
+                                            v-for="country in countries.data" 
+                                            :value="country.country"
+                                            >
                                                 {{ country.key }}
                                             </option>
                                         </select>
                                     </div>
-
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-city">City</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-city" v-model="account.city" />
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="label-city" 
+                                        v-model="new_account.city" 
+                                        />
                                     </div>
-
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-timezones">Time Zone</label>
                                         <br/>
-                                        <select class="form-control" id="label-timezones" v-model="account.timezone">
-                                            <option v-for="timezone in timezonesList.data" :value="timezone.text">
+                                        <select 
+                                        class="form-control" 
+                                        id="label-timezones" 
+                                        v-model="new_account.timezone"
+                                        >
+                                            <option 
+                                            v-for="timezone in timezones.data" 
+                                            :value="timezone.text">
                                                 {{ timezone.text }}
                                             </option>
                                         </select>
                                     </div>
-
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-languages">Language</label>
                                         <br/>
-                                        <select class="form-control" id="label-languages" v-model="account.language">
-                                            <option v-for="language in languagesList.data" :value="language.abbr">
+                                        <select 
+                                        class="form-control" 
+                                        id="label-languages" 
+                                        v-model="new_account.language"
+                                        >
+                                            <option 
+                                            v-for="language in languages.data" 
+                                            :value="language.abbr"
+                                            >
                                                 {{ language.name }}
                                             </option>
                                         </select>
@@ -122,45 +201,74 @@
                         </div>
                         <div class="form-group">
                             <h5>BILLING DETAILS</h5>
-
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-city">Company</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-city" v-model="account.company" />
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="label-city" 
+                                        v-model="new_account.company" 
+                                        />
                                     </div>
 
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-city">Country</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-city" v-model="account.billing_country" />
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="label-city" 
+                                        v-model="new_account.billing_country" 
+                                        />
                                     </div>
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-timezones">City</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-city" v-model="account.billing_city" />
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="label-city" 
+                                        v-model="new_account.billing_city" 
+                                        />
                                     </div>
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-languages">Email</label>
                                         <br/>
-                                        <input type="text" class="form-control" id="label-city" v-model="account.billing_email" />
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="label-city" 
+                                        v-model="new_account.billing_email" 
+                                        />
                                     </div>
                                     <div class="col-xs-12">
                                         <label for="label-languages">Address</label>
                                         <br/>
-                                        <textarea cols="40" rows="5" style="height: 100px" type="text" class="form-control" id="label-city" v-model="account.billing_address" /></textarea>
+                                        <textarea 
+                                        cols="40" 
+                                        rows="5" 
+                                        style="height: 100px" 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="label-city" 
+                                        v-model="new_account.billing_address"
+                                        >
+                                        </textarea>
                                     </div>
                                 </div>
                             </div>
-
-
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <label for="label-approved">Approved</label>
                                         <br/>
-                                        <select class="form-control" id="label-approved" v-model="account.status">
+                                        <select 
+                                        class="form-control" 
+                                        id="label-approved" 
+                                        v-model="new_account.status">
                                             <option value="1">Approved</option>
                                             <option value="0">Not Approved</option>
                                         </select>
@@ -170,29 +278,51 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" @click="cleanModalDetails()">Close</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewAccount()">Create</button>
+                        <button 
+                        type="button" 
+                        class="btn btn-default" 
+                        data-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                        <button 
+                        type="button" 
+                        class="btn btn-primary" 
+                        data-dismiss="modal" 
+                        @click="createNewAccount()"
+                        >
+                            Create
+                        </button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
+        <!-- CREATE NEW ACCOUNT END -->
+        <!-- MODALS END -->
     </div>
 </template>
 
 <script>
     export default {
         mounted() {
-
-            this.fetchCountries();
-            this.fetchTimezones();
-            this.fetchLanguages();
+            this.getCountries();
+            this.getTimezones();
+            this.getLanguages();
         },
 
-        data: function () {
-
+        data() {
             return {
-                accounts: {},
-                account: {
+                //ESSENTIALS
+                token: '',     
+                search_accounts: '',           
+
+                //ACCOUNTS
+                accounts: [],
+                accounts_table_loading: true,
+                accounts_table_empty: false,
+
+                //CREATE NEW ACCOUNT
+                new_account: {
                     name: '',
                     country: '',
                     city: '',
@@ -205,187 +335,174 @@
                     billing_country: '',
                     billing_city: ''
                 },
-                countriesList: {},
-                timezonesList: {},
-                languagesList: {},
-                loading: false,
-                noresult: false,
-                token: false
+                countries: [],
+                timezones: [],
+                languages: [],
             }
         },
 
         methods: {
-            cleanModalDetails() {
-                this.account.name = '',
-                this.account.country = '',
-                this.account.city = '',
-                this.account.language = '',
-                this.account.status = 1,
-                this.account.company = '',
-                this.account.billing_email = '',
-                this.account.billing_address = '',
-                this.account.billing_country = '',
-                this.account.billing_city = '',
-                this.account.timezone = ''
-            },
-    
-            fetchAccounts(token) {
 
-                this.loading = true;
-                var self = this;
-
-                axios.get(this.$root.api + 'accounts',this.$root.config).then( response => {
-                    this.accounts = response.data.data;
-
-                    this.loading = false;
-                }, error => {
-                    console.log(error);
-                });
+            //OVERALL
+            buttonLoading(action, condition, id) {
+                for(var button in this.$refs[id]) {
+                    var targetted_button = this.$refs[id][button].id == action ? button : targetted_button;
+                }
+                condition ? this.$refs[id][targetted_button].children[0].className = 'fa fa-circle-o-notch fa-spin' : 
+                            this.$refs[id][targetted_button].children[0].className = 'fa fa-check-circle-o';
             },
 
-            fetchCountries() {
-
-                axios.get('/data/countries').then(response => {
-                    this.countriesList = response;
-                }, error => {
-                    console.log(error);
-                });
+            //ACCOUNTS
+            getAccounts(id) {
+                axios.get(
+                    this.$root.api + 'accounts',
+                    this.$root.config
+                ).then(response => {
+                        this.accounts_table_empty = response.data.data == '' ? true : false;
+                        this.accounts = response.data.data;
+                        this.accounts_table_loading = false;
+                        if(id) {
+                            this.buttonLoading('delete', false, id);
+                            this.buttonLoading('toggle', false, id);
+                        }
+                    }, error => {
+                        this.accounts_table_loading = false;
+                    }
+                );
             },
 
-            fetchTimezones() {
+            toggleAccountStatus(status ,id) {
+                var status = status ? 0 : 1;
+                this.buttonLoading('toggle', true, id);
 
-                axios.get('/data/timezones').then( response => {
-                    this.timezonesList = response;
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            fetchLanguages() {
-
-                axios.get('/data/languages').then( response => {
-                    this.languagesList = response;
-                }, error => {
-                    console.log(error);
-                });
+                axios.put(
+                    this.$root.api + 'accounts/' + id,
+                    { status: status },
+                    this.$root.config
+                ).then(response => {
+                        this.getAccounts(id);
+                    }, error => {
+                        this.getAccounts(id);
+                    }
+                );
             },
 
             deleteAccount(id) {
+                this.buttonLoading('delete', true, id);
 
-                axios.delete(this.$root.api + 'accounts/' + id, this.$root.config).then( response => {
-                    this.fetchAccounts();
-                }, error => {
-                    alert(error);
-                });
+                axios.delete(
+                    this.$root.api + 'accounts/' + id, 
+                    this.$root.config
+                ).then(response => {
+                        this.getAccounts(id);
+                    }, error => {
+                        this.getAccounts(id);
+                    }
+                );
             },
 
-            openUsers(id) {
-
-                this.loading = true;
-
-                axios.get(this.$root.api + 'accounts/' + id + '/users', this.$root.config).then( response => {
-
-                    this.loading = false;
-
-                    this.users = response.data;
-
-                    $('#_modal-users').modal();
-
-                }, error => {
-                    alert(error);
-                });
-            },
-
-            openSettings(id) {
-
-                this.loading = true;
-
-                axios.get(this.$root.api + 'accounts/' + id, this.$root.config).then(response => {
-
-                    this.account = response.data;
-                    this.loading = false;
-
-                    $('#_modal-edit-account').modal();
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            openCreateAccount() {
-
+            //CREATE NEW ACCOUNT
+            openCreateNewAccount() {
                 $('#_modal-create-new-account').modal();
             },
 
+            getCountries() {
+                axios.get(
+                    '/data/countries.json'
+                ).then(response => {
+                        this.countries = response;
+                    }, error => {
+
+                    }
+                );
+            },
+
+            getTimezones() {
+                axios.get(
+                    '/data/timezones.json'
+                ).then(response => {
+                        this.timezones = response;
+                    }, error => {
+
+                    }
+                );
+            },
+
+            getLanguages() {
+                axios.get(
+                    '/data/languages.json'
+                ).then(response => {
+                        this.languages = response;
+                    }, error => {
+
+                    }
+                );
+            },
+
+            clearNewAccount() {
+                this.new_account.name = '',
+                this.new_account.country = '',
+                this.new_account.city = '',
+                this.new_account.language = '',
+                this.new_account.status = 1,
+                this.new_account.company = '',
+                this.new_account.billing_email = '',
+                this.new_account.billing_address = '',
+                this.new_account.billing_country = '',
+                this.new_account.billing_city = '',
+                this.new_account.timezone = ''
+            },
+
             createNewAccount() {
-                this.loading = true;
+                this.accounts_table_loading = true;
 
-                return axios.post(this.$root.api + 'accounts', this.account, this.$root.config).then(response => {
-                    this.cleanModalDetails();
-                    this.fetchAccounts();
-                    this.loading = false;
-                    this.account = false;
-                    this.closeModal();
-                }, error => {
-
-                    this.loading = false;
-                    this.closeModal();
-                });
+                axios.post(
+                    this.$root.api + 'accounts', 
+                    this.new_account, 
+                    this.$root.config
+                ).then(response => {
+                        this.clearNewAccount();
+                        this.getAccounts();
+                    }, error => {
+                        this.clearNewAccount();
+                        this.getAccounts();
+                    }
+                );
             },
 
-            closeModal() {
-                $('#_modal-create-new-account').modal('close');
-            },
-
-            toggleStatus(id, status, index) {
-
-                status = (1 == status) ? 0 : 1;
-                this.accounts.data[index].status = status;
-
-                axios.put(this.$root.api + 'accounts/' + id, {status: status}, this.$root.config).then(response => {
-                    this.fetchAccounts();
-                }, error => {
-                    console.log(error);
-                });
-            },
-
-            generateUri(type, id) {
-
-                var endpoint = '';
-
-                switch(type) {
-
-                    case 'campaigns':
-                        endpoint += 'campaigns';
-                    break;
-
-                    case 'creatives':
-                        endpoint += 'creatives';
-                    break;
-                }
-
-                return '/accounts/' + id + '/' + endpoint;
+            updateFees(fees, id) {
+                var payload = {
+                    fee_fixed: fees.fixed,
+                    fee_variable: fees.variable
+                };
+                axios.put(
+                    this.$root.api + 'accounts/' + id + '/fees',
+                    payload,
+                    this.$root.config
+                ).then(response => {
+                        this.getAccounts();
+                    }, error => {
+                        this.getAccounts();
+                    }
+                );
             }
         },
 
         computed: {
-
-            filterByUsers() {
-                if (typeof this.users.data == 'undefined') return;
-
+            filtered_accounts() {
                 var self = this;
 
-                var results = this.users.data.filter( function(item) {
-
-                    return item.first_name.toLowerCase().indexOf(self.searchUsers.toLowerCase()) > -1;
-                });
-
+                var results = this.accounts.filter(account => 
+                    account.name.toLowerCase().indexOf(self.search_accounts) != -1
+                );
+                this.accounts_table_empty = results == '' ? true : false;
                 return results;
             }
         },
 
         watch: {
             token(value) {
-                this.fetchAccounts();
+                this.getAccounts();
             }
         }
     }

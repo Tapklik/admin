@@ -5,7 +5,7 @@
         </h1>
     </div>
     <div class="col-md-1">
-        <small class="pull-right" style="font-size: 14px; color: #fff; margin-top: 25px; ">v0.1.2</small>
+        <small class="pull-right" style="font-size: 14px; color: #fff; margin-top: 25px; ">v0.1.4-ALPHA</small>
     </div>
     <div class="col-md-9">
         <nav>
@@ -25,11 +25,13 @@
                         Reports
                     </a>
                 </li>
+                <!--
                 <li class="{{ Request::is('accounting') ? 'selected' : '' }}">
                     <a href="/accounting">
                         Accounting
                     </a>
                 </li>
+                -->
                 <li class="{{ Request::is('logout') ? 'selected' : '' }}">
                     <a href="/logout">
                         Logout

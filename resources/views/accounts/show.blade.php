@@ -1,9 +1,9 @@
 @extends('layouts.default')
 
 @section('breadcrumbs')
- 
+ 	Account #{{ $id }}
 @stop
 
 @section('content')
-<accounts-show></accounts-show>
+<account></account>
 @stop

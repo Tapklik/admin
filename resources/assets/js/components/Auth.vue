@@ -1,37 +1,47 @@
 <template>
+
+    <!-- LOGIN START -->
     <div class="widget-body" style="margin-left:40%; margin-top: 20px;">
-            <div class="col-xs-12 col-md-4">
-                <div class="alert alert-danger" role="alert" v-show="error">
-                    <i class="fa fa-exclamation-triangle"></i>
-                    <strong>{{ error.message }} </strong>
-                    {{ error.details }}
+        <div class="col-xs-12 col-md-4">
+            <div class="form-group">
+                <div class="row">
+                    <label for="label-email">Email</label>
+                    <input 
+                    type="text" 
+                    id="label-email" 
+                    class="form-control" 
+                    placeholder="you@email.com" 
+                    v-model="credentials.email" 
+                    />
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <div class="row">
-                        <label for="label-email">Email</label>
-                        <input type="text" id="label-email" class="form-control" placeholder="you@email.com" v-model="email" />
-                    </div>
+            <div class="form-group">
+                <div class="row">
+                    <label for="label-password">Password</label>
+                    <input 
+                    type="password" 
+                    id="label-password" 
+                    class="form-control" 
+                    placeholder="password" 
+                    v-model="credentials.password" 
+                    />
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <div class="row">
-                        <label for="label-password">Password</label>
-                        <input type="password" id="label-password" class="form-control" placeholder="password" v-model="password" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="row clearfix">
-                        <button class="btn btn-primary pull-right" @click="login()">
-                            <i class="fa fa-lock" v-show="!isLoading"></i>
-                            <i class="fa fa-refresh fa-spin" v-show="isLoading"></i>
-                            Login
-                        </button>
-                    </div>
+            <div class="form-group">
+                <div class="row clearfix">
+                    <button class="btn btn-primary pull-right" @click="login()">
+                        <i class="fa fa-lock" v-show="!login_button_loading"></i>
+                        <i class="fa fa-refresh fa-spin" v-show="login_button_loading"></i>
+                        Login
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- LOGIN END -->
+    
 </template>
 
 <script>
@@ -40,48 +50,45 @@
         },
 
         data() {
-
             return {
-                token: null,
-                email: '',
-                password: '',
-                isLoading: false,
-                error: ''
+                //ESSENTIALS
+                token: '',
+
+                //LOGIN
+                credentials: {
+                    email: '',
+                    password: ''
+                },
+                login_button_loading: false
             }
         },
 
         methods: {
 
+            //LOGIN
             login () {
-                this.isLoading = true;
-                this.error = '';
-
-                axios.post(this.$root.api + 'auth', {
-                    'email': this.email,
-                    'password': this.password
-                }).then(response => {
+                this.login_button_loading = true;
+                
+                axios.post(this.$root.api + 'auth', this.credentials).then(response => {
                     this.token = window.atob(response.data.token);
-                    this.isLoading = false;
+                    this.login_button_loading = false;
                 }, error => {
-                    this.error = error.data.error;
-                    this.isLoading = false;
+                    swal('Error', error, 'error');
+                    this.login_button_loading = false;
                 });
             }
         },
 
         watch: {
-            token () {
+            token() {
                 if(this.token == null) return; // prevent endless loop
-
                 // Need to save this to local session
                 axios.post('/core/token', {
                     token: this.token
                 }).then(response => {
-
                    window.location = '/dashboard';
                 }, error => {
-
-                    swal('Error', error.data.error, 'error');
+                    swal('Error', error, 'error');
                 });
             }
         }

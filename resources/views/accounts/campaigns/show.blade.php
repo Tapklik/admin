@@ -9,5 +9,5 @@
 @stop
 
 @section('content')
-    <campaign-show></campaign-show>
+    <campaign></campaign>
 @stop
