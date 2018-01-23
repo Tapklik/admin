@@ -30,8 +30,8 @@ Vue.component('auth', require('./components/Auth.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-        version: 'v0.1.5-ALPHA',
-        erlang_api: 'http://104.225.218.109:2301/api/v1/',
+        version: 'v0.1.5',
+        erlang_api: 'http://45.76.95.115:2301/api/v1/',
         api : 'https://api.tapklik.com/v1/',
         path: '//api.tapklik.com/',
         token: false,
