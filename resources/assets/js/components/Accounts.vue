@@ -67,14 +67,14 @@
                         <input 
                         type="text" 
                         v-model="account.fees.fixed" 
-                        @keyup="updateFees(account.fees, account.id)" 
+                        @blur="updateFees(account.fees, account.id)" 
                         /> 
                     </td>
                     <td> 
                         <input 
                         type="text" 
                         v-model="account.fees.variable" 
-                        @keyup="updateFees(account.fees, account.id)"
+                        @blur="updateFees(account.fees, account.id)"
                         /> 
                     </td>
                     <td></td>
@@ -148,7 +148,7 @@
                                         v-model="new_account.country"
                                         >
                                             <option 
-                                            v-for="country in countries.data" 
+                                            v-for="country in countries" 
                                             :value="country.country"
                                             >
                                                 {{ country.key }}
@@ -215,14 +215,20 @@
                                     </div>
 
                                     <div class="col-xs-12 col-md-3">
-                                        <label for="label-city">Country</label>
+                                        <label for="label-country">Country</label>
                                         <br/>
-                                        <input 
-                                        type="text" 
+                                        <select 
                                         class="form-control" 
-                                        id="label-city" 
-                                        v-model="new_account.billing_country" 
-                                        />
+                                        id="label-country" 
+                                        v-model="new_account.billing_country"
+                                        >
+                                            <option 
+                                            v-for="country in countries" 
+                                            :value="country.country"
+                                            >
+                                                {{ country.key }}
+                                            </option>
+                                        </select>
                                     </div>
                                     <div class="col-xs-12 col-md-3">
                                         <label for="label-timezones">City</label>
@@ -410,7 +416,7 @@
                 axios.get(
                     '/data/countries.json'
                 ).then(response => {
-                        this.countries = response;
+                        this.countries = response.data;
                     }, error => {
 
                     }
