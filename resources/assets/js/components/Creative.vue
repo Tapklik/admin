@@ -62,11 +62,18 @@
                 </span>
             </div><br>
             <div class="row">
-                <button class="col-xs-4">
-                    This button is going to do ...
-                </button>
+                <div class="col-xs-4">
+                    <button>
+                        Hello
+                    </button>
+                    <br />
+                    <br />
+                    <button>
+                        There
+                    </button>
+                </div>
                 <p class="col-xs-8">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc porta aliquet sagittis. Donec euismod dolor est, ...
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc porta aliquet sagittis.
                 </p>
             </div>
         </div>    

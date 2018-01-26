@@ -139,13 +139,13 @@
                 var self = this
                 setInterval(function(){
                     self.getStatsData();
-                }, 2000); 
+                }, 10000); 
             },
             getStatsData(){
                 var campaigns = this.selectedCampaigns;
                 var nodes = this.selectedNodes;
                 var self = this;
-                var time = new Date()
+                var time = new Date();
                 axios.get(this.$root.erlang_api + 'stats', this.$root.config).then( response => {
                     if(campaigns=='' || nodes == ''){
                         self.stats = response.data
@@ -238,7 +238,7 @@
                         "clicks": data.clicks
                     });
                     chart[cmp].validateData();
-                }, 5000 );
+                }, 5000);
             },
             
             drawCharts() {

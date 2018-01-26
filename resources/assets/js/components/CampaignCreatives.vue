@@ -45,7 +45,7 @@
                 <tr v-else v-for="creative in campaign_creatives">
                     <td>{{ creative.id }}</td>
                     <td>
-                        <a :href=" account_id + '/creatives/' + creative.id">
+                        <a style="cursor: pointer" @click="sendToCreative(creative.id)">
                             {{ creative.name }}
                         </a>
                     </td>
@@ -120,6 +120,10 @@
                 }
                 condition ? this.$refs[id][targetted_button].children[0].className = 'fa fa-circle-o-notch fa-spin' : 
                             this.$refs[id][targetted_button].children[0].className = 'fa fa-check-circle-o';
+            },
+
+            sendToCreative(id) {
+                window.location.pathname = "/accounts/" + this.account_id +"/creatives/" + id;
             },
 
             //CAMPAIGN CREATIVES 

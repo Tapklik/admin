@@ -588,11 +588,13 @@
                     this.new_user,
                     this.$root.config
                 ).then(response => {
-                        this.clearCreateNewUserModal();
+                        this.clearNewUser();
                         this.getUsers();
+                        this.users_table_loading = false;
                     }, error => {
-                        this.clearCreateNewUserModal();
+                        this.clearNewUser();
                         this.getUsers();
+                        this.users_table_loading = false;
                     }
                 );
             },
@@ -751,7 +753,7 @@
             },
 
             toggleCreativeStatus(id, status) {
-                var toggleBag = {
+                var toggle_statuses = {
                     approved: 'declined',
                     declined: 'approved',
                     pending: 'approved'
@@ -760,7 +762,7 @@
 
                 axios.put(
                     this.$root.api + 'creatives/' + id, 
-                    {status: toggleBag[status]}, 
+                    {status: toggle_statuses[status]}, 
                     this.$root.config
                 ).then(response => {
                         this.getCreatives(id);
@@ -904,17 +906,17 @@
             },
 
             emptyData() {
-                var emptyData = []
+                var empty_data = []
                 var time = new Date();
                 var data = 0;
                 for (var i = 40; i >= 0; i--) {
                     var d = {
                         "date" : time - (i * 5000),
                         "balance": data
-                    }
-                    emptyData.push(d)
+                    };
+                    empty_data.push(d);
                 }
-                return emptyData
+                return empty_data;
             },
         },
 

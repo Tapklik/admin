@@ -126,7 +126,7 @@
                 <tr v-for="campaign in campaigns">
                     <td>{{ campaign.id }}</td>
                     <td>
-                        <a :href="account_id + '/campaigns/' + campaign.id">
+                        <a :href="'/campaigns/' + campaign.id">
                             {{ campaign.name }}
                         </a>
                     </td>
@@ -185,7 +185,7 @@
         <!-- CAMPAIGNS END -->
 
         <!-- MODALS START -->
-        <!-- CAMPAIGN JSON MODAL START-->    
+        <!-- CAMPAIGN JSON MODAL START-->
         <div class="modal fade" id="_modal-show-json" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -241,7 +241,7 @@
                 opened_json: {},
                 campaigns_table_loading: true,
                 campaigns_table_empty: false,
-                statuses: ['active', 'paused', 'archived', 'declined', 'deleted', 'draft'],
+                statuses: ['active', 'paused', 'archived', 'draft', 'not started', 'expired'],
 
                 //ACCOUNTS
                 accounts: [],
