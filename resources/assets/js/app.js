@@ -13,16 +13,18 @@ require('./bootstrap');
  */
 
 /*Vue.component('tk-datepicker', require('vue-datepicker'));*/
-Vue.component('accounts', require('./components/Accounts.vue'));
 Vue.component('account', require('./components/Account.vue'));
+Vue.component('accounting', require('./components/Accounting.vue'));
+Vue.component('accounts', require('./components/Accounts.vue'));
+Vue.component('bid', require('./components/Bid.vue'));
+Vue.component('billing', require('./components/Billing.vue'));
 Vue.component('campaign', require('./components/Campaign.vue'));
 Vue.component('campaign-creatives', require('./components/CampaignCreatives.vue'));
 Vue.component('creative', require('./components/Creative.vue'));
 Vue.component('dashboard', require('./components/Dashboard.vue'));
 Vue.component('reporting', require('./components/Reporting.vue'));
-Vue.component('accounting', require('./components/Accounting.vue'));
-Vue.component('billing', require('./components/Billing.vue'));
-Vue.component('bid', require('./components/Bid.vue'));
+Vue.component('support', require('./components/Support.vue'));
+Vue.component('support-graphs', require('./components/SupportGraphs.vue'));
 
 /*LOGIN COMPONENT*/
 Vue.component('auth', require('./components/Auth.vue'));

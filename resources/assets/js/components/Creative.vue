@@ -524,7 +524,7 @@
 
             getFilledTags() {
                 var tags = this.tags;
-                return tags.filter(tag => tag !== '')
+                return tags.filter(tag => tag !== '');
             },
             
             //CAMPAIGNS

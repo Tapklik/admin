@@ -228,9 +228,6 @@
 
 <script>
 	export default {
-        mounted() {
-        },
-
         data() {
             return {
                 //ESSENTIALS

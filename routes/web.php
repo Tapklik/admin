@@ -73,6 +73,16 @@ Route::get('accounts/{id}/billing', [
     'uses' => 'BillingController@index'
 ]);
 
+Route::get('support', [
+    'as'   => 'support.index',
+    'uses' => 'SupportController@index'
+]);
+
+Route::get('support/graphs', [
+    'as'   => 'support.graphs',
+    'uses' => 'SupportController@graphs'
+]);
+
 Route::group(
     ['prefix' => 'core'],
     function () {
