@@ -46,9 +46,6 @@
 
 <script>
     export default {
-        mounted () {
-        },
-
         data() {
             return {
                 //ESSENTIALS
@@ -69,27 +66,33 @@
             login () {
                 this.login_button_loading = true;
                 
-                axios.post(this.$root.api + 'auth', this.credentials).then(response => {
-                    this.token = window.atob(response.data.token);
-                    this.login_button_loading = false;
-                }, error => {
-                    swal('Error', error, 'error');
-                    this.login_button_loading = false;
-                });
+                axios.post(
+                    this.$root.api + 'auth', 
+                    this.credentials
+                ).then(response => {
+                        this.token = atob(response.data.token);
+                        this.login_button_loading = false;
+                    }, error => {
+                        swal('Error', error, 'error');
+                        this.login_button_loading = false;
+                    }
+                );
             }
         },
 
         watch: {
             token() {
-                if(this.token == null) return; // prevent endless loop
-                // Need to save this to local session
-                axios.post('/core/token', {
-                    token: this.token
-                }).then(response => {
-                   window.location = '/dashboard';
-                }, error => {
-                    swal('Error', error, 'error');
-                });
+                if(this.token == null) return;  // prevent endless loop
+                                                // Need to save this to local session
+                axios.post(
+                    '/core/token', 
+                    { token: this.token }
+                ).then(response => {
+                       window.location = '/dashboard';
+                    }, error => {
+                        swal('Error', error, 'error');
+                    }
+                );
             }
         }
     }

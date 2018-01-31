@@ -29,12 +29,56 @@
         <hr />
 
         <!-- GRAPH START -->
-        <iframe 
-        :src="full_query"
-        width="900" 
-        height="400" 
-        frameborder="0"
-        ></iframe>
+        <div style="padding-left: 5%">
+            <iframe 
+            :src="fullQuery(4)" 
+            width="30%" 
+            height="200" 
+            frameborder="0"
+            ></iframe>
+            <iframe 
+            :src="fullQuery(48)" 
+            width="30%" 
+            height="200" 
+            frameborder="0"
+            ></iframe>
+            <iframe 
+            :src="fullQuery(49)" 
+            width="30%" 
+            height="200" 
+            frameborder="0"
+            ></iframe>
+            <iframe 
+            :src="fullQuery(51)" 
+            width="30%" 
+            height="200" 
+            frameborder="0"
+            ></iframe>
+            <iframe 
+            :src="fullQuery(52)" 
+            width="30%" 
+            height="200" 
+            frameborder="0"
+            ></iframe>
+            <iframe 
+            :src="fullQuery(53)" 
+            width="30%" 
+            height="200" 
+            frameborder="0"
+            ></iframe>
+            <iframe 
+            :src="fullQuery(55)"
+            width="90%" 
+            height="200" 
+            frameborder="0"
+            ></iframe>
+            <iframe 
+            :src="fullQuery(56)" 
+            width="90%" 
+            height="200" 
+            frameborder="0"
+            ></iframe>
+        </div>
         <!-- GRAPH END -->
 
         <!-- MODALS START -->
@@ -122,7 +166,7 @@
         </div>
         <!-- SELECT CAMPAIGNS MODAL END -->
         <!-- MODALS END -->
-        
+
     </div>
 </template>
 <script>
@@ -133,11 +177,11 @@
                 //ESSENTIALS
                 token: '',
                 iframe_url: 'https://www.hostedgraphite.com/93a2a8a9/2fb25eb8-3683-479b-a7d0-abaa7bb31938/grafana/dashboard-solo/db/campaigns',
+                accounts: [],
+                campaigns: [],
 
                 //QUERY PARAMETERS
-                accounts: [],
                 selected_accounts: [],
-                campaigns: [],
                 selected_campaigns: [],
                 selected_time: -1,
         		date_from: this.getDate(-1),
@@ -179,16 +223,14 @@
                 if(!days) var days = 0;
                 if(!hours) var hours = 0;
                 var today = new Date;
-                var selected_day = new Date;
+                var selected_day = new Date();
                 selected_day.setHours(today.getHours() + hours);
-                var stringify_day = selected_day.toString();
-                return stringify_day;
+                var milliseconds = selected_day.getTime();
+                return milliseconds;
             },
 
             //QUERY PARAMETERS
             queryForDates() {
-                this.date_from = this.date_from.replace("(CET)", "");
-                this.date_to = this.date_to.replace("(CET)", "");
                 return 'from=' + this.date_from + '&to=' + this.date_to;
             },
 
@@ -202,15 +244,17 @@
                 if(this.selected_campaigns == '') return 'var-Cmp=All';
                 var campaigns = this.selected_campaigns.map(campaign => 'var-Cmp=' + campaign);
                 return campaigns.join('&');
-            }
+            },
+            fullQuery(panel_id) {
+                return this.iframe_url + '?' + 
+                this.queryForSelectedAccounts() + '&' + 
+                this.queryforSelectedCampaigns() + '&' + 
+                this.queryForDates() + '&' +
+                'panelId=' + panel_id +'&fullscreen';
+            }  
 
         },
 
-        computed: {
-            full_query() {
-                return this.iframe_url + '?' + this.queryForSelectedAccounts() + '&' + this.queryforSelectedCampaigns() + '&' + this.queryForDates() + '&panelId=55&fullscreen';
-            }
-        },
         watch: {
             token(value) {
                 this.getAccounts();
