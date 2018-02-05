@@ -153,20 +153,32 @@
                     <div class="col-xs-12 col-md-12">
                         <label for="label-city">Selected Categories</label>
                         <br/>
-                        <div v-for="category in categories" class="col-xs-12 col-md-3">
-                            <input 
-                            type="checkbox" 
-                            :value="category.code" 
-                            v-model="campaign.cat.data"
-                            >
-                            <a 
-                            class="btn btn-link" 
-                            data-toggle="collapse" 
-                            href="#multiCollapseExample1" 
-                            role="button" 
-                            aria-expanded="false" 
-                            aria-controls="multiCollapseExample1"
-                            >{{category.type}}</a>
+                        <div v-for="category in categories">
+                            <div class="col-xs-12 col-md-3">
+                                <input 
+                                type="checkbox" 
+                                :value="category.code" 
+                                v-model="campaign.cat.data"
+                                >
+                                <a 
+                                class="btn btn-link" 
+                                data-toggle="collapse" 
+                                :href="'#' + category.code" 
+                                role="button" 
+                                aria-expanded="false"
+                                :aria-controls="category.code"
+                                >
+                                    {{ category.type }}
+                                </a>
+                            </div>
+                            <div class="collapse" :id="category.code">
+                                <div class="well col-xs-12">
+                                    <div v-for="subcategory in category.sub" class="col-xs-3">
+                                        <input type="checkbox" :value="subcategory.code" v-model="campaign.cat.data">
+                                        {{subcategory.type}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -353,6 +365,14 @@
                 creatives: [],
                 gender: ['M','F'],
                 geo: [],
+                subcategories: {
+                    IAB1 : [
+                        {
+                            code: 'IAB1-1',
+                            type: 'hello'
+                        }
+                    ]
+                },
 
                 //CAMPAIGN
                 search_geo: '',
