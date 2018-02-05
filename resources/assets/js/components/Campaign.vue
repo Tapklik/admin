@@ -159,7 +159,14 @@
                             :value="category.code" 
                             v-model="campaign.cat.data"
                             >
-                            {{category.type}}
+                            <a 
+                            class="btn btn-link" 
+                            data-toggle="collapse" 
+                            href="#multiCollapseExample1" 
+                            role="button" 
+                            aria-expanded="false" 
+                            aria-controls="multiCollapseExample1"
+                            >{{category.type}}</a>
                         </div>
                     </div>
                 </div>
@@ -187,7 +194,9 @@
                             :value="creative" 
                             v-model="campaign.creatives.data"
                             >
-                            {{creative.id}}
+                            <span>
+                                <b> {{creative.name}} </b>({{creative.id}})
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -206,10 +215,10 @@
         <div class="form-group">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-xs-12 col-md-12">
+                    <div class="col-xs-12 col-md-4">
                         <label for="label-city">Devices</label>
                         <br/>
-                        <div v-for="type in types" class="col-xs-12 col-md-4">
+                        <div v-for="type in types">
                             <input 
                             type="checkbox" 
                             :value="type.device_id" 
@@ -218,14 +227,10 @@
                             {{type.type}}
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
+                    <div class="col-xs-12 col-md-4">
                         <label for="label-city">Browsers</label>
                         <br/>
-                        <div v-for="u in ua" class="col-xs-12 col-md-2">
+                        <div v-for="u in ua">
                             <input 
                             type="checkbox" 
                             :value="u.device_id" 
@@ -234,14 +239,10 @@
                             {{u.type}}
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
+                    <div class="col-xs-12 col-md-4">
                         <label for="label-city">Operating Systems</label>
                         <br/>
-                        <div v-for="o in os" class="col-xs-12 col-md-2">
+                        <div v-for="o in os">
                             <input 
                             type="checkbox" 
                             :value="o.device_id" 
@@ -252,95 +253,72 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-3">
-                        <label for="label-city">Age Group</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign.user.data.age.min" 
-                        />
-                    </div>
-                    <div class="col-xs-12 col-md-3">
-                        <label for="label-city"></label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign.user.data.age.max"
-                        />
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Gender</label>
-                        <br/>
-                        <div v-for="g in gender" class="col-xs-12 col-md-2">
-                            <input 
-                            type="checkbox" 
-                            :value="g" 
-                            v-model="campaign.user.data.gender"
-                            >
-                            {{g}}
-                        </div>
-                    </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="title pull-left">User</h4>
                 </div>
             </div>
             <div class="form-group">
                 <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <label for="label-city">Geo</label>
+                    <div class="col-xs-12 col-md-3">
+                        <label for="label-city">Age Group - From:</label>
                         <br/>
+                        <select 
+                        class="form-control" 
+                        v-model="campaign.user.data.age.min"
+                        >
+                            <option v-for="age in ages" :value="age">{{age}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <label for="label-city">To: </label>
+                        <br/>
+                        <select 
+                        class="form-control" 
+                        v-model="campaign.user.data.age.max"
+                        >
+                            <option v-for="age in ages" :value="age">{{age}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <label for="label-city">Gender</label>
+                        <br/>
+                            <input type="checkbox" value="M" v-model="campaign.user.data.gender"> M
+                            <input type="checkbox" value="F" v-model="campaign.user.data.gender"> F 
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="title pull-left">Geo</h4>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-3">
                         <input 
-                        type="text" 
-                        @keyup="getGeo()" 
+                        type="text"
+                        @keyup.enter="reloadGeo()"
+                        class="form-control"
                         v-model="search_geo"
                         >
-                        <div v-for="g in geo" class="col-xs-12 col-md-2">
-                            <input 
-                            type="checkbox" 
-                            :value="g" 
-                            v-model="campaign.geo.data"
-                            />
-                            {{g}}
-                        </div>
                     </div>
+                    <button class="btn btn-primary" @click="reloadGeo()">Search Geo</button> 
+                </div>
+                <br />
+                <div v-for="g in geo" class="col-xs-12">
+                    <input 
+                    type="checkbox" 
+                    :value="g" 
+                    v-model="campaign.geo.data"
+                    />
+                    {{g}}
                 </div>
             </div>
         </div>
         <!-- TARGETTING END -->
-
-        <hr/>
-        
-        <!-- CHARTS START -->
-        <div class="row">
-            <div class="col-xs-12 col-md-12">
-                <h2>Campaign balance</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="col-md-12 panel panel-default">
-                    <h4>Balance </h4>
-                    <div id="chartdiv_0" style="height: 300px;"></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="col-md-12 panel panel-default">
-                    <h4> In-Flight </h4>
-                    <div id="chartdiv_1" style="height: 300px;"></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="col-md-12 panel panel-default">
-                    <h4>Total Spend</h4>
-                    <div id="chartdiv_2" style="height: 300px;"></div>
-                </div>
-            </div>
-        </div>
-        <!-- CHARTS END -->
 
     </div>
 </template>
@@ -363,6 +341,7 @@
                 campaign_id: '',
                 account_id: '',
                 updates_counter: 0,
+                ages: [1, 12, 18, 26, 40, 55, 65, 120],
 
                 //CAMPAIGN LISTS
                 categories: [],
@@ -470,27 +449,20 @@
             },
 
             getGeo() {
-                var start_search = this.search_geo.length >= 3 ? true : false;
-                var locations = this.campaign.geo.data;
-                
-                if(start_search){
-                    axios.get(
-                        this.$root.api + 'core/search/geo?key=' + this.search_geo, 
-                        this.$root.config
-                    ).then(response => {
-                            this.geo = response.data.data;
-                            for(var l in locations) {
-                                this.geo.push(locations[l]);
-                            }
-                        }, error => {
-                        
-                        }
-                    );
-                }
-                
-                else {
-                  this.geo = locations;
-                }
+                axios.get(
+                    this.$root.api + 'core/search/geo?key=' + this.search_geo, 
+                    this.$root.config
+                ).then(response => {
+                        this.geo = response.data.data;
+                    }, error => {
+                        this.$root.showAlertPopUp('error', 'Something went wrong');
+                    }
+                );
+            },
+
+            reloadGeo() {
+                if(!this.search_geo || this.search_geo.length < 3) this.geo = this.campaign.geo.data;
+                else this.getGeo();
             },
 
             getFolders() {
@@ -513,7 +485,6 @@
                         this.$root.api + 'creatives/' + this.account_id + '/folders/' + folders[folder].id, 
                         this.$root.config
                     ).then(response => {
-                            console.log(response.data.data);
                             this.creatives.push(response.data.data);
                             this.creatives = [].concat.apply([], this.creatives);
                         }, error => {
@@ -725,6 +696,7 @@
         },
 
         watch: {
+
             updates_counter(value) {
                 if(value == 9) window.location.pathname = 'accounts/' + this.account_id;
             },
