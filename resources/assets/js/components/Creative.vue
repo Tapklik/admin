@@ -43,7 +43,8 @@
                 </button>
             </div>              
             <div class="col-xs-8">
-                <button @click="openCreative(creative.iurl)" class="btn btn-default" >Preview</button>    
+                <button @click="openCreativePreview()" class="btn btn-default">Preview</button>  
+                <a :href="creative.iurl" class="btn btn-default">Download Image</a>    
                 <a :href="creative.asset" v-show="creative_is_html5">
                     <button class="btn btn-default">Download HTML5</button>
                 </a>
@@ -108,6 +109,7 @@
                                     <option value="banner">Banner</option>
                                     <option value="video">Video</option>
                                     <option value="native">Native</option>
+                                    <option value="html5">HTML5</option>
                                 </select>
                             </div>
                         </div>
@@ -337,19 +339,43 @@
                         >
                             Close
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- INVOCATION CODE MODAL END -->
+
+        <!-- PREVIEW MODAL START -->
+        <div class="modal fade" id="_modal-show-preview" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" :style="'width: ' + (creative.w + 32) + 'px; margin: auto'">
+                    <div class="modal-header">
                         <button 
                         type="button" 
-                        class="btn btn-primary" 
+                        class="close" 
                         data-dismiss="modal" 
-                        @click="createNewUser()"
+                        aria-label="Close"
                         >
-                            Create
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Preview</h4>
+                    </div>
+                    <div class="modal-body">
+                        <img :src="creative.iurl" />
+                    </div>
+                    <div class="modal-footer">
+                        <button 
+                        type="button" 
+                        class="btn btn-default" 
+                        data-dismiss="modal"
+                        >
+                            Close
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- INVOCATION CODE MODAL START -->
+        <!-- PREVIEW MODAL END -->
 
     </div>
 </template>
@@ -431,7 +457,11 @@
                 );
             },
 
-            //CREATIVE            
+            //CREATIVE   
+            openCreativePreview() {
+                $("#_modal-show-preview").modal();
+            },
+
             getAttributes() {
                 axios.get(
                     '/data/attributes.json'

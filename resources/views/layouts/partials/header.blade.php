@@ -32,6 +32,11 @@
                     </a>
                 </li>
                 -->
+                <li class="{{ Request::is('support') ? 'selected' : '' }}">
+                    <a href="/support">
+                        Support
+                    </a>
+                </li>
                 <li class="{{ Request::is('logout') ? 'selected' : '' }}">
                     <a href="/logout">
                         Logout
