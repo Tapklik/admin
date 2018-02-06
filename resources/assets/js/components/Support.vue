@@ -1,6 +1,6 @@
 <template>
     <div>
-        Support
+        <a href="/support/graphs">Graphs</a>
     </div>
 </template>
 

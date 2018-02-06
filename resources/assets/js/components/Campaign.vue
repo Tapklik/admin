@@ -171,6 +171,8 @@
                                     {{ category.type }}
                                 </a>
                             </div>
+                        </div>
+                        <div v-for="category in categories">
                             <div class="collapse" :id="category.code">
                                 <div class="well col-xs-12">
                                     <div v-for="subcategory in category.sub" class="col-xs-3">

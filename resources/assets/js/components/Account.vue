@@ -735,10 +735,8 @@
                         this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[folder].id, 
                         this.$root.config
                     ).then(response => {
-                            var creatives = [];
-                            creatives.push(response.data.data);
-                            creatives = [].concat.apply([], creatives);
-                            this.creatives = creatives;
+                            this.creatives.push(response.data.data);
+                            this.creatives = [].concat.apply([], this.creatives);
                             this.creatives_table_empty = this.creatives == [] ? true : false;
                             if(id) {
                                 this.buttonLoading('delete', false, id);

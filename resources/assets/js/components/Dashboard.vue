@@ -318,7 +318,7 @@
             //CAMPAIGNS
             getCampaigns(id) {
                 axios.get(
-                    this.$root.api + 'campaigns', 
+                    this.$root.api + 'campaigns?include=account', 
                     this.$root.config
                 ).then(response => {
                         this.campaigns_table_empty = response.data.data == '' ? true : false;
