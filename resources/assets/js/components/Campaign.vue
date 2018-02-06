@@ -177,7 +177,7 @@
                                 <div class="well col-xs-12">
                                     <div v-for="subcategory in category.sub" class="col-xs-3">
                                         <input type="checkbox" :value="subcategory.code" v-model="campaign.cat.data">
-                                        {{subcategory.type}}
+                                        {{subcategory.type}} ({{subcategory.code}})
                                     </div>
                                 </div>
                             </div>
