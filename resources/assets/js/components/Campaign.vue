@@ -107,7 +107,7 @@
                         type="text" 
                         class="form-control" 
                         id="label-city" 
-                        v-model="campaign.budget.data.amount" 
+                        v-model="campaign_budget" 
                         />
                     </div>
                     <div class="col-xs-12 col-md-6">
@@ -117,7 +117,7 @@
                         type="text" 
                         class="form-control" 
                         id="label-city" 
-                        v-model="campaign.bid"
+                        v-model="campaign_bid"
                         />
                     </div>
                 </div>
@@ -447,6 +447,14 @@
                 this.account_id = res[2];
             },
 
+            fromMicroDollars(value) {
+                return value / 1000;
+            },
+
+            toMicroDollars(value) {
+                return value * 1000;
+            },
+
             //CAMPAIGN LISTS
             getCategories() {
                 axios.get(
@@ -715,6 +723,27 @@
                 return emptyData
             },
 
+        },
+
+        computed: {
+            campaign_budget: {
+                get() {
+                    return this.campaign.budget.data.amount / 1000000;
+                },
+
+                set(value) {
+                    this.campaign.budget.data.amount = value * 1000000;
+                }
+            },
+            campaign_bid: {
+                get() {
+                    return this.campaign.bid / 1000000;
+                },
+
+                set(value) {
+                    this.campaign.bid = value * 1000000;
+                }
+            }
         },
 
         watch: {
