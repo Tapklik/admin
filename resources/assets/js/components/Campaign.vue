@@ -341,8 +341,7 @@
     export default {
         mounted() {
             this.getCategories();
-            this.getTechnologies();            
-            this.createChart();
+            this.getTechnologies();
             this.getIds();
         },
 
@@ -425,15 +424,7 @@
                             }
                         }
                     }
-                },
-
-                //CHARTS
-                banker: {
-                    main: 0,
-                    flight: 0,
-                    spend: 0
-                },
-
+                }
             }
         },
 
@@ -447,18 +438,20 @@
                 this.account_id = res[2];
             },
 
-            fromMicroDollars(value) {
-                return value / 1000;
-            },
-
-            toMicroDollars(value) {
-                return value * 1000;
+            splitPacingInDaysAndTimes(pacing) {
+                var pacing_array = this.campaign.budget.data.pacing.split(' ');
+                var days = pacing_array.map(day => day != '0000000' ? true : false);
+                var index_of_day = pacing_array.findIndex(function() { return true });
+                var chosen_day = pacing_array[index_of_day];
+                var chosen_day_array = chosen_day.split('');
+                var times = chosen_day_array.map(time => parseInt(time) == 1 ? true : false);
+                console.log({days: days, times: times});
             },
 
             //CAMPAIGN LISTS
             getCategories() {
                 axios.get(
-                    '/data/categories.json'
+                    this.$root.api + 'core/list/categories'
                 ).then(response => {
                         this.categories = response.data;
                     }, error => {
@@ -623,106 +616,7 @@
                 this.updateCampaignPartly('post', '/device/os', {os: this.collectDevices().operating_systems});
                 this.updateCampaignPartly('post', '/budget', this.collectBudget());
                 this.updateCampaignPartly('post', '/creatives', {creatives: this.collectCreatives()});
-            },
-
-            //CHARTS
-            createChart() {
-                var self = this; 
-                var chart = [];
-                for( var c = 0; c <= 2; c++) {
-                    chart[c] = AmCharts.makeChart( 'chartdiv_' + c, {
-                      "type": "serial",
-                      "theme": "light",
-                      "zoomOutButton": {
-                        "backgroundColor": '#000000',
-                        "backgroundAlpha": 0.15
-                        },
-                        "dataProvider": self.emptyData(),
-                        "categoryField": "date",
-                        "categoryAxis": {
-                            "parseDates": true,
-                            "minPeriod": "ss",
-                            "dashLength": 1,
-                            "gridAlpha": 0.15,
-                            "axisColor": "#DADADA"
-                        },
-                        "graphs": [ {
-                            "id": "balance",
-                            "valueField": "balance",
-                            "lineThickness": 2,
-                            "lineColor": "#337ab7",
-                            "bullet": "round",
-                            "bulletAlpha": 0,
-                            "hideBulletsCount": 50
-                        }],
-                        "balloon": {
-                            "borderColor": "#337ab7",
-                            "borderAlpha": 0,
-                            "borderThickness": 0,
-                            "shadowAlpha": 0,
-                            "color": "#ffffff",
-                            "drop": false,
-                            "cornerRadius": 5,
-                            "fillColor": "#337ab7",
-                            "fillAlpha": 1,
-                        }
-                    } )
-                }
-
-                setInterval( function() {
-                    chart[0].dataProvider.shift();
-                    chart[1].dataProvider.shift();
-                    chart[2].dataProvider.shift();
-                    var time = new Date();
-                    var data = self.getBalanceData();
-                    chart[0].dataProvider.push({
-                        "date": time,
-                        "balance": data.balance
-                    });
-                    chart[1].dataProvider.push({
-                        "date": time,
-                        "balance": data.flight
-                    });
-                    chart[2].dataProvider.push({
-                        "date": time,
-                        "balance": data.spend
-                    });
-                    chart[0].validateData();
-                    chart[1].validateData();
-                    chart[2].validateData();
-                }, 5000 );
-            },
-
-            getBalanceData(){
-                var self = this;
-
-                axios.get(this.$root.erlang_api + 'banker/' + this.campaign_id, this.$root.config).then( response => {
-                    self.banker = response.data
-                }, error => {
-                    console.log(error);
-                });
-    
-                return {
-                    "balance": self.banker.balance,
-                    "flight": self.banker.flight,
-                    "spend": self.banker.spend
-                }
-            },
-
-            emptyData() {
-                var emptyData = []
-                var time = new Date();
-                var data = 0;
-                for (var i = 40; i >= 0; i--) {
-                    var d = {
-                        "date" : time - (i * 5000),
-                        "balance": data
-                    }
-                    emptyData.push(d)
-                }
-                return emptyData
-            },
-
+            }
         },
 
         computed: {
@@ -767,6 +661,7 @@
                 this.os = value.operatingsystems;
             },
             campaign(value) {
+                this.splitPacingInDaysAndTimes();
                 this.collectCreatives();
             }
 

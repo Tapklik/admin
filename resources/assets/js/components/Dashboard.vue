@@ -126,7 +126,7 @@
                 <tr v-for="campaign in campaigns">
                     <td>{{ campaign.id }}</td>
                     <td>
-                        <a :href="'/campaigns/' + campaign.id">
+                        <a :href="'/accounts/' + campaign.account.data.id + '/campaigns/' + campaign.id">
                             {{ campaign.name }}
                         </a>
                     </td>

@@ -177,6 +177,7 @@
                         :src="creative.thumb" 
                         />
                     </div>
+                    <button @click="editCreative()" class="btn btn-default">Edit Creative</button>
                 </div>
             </div>   
         </div>
