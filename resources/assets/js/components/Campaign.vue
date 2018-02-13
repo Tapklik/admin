@@ -451,7 +451,7 @@
             //CAMPAIGN LISTS
             getCategories() {
                 axios.get(
-                    this.$root.api + 'core/list/categories'
+                    '/data/categories.json'
                 ).then(response => {
                         this.categories = response.data;
                     }, error => {
