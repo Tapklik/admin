@@ -127,8 +127,7 @@
             }
         },
         methods: {
-            fetchAllCampaigns() {
-                            
+            fetchAllCampaigns() {    
                 axios.get(this.$root.api + 'campaigns', this.$root.config).then(response => {
                     this.allCampaigns = response.data;
                 }, error => {
@@ -226,7 +225,7 @@
                     } ]
                 } )
 
-                setInterval( function() {
+                setInterval(function() {
                     chart[cmp].dataProvider.shift();
                     var time = new Date();
                     var data = self.getTotals(cmp);

@@ -289,19 +289,19 @@
                     <td></td>
                     <td>
                         <button 
-                        @click="openJSON('adm_js', campaign.id)"
+                        @click="openJSON('adm_js', campaign)"
                         class="btn btn-primary"
                         >
                             JS
                         </button>
                         <button 
-                        @click="openJSON('adm_iframe', campaign.id)"
+                        @click="openJSON('adm_iframe', campaign)"
                         class="btn btn-primary"
                         >
                             iFrame
                         </button>
                         <button 
-                        @click="openJSON(campaign)"
+                        @click="openJSON('adm', campaign)"
                         class="btn btn-primary"
                         >
                             View
@@ -328,8 +328,8 @@
                         <h4 class="modal-title">JS</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            {{selected_invocation_code_text}}
+                        <div class="form-group" v-html="invocation_code">
+                            
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -463,6 +463,23 @@
                 $("#_modal-show-preview").modal();
             },
 
+            getErlangCampaigns() {
+                axios.get(
+                    'http://104.225.218.101:10006/v1/core/erlang/campaigns'
+                ).then(response => {
+                        var self = this;
+                        var campaigns = response.data.data;
+                        console.log(campaigns);
+                        this.erlang_campaigns = campaigns.filter(campaign => 
+                            campaign.creatives.data.map(creative => 
+                                creative.crid).indexOf(self.creative_id) != -1
+                        );
+                    }, error => {
+
+                    }
+                );
+            },
+
             getAttributes() {
                 axios.get(
                     '/data/attributes.json'
@@ -579,17 +596,30 @@
             },
 
             //INVOCATION CODE MODAL
-            openJSON(invocation_code, campaign_id) {
-                this.selected_invocation_code_text = this.creative[invocation_code];
+            openJSON(invocation, campaign) {
+                this.getInvocationCode(invocation, campaign);
                 $('#_modal-show-invocation').modal();
-            }
+            },
+
+            getInvocationCode(invocation, campaign) {
+                var index = campaign.creatives.data.map(creative => creative.id).indexOf(this.creative_id);
+                var creative = campaign.creatives.data[index];
+                if(invocation == 'adm') {
+                    var result = creative.adm.replace('{{ADM_URL}}', creative.adm_url + '&preview=1');
+                    this.invocation_code = result;
+                }
+                else if(invocation == 'adm_iframe') {
+                    var adm_url_encoded = encodeURIComponent(creative.adm_url + '&preview=1');
+                    var result = creative.adm_iframe.replace('{{ADM_URL}}', adm_url_encoded);
+                    this.invocation_code = result;
+                }
+            },
         },
 
         computed: {
             creative_is_html5() {
                 return this.creative.asset == '' ? false : true;
             }
-
         },
 
         watch: {
