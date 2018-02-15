@@ -607,13 +607,13 @@
                 var creative = campaign.creatives.data[index];
                 console.log(creative);
                 if(invocation == 'adm') {
-                    var result = creative.adm.replace('{{ADM_URL}}', creative.adm_url + '&preview=1');
+                    var result = creative.adm.replace('{{ADM_URL}}', creative.adm_url + '?preview=1');
+                    console.log(result);
                     this.invocation_code = result;
                 }
                 else if(invocation == 'adm_iframe') {
-                    var adm_url_replacement = creative.asset != '' ? '?type=html5&ct=' + creative.adm_url + '&preview=1' : '&preview=1';
+                    var adm_url_replacement = creative.asset != '' ? 'ct=' + encodeURIComponent(creative.adm_url) + '?preview=1' : '&preview=1';
                     var result = creative.adm_iframe.replace('{{ADM_URL}}', adm_url_replacement);
-                    console.log(result);
                     this.invocation_code = result;
                 }
             },
