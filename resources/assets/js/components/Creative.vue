@@ -315,7 +315,7 @@
         <!-- INVOCATION CODE MODAL START -->
         <div class="modal fade" id="_modal-show-invocation" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
-                <div class="modal-content">
+                <div class="modal-content" :style="'width: ' + (creative.w + 32) + 'px; margin: auto'">
                     <div class="modal-header">
                         <button 
                         type="button" 
@@ -328,9 +328,10 @@
                         <h4 class="modal-title">JS</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group" v-html="invocation_code">
-                            
-                        </div>
+                        <div 
+                        class="form-group" 
+                        v-html="invocation_code"
+                        ></div>
                     </div>
                     <div class="modal-footer">
                         <button 
@@ -610,7 +611,7 @@
                     this.invocation_code = result;
                 }
                 else if(invocation == 'adm_iframe') {
-                    var adm_url_encoded = encodeURIComponent(creative.iurl + '?ct=' + creative.adm_url + '&bidid=null&preview=1');
+                    var adm_url_encoded = encodeURIComponent(creative.iurl + '?ct=' + creative.adm_url + '&preview=1');
                     var result = creative.adm_iframe.replace('{{ADM_URL}}', adm_url_encoded);
                     console.log(result);
                     this.invocation_code = result;
