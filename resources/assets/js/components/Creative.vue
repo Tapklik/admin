@@ -451,23 +451,6 @@
                 $("#_modal-show-preview").modal();
             },
 
-            getErlangCampaigns() {
-                axios.get(
-                    'http://104.225.218.101:10006/v1/core/erlang/campaigns'
-                ).then(response => {
-                        var self = this;
-                        var campaigns = response.data.data;
-                        console.log(campaigns);
-                        this.erlang_campaigns = campaigns.filter(campaign => 
-                            campaign.creatives.data.map(creative => 
-                                creative.crid).indexOf(self.creative_id) != -1
-                        );
-                    }, error => {
-
-                    }
-                );
-            },
-
             getAttributes() {
                 axios.get(
                     '/data/attributes.json'
