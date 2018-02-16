@@ -289,22 +289,10 @@
                     <td></td>
                     <td>
                         <button 
-                        @click="openJSON('adm_js', campaign)"
+                        @click="openInvocationCodeModal(campaign)"
                         class="btn btn-primary"
                         >
-                            JS
-                        </button>
-                        <button 
-                        @click="openJSON('adm_iframe', campaign)"
-                        class="btn btn-primary"
-                        >
-                            iFrame
-                        </button>
-                        <button 
-                        @click="openJSON('adm', campaign)"
-                        class="btn btn-primary"
-                        >
-                            View
+                            Preview
                         </button>
                     </td>
                 </tr>
@@ -325,12 +313,12 @@
                         >
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">JS</h4>
+                        <h4 class="modal-title">Invocation Code Preview</h4>
                     </div>
                     <div class="modal-body">
                         <div 
                         class="form-group" 
-                        v-html="invocation_code"
+                        v-html="invocation_code_preview"
                         ></div>
                     </div>
                     <div class="modal-footer">
@@ -431,10 +419,9 @@
                 campaigns: [],
                 campaigns_table_loading: true,
                 campaigns_table_empty: false,
-                invocation_code: 'js',
 
                 //INVOCATION CODE MODAL
-                selected_invocation_code_text: ''
+                invocation_code_preview: '',
             }
         },
 
@@ -597,24 +584,22 @@
             },
 
             //INVOCATION CODE MODAL
-            openJSON(invocation, campaign) {
+            openInvocationCodeModal(invocation, campaign) {
                 this.getInvocationCode(invocation, campaign);
                 $('#_modal-show-invocation').modal();
             },
 
-            getInvocationCode(invocation, campaign) {
+            getInvocationCode(campaign) {
                 var index = campaign.creatives.data.map(creative => creative.id).indexOf(this.creative_id);
                 var creative = campaign.creatives.data[index];
-                console.log(creative);
-                if(invocation == 'adm') {
-                    var result = creative.adm.replace('{{ADM_URL}}', creative.adm_url + '?preview=1');
-                    console.log(result);
-                    this.invocation_code = result;
-                }
-                else if(invocation == 'adm_iframe') {
-                    var adm_url_replacement = creative.asset != '' ? 'ct=' + encodeURIComponent(creative.adm_url) + '?preview=1' : '&preview=1';
+                var html5 = creative.class != 'html5' ? false : true;
+                if(html5) {
+                    var adm_url_replacement = 'ct=' + encodeURIComponent(creative.adm_url) + '?preview=1';
                     var result = creative.adm_iframe.replace('{{ADM_URL}}', adm_url_replacement);
-                    this.invocation_code = result;
+                    this.invocation_code_preview = result;
+                } else {
+                    var result = creative.adm.replace('{{ADM_URL}}', creative.adm_url + '?preview=1');
+                    this.invocation_code_preview = result;
                 }
             },
         },
