@@ -584,8 +584,8 @@
             },
 
             //INVOCATION CODE MODAL
-            openInvocationCodeModal(invocation, campaign) {
-                this.getInvocationCode(invocation, campaign);
+            openInvocationCodeModal(campaign) {
+                this.getInvocationCode(campaign);
                 $('#_modal-show-invocation').modal();
             },
 
