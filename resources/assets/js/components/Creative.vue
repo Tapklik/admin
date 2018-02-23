@@ -351,7 +351,21 @@
                         <h4 class="modal-title">Preview</h4>
                     </div>
                     <div class="modal-body">
-                        <img :src="creative.iurl" />
+                        <img v-if="creative.class != 'html5'" :src="creative.iurl" />
+                        <iframe 
+                        v-else-if="creative.class == 'html5' && campaigns == ''"
+                        :src="previewLink()"
+                        marginwidth='0' 
+                        marginheight='0' 
+                        align='top' 
+                        scrolling='no' 
+                        frameborder='0' 
+                        hspace='0' 
+                        vspace='0' 
+                        height='250' 
+                        width='300'
+                        ></iframe>
+                        <div v-else v-html="invocation_code_preview"></div>
                     </div>
                     <div class="modal-footer">
                         <button 
@@ -446,7 +460,13 @@
                 );
             },
 
-            //CREATIVE   
+            //CREATIVE
+            previewLink() {
+                var result = 'http://104.225.218.101:10015/paint/' + this.creative.id + '?type=html5&preview=1&ct=tapklik.com';
+                console.log(result);
+                return result;
+            },
+
             openCreativePreview() {
                 $("#_modal-show-preview").modal();
             },
