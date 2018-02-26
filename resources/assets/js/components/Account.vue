@@ -13,10 +13,6 @@
                 >
                     <i class="fa fa-plus"></i> Create new user
                 </button>
-                <button style="margin-right: 10px;" class="btn btn-default pull-right" @click="openModal('#_modal-add-creative')">
-                    <i class="fa fa-plus"></i>
-                    Add Creative
-                </button>
             </div>
         </div>
         <!-- HEADER END -->
@@ -495,57 +491,6 @@
             </div>
         </div>
         <!-- CREATE NEW USER END-->
-
-        <!-- ADD CREATIVE START-->   
-        <div class="modal fade" id="_modal-add-creative" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button 
-                        type="button" 
-                        class="close" 
-                        data-dismiss="modal" 
-                        aria-label="Close"
-                        >
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Create New User</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div 
-                            id="uploader" 
-                            class="col-xs-12"
-                            style="padding-top: 15px; padding-bottom: 15px; text-align: center; background: repeating-linear-gradient(45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px), linear-gradient( to bottom, #eee, #999); cursor: pointer;"
-                            @mouseenter="dropzoneMaker()"
-                            >
-                                <span id="uploader-title" >Upload Creative Here</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="modal-footer">
-                            <button 
-                            type="button" 
-                            class="btn btn-default" 
-                            data-dismiss="modal"
-                            >
-                                Close
-                            </button>
-                            <button 
-                            type="button" 
-                            class="btn btn-primary" 
-                            data-dismiss="modal" 
-                            :loading="add_creative_button_loading"
-                            @click="uploadCreative(), add_creative_button_loading = true"
-                            >
-                                Create
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ADD CREATIVE END-->
         <!-- MODALS END -->
 
     </div>
@@ -562,7 +507,6 @@
                 //ESSENTIALS
                 token: '',
                 account_id: window.location.pathname.replace('\/accounts\/', ''),
-                dropzone: false,
 
                 //ACCOUNT DETAILS
                 account: {
@@ -618,62 +562,11 @@
                     phone: '',
                     password: ''
                 },
-                new_creative: {},
                 thumbnail: ''
             }
         },
 
         methods: {
-            dropzoneMaker() {
-                if (this.dropzone !== false) return;
-                this.dropzone = new Dropzone("#uploader", {
-                    url: this.$root.uri + '/creatives',
-                    paramName: 'file',
-                    maxFilesize: 2,
-                    acceptedFiles: 'image/*, application/zip',
-                    headers: {"Authorization": 'Bearer ' + this.token},
-                    autoProcessQueue: false,
-                    thumbnailWidth: 120,
-                    thumbnailHeight: 120,
-                    clickable: ['#uploader', '#uploader-title']
-                });
-
-                this.dropzone.on("addedfile", function(file, thumb) {
-                    var is_zip = file.type.indexOf('zip') != -1 ? true : false;
-                    var sizeInterval = setInterval(function () {
-                        console.log(typeof file.width);
-                        if(typeof file.width != 'undefined' || is_zip) {
-                            this.new_creative = {
-                                w: is_zip ? 0 : file.width,
-                                h: is_zip ? 0 : file.height,
-                                name: file.name.slice(0,file.name.lastIndexOf('.')),
-                                class: is_zip ? 'html5' : 'banner',
-                                url: '',
-                                responsive: 0
-                            };
-                            clearInterval(sizeInterval);
-                        }
-                    }.bind(this), 1000);
-                }.bind(this));
-
-                this.dropzone.on("thumbnail", function(file, thumb) {
-                    this.thumbnail = thumb;
-                }.bind(this));
-            },
-
-            uploadCreative() {
-                this.dropzone.options.params = {
-                    //SEND THE PARAMETERS HERE
-                };
-                this.dropzone.processQueue();
-
-                this.dropzone.on("complete", function (file) {
-                    if (file.status == 'success') {
-                        this.add_creative_button_loading = false;
-                    }
-                }.bind(this));
-            },
-
             //OVERALL        
             buttonLoading(action, condition, id) {
                 for(var button in this.$refs[id]) {
