@@ -13,6 +13,11 @@
                 >
                     <i class="fa fa-plus"></i> Create new user
                 </button>
+                &nbsp;
+                <button class="btn btn-default pull-right" @click="openModal('#_modal-add-creative')">
+                    <i class="fa fa-plus"></i>
+                    Add Creative
+                </button>
             </div>
         </div>
         <!-- HEADER END -->
@@ -239,12 +244,6 @@
         <div class="row">
             <div class="col-xs-6">
                 <h2>Creatives</h2>
-            </div>
-            <div class="col-xs-6">
-                <button class="btn btn-default pull-right" @click="openModal('#_modal-add-creative')">
-                    <i class="fa fa-plus"></i>
-                    Add Creative
-                </button>
             </div>
         </div>
         <table class="table table-striped">
