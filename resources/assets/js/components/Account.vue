@@ -13,8 +13,7 @@
                 >
                     <i class="fa fa-plus"></i> Create new user
                 </button>
-                &nbsp;
-                <button class="btn btn-default pull-right" @click="openModal('#_modal-add-creative')">
+                <button style="margin-right: 10px;" class="btn btn-default pull-right" @click="openModal('#_modal-add-creative')">
                     <i class="fa fa-plus"></i>
                     Add Creative
                 </button>
@@ -536,6 +535,7 @@
                             type="button" 
                             class="btn btn-primary" 
                             data-dismiss="modal" 
+                            :loading="add_creative_button_loading"
                             @click="uploadCreative(), add_creative_button_loading = true"
                             >
                                 Create
