@@ -338,7 +338,7 @@
         <!-- PREVIEW MODAL START -->
         <div class="modal fade" id="_modal-show-preview" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
-                <div class="modal-content" :style="'width: ' + (creative.w + 32) + 'px; margin: auto'">
+                <div class="modal-content" :style="'width: ' + (creative.w + 32) + 'px; margin: auto; max-width: 100%;'">
                     <div class="modal-header">
                         <button 
                         type="button" 
@@ -351,7 +351,7 @@
                         <h4 class="modal-title">Preview</h4>
                     </div>
                     <div class="modal-body">
-                        <img v-if="creative.class != 'html5'" :src="creative.iurl" />
+                        <img v-if="creative.class != 'html5'" width="100%" :src="creative.iurl" />
                         <iframe 
                         v-else-if="creative.class == 'html5' && campaigns == ''"
                         :src="previewLink()"
