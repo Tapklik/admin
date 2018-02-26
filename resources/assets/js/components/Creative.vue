@@ -44,7 +44,7 @@
             </div>              
             <div class="col-xs-8">
                 <button @click="openCreativePreview()" class="btn btn-default">Preview</button>  
-                <a :href="creative.iurl" class="btn btn-default">Download Image</a>    
+                <a :href="creative.iurl" v-show="!creative_is_html5" class="btn btn-default">Download Image</a>    
                 <a :href="creative.asset" v-show="creative_is_html5">
                     <button class="btn btn-default">Download HTML5</button>
                 </a>
