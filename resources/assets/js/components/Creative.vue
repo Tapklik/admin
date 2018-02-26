@@ -48,9 +48,9 @@
                 <a :href="creative.asset" v-show="creative_is_html5">
                     <button class="btn btn-default">Download HTML5</button>
                 </a>
-                <button class="btn btn-default" @click="openUpload('#_modal-add-creative')">
+                <button v-show="creative_is_html5" class="btn btn-default" @click="openUpload('#_modal-add-creative')">
                     <i class="fa fa-plus"></i>
-                    Add Creative
+                    Upload
                 </button>
             </div>               
         </div>
