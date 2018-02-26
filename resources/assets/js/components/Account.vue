@@ -561,8 +561,7 @@
                     email: '',
                     phone: '',
                     password: ''
-                },
-                thumbnail: ''
+                }
             }
         },
 
