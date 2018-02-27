@@ -121,7 +121,7 @@
                         class="btn btn-danger" 
                         @click="deleteUser(user.id)"
                         >
-                            <i class="fa fa-check-circle-o"></i>
+                            <i class="fa fa-trash"></i>
                         </button>
                     </td>
                 </tr>
@@ -225,7 +225,7 @@
                         class="btn btn-danger" 
                         @click="deleteCampaign(campaign.id)"
                         >
-                            <i class="fa fa-check-circle-o"></i>
+                            <i class="fa fa-trash"></i>
                         </button>
                     </td>
                 </tr>
@@ -301,7 +301,7 @@
                         id="delete" 
                         class="btn btn-danger" 
                         @click="deleteCreative(creative.id)">
-                            <i class="fa fa-check-circle-o"></i>
+                            <i class="fa fa-trash"></i>
                         </button>
                     </td>
                 </tr>
