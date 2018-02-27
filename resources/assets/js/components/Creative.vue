@@ -20,17 +20,17 @@
         </div>
         <div class="row">
             <div class="col-xs-2">
-                <select 
-                class="form-control" 
-                id="label-approved" 
-                @change="editCreativeStatus()" 
+                <select
+                class="form-control"
+                id="label-approved"
+                @change="editCreativeStatus()"
                 v-model="creative.approved"
                 >
                     <option value="approved">Approved</option>
                     <option value="pending">Pending</option>
                     <option value="declined">Declined</option>
                 </select>
-            </div> 
+            </div>
             <div class="col-xs-2">
                 <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-print"></span>
@@ -41,10 +41,10 @@
                 <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-tags"></span>
                 </button>
-            </div>              
+            </div>
             <div class="col-xs-8">
-                <button @click="openCreativePreview()" class="btn btn-default">Preview</button>  
-                <a :href="creative.iurl" v-show="!creative_is_html5" class="btn btn-default">Download Image</a>    
+                <button @click="openCreativePreview()" class="btn btn-default">Preview</button>
+                <a :href="creative.iurl" v-show="!creative_is_html5" class="btn btn-default">Download Image</a>
                 <a :href="creative.asset" v-show="creative_is_html5">
                     <button class="btn btn-default">Download HTML5</button>
                 </a>
@@ -52,12 +52,12 @@
                     <i class="fa fa-plus"></i>
                     Upload
                 </button>
-            </div>               
+            </div>
         </div>
         <!-- ACTION BAR END -->
 
-        <hr />     
-        
+        <hr />
+
         <!-- ADEX TABLE START -->
         <div class="well col-xs-3" v-for="(ad, index) in adex">
             <div class="row">
@@ -81,9 +81,9 @@
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc porta aliquet sagittis.
                 </p>
             </div>
-        </div>    
+        </div>
         <!-- ADEX TABLE END -->
-        
+
         <hr />
 
         <!-- CREATIVE START -->
@@ -95,19 +95,19 @@
                             <div class="col-xs-12 col-md-6">
                                 <label for="label-city">Name</label>
                                 <br/>
-                                <input 
-                                type="text" 
-                                class="form-control" 
-                                id="label-city" 
-                                v-model="creative.name" 
+                                <input
+                                type="text"
+                                class="form-control"
+                                id="label-city"
+                                v-model="creative.name"
                                 />
                             </div>
                             <div class="col-xs-12 col-md-6">
                                 <label for="label-approved">Class</label>
                                 <br/>
-                                <select 
-                                class="form-control" 
-                                id="label-approved" 
+                                <select
+                                class="form-control"
+                                id="label-approved"
                                 v-model="creative.class"
                                 >
                                     <option value="banner">Banner</option>
@@ -123,30 +123,30 @@
                             <div class="col-xs-12 col-md-3">
                                 <label for="label-approved">Width</label>
                                 <br/>
-                                <input 
-                                type="text" 
-                                class="form-control" 
-                                id="label-city" 
+                                <input
+                                type="text"
+                                class="form-control"
+                                id="label-city"
                                 v-model="creative.w"
                                 />
                             </div>
                             <div class="col-xs-12 col-md-3">
                                 <label for="label-approved">Height</label>
                                 <br/>
-                                <input 
-                                type="text" 
-                                class="form-control" 
-                                id="label-city" 
+                                <input
+                                type="text"
+                                class="form-control"
+                                id="label-city"
                                 v-model="creative.h"
                                 />
                             </div>
                             <div class="col-xs-12 col-md-6">
                                 <div class="row">
                                     <label for="label-approved"></label><br />
-                                    <input 
-                                    type="checkbox" 
-                                    v-model="creative.responsive" 
-                                    style="margin-left: 20px;" 
+                                    <input
+                                    type="checkbox"
+                                    v-model="creative.responsive"
+                                    style="margin-left: 20px;"
                                     /> Responsive
                                 </div>
                             </div>
@@ -157,14 +157,14 @@
                             <div class="col-xs-12 col-md-12">
                                 <label for="label-approved">Attributes</label>
                                 <br/>
-                                <select 
-                                class="form-control" 
-                                multiple 
-                                id="label-approved" 
+                                <select
+                                class="form-control"
+                                multiple
+                                id="label-approved"
                                 v-model="creative.attr.data"
                                 >
-                                    <option 
-                                    v-for="attribute in attributes" 
+                                    <option
+                                    v-for="attribute in attributes"
                                     :value="attribute.value"
                                     >
                                         {{attribute.description}}
@@ -176,14 +176,14 @@
                 </div>
                 <div class="col-xs-4">
                     <div class="well" style="margin-top: 50px">
-                        <img 
-                        style="display: block; margin:auto" 
-                        :src="creative.thumb" 
+                        <img
+                        style="display: block; margin:auto"
+                        :src="creative.thumb"
                         />
                     </div>
                     <button @click="editCreative()" class="btn btn-default">Edit Creative</button>
                 </div>
-            </div>   
+            </div>
         </div>
         <!-- CREATIVE END -->
 
@@ -198,50 +198,50 @@
                             <div class="col-xs-12">
                                 <label for="label-city">CTR URL</label>
                                 <br/>
-                                <input 
-                                type="text" 
-                                class="form-control" 
-                                id="label-city" 
-                                v-model="creative.ctrurl" 
+                                <input
+                                type="text"
+                                class="form-control"
+                                id="label-city"
+                                v-model="creative.ctrurl"
                                 />
                             </div>
                             <div class="col-xs-12">
                                 <label for="label-city">Tag #1</label>
                                 <br/>
-                                <input 
-                                type="text" 
-                                class="form-control" 
-                                id="label-city" 
-                                v-model="tags[0]" 
+                                <input
+                                type="text"
+                                class="form-control"
+                                id="label-city"
+                                v-model="tags[0]"
                                 />
                             </div>
                             <div class="col-xs-12">
                                 <label for="label-city">Tag #2</label>
                                 <br/>
-                                <input 
-                                type="text" 
-                                class="form-control" 
-                                id="label-city" 
+                                <input
+                                type="text"
+                                class="form-control"
+                                id="label-city"
                                 v-model="tags[1]"
                                 />
                             </div>
                             <div class="col-xs-12">
                                 <label for="label-city">Tag #3</label>
                                 <br/>
-                                <input 
-                                type="text" 
-                                class="form-control" 
-                                id="label-city" 
+                                <input
+                                type="text"
+                                class="form-control"
+                                id="label-city"
                                 v-model="tags[2]"
                                 />
                             </div>
                             <div class="col-xs-12">
                                 <label for="label-city">Tag #4</label>
                                 <br/>
-                                <input 
-                                type="text" 
-                                class="form-control" 
-                                id="label-city" 
+                                <input
+                                type="text"
+                                class="form-control"
+                                id="label-city"
                                 v-model="tags[3]"
                                 />
                             </div>
@@ -271,14 +271,14 @@
             </thead>
             <tbody class="vcenter">
 
-                <!-- TABLE LOADER START -->                   
+                <!-- TABLE LOADER START -->
                 <tr v-if="campaigns_table_loading">
                     <td colspan="11" class="loader text-center">
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                     </td>
                 </tr>
-                <!-- TABLE LOADER END -->                          
-                
+                <!-- TABLE LOADER END -->
+
                 <!-- EMPTY TABLE MESSAGE START -->
                 <tr v-else-if="campaigns_table_empty">
                     <td colspan="11">
@@ -292,7 +292,7 @@
                     <td>{{campaign.ctrurl}}</td>
                     <td></td>
                     <td>
-                        <button 
+                        <button
                         @click="openInvocationCodeModal(campaign)"
                         class="btn btn-primary"
                         >
@@ -302,17 +302,17 @@
                 </tr>
             </tbody>
         </table>
-        <!-- CAMPAIGNS END -->
+        <!-- CAMPAIGNS END -->creati
 
         <!-- INVOCATION CODE MODAL START -->
         <div class="modal fade" id="_modal-show-invocation" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content" :style="'width: ' + (creative.w + 32) + 'px; margin: auto'">
                     <div class="modal-header">
-                        <button 
-                        type="button" 
-                        class="close" 
-                        data-dismiss="modal" 
+                        <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
                         aria-label="Close"
                         >
                             <span aria-hidden="true">&times;</span>
@@ -320,15 +320,15 @@
                         <h4 class="modal-title">Invocation Code Preview</h4>
                     </div>
                     <div class="modal-body">
-                        <div 
-                        class="form-group" 
+                        <div
+                        class="form-group"
                         v-html="invocation_code_preview"
                         ></div>
                     </div>
                     <div class="modal-footer">
-                        <button 
-                        type="button" 
-                        class="btn btn-default" 
+                        <button
+                        type="button"
+                        class="btn btn-default"
                         data-dismiss="modal"
                         >
                             Close
@@ -344,10 +344,10 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content" :style="'width: ' + (creative.w + 32) + 'px; margin: auto; max-width: 100%;'">
                     <div class="modal-header">
-                        <button 
-                        type="button" 
-                        class="close" 
-                        data-dismiss="modal" 
+                        <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
                         aria-label="Close"
                         >
                             <span aria-hidden="true">&times;</span>
@@ -356,25 +356,25 @@
                     </div>
                     <div class="modal-body">
                         <img v-if="creative.class != 'html5'" width="100%" :src="creative.iurl" />
-                        <iframe 
+                        <iframe
                         v-else-if="creative.class == 'html5' && campaigns == ''"
                         :src="previewLink()"
-                        marginwidth='0' 
-                        marginheight='0' 
-                        align='top' 
-                        scrolling='no' 
-                        frameborder='0' 
-                        hspace='0' 
-                        vspace='0' 
-                        height='250' 
-                        width='300'
+                        marginwidth='0'
+                        marginheight='0'
+                        align='top'
+                        scrolling='no'
+                        frameborder='0'
+                        hspace='0'
+                        vspace='0'
+                        :height='creative.h'
+                        :width='creative.w'
                         ></iframe>
                         <div v-else v-html="invocation_code_preview"></div>
                     </div>
                     <div class="modal-footer">
-                        <button 
-                        type="button" 
-                        class="btn btn-default" 
+                        <button
+                        type="button"
+                        class="btn btn-default"
                         data-dismiss="modal"
                         >
                             Close
@@ -385,15 +385,15 @@
         </div>
         <!-- PREVIEW MODAL END -->
 
-                <!-- ADD CREATIVE START-->   
+                <!-- ADD CREATIVE START-->
         <div class="modal fade" id="_modal-add-creative" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button 
-                        type="button" 
-                        class="close" 
-                        data-dismiss="modal" 
+                        <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
                         aria-label="Close"
                         >
                             <span aria-hidden="true">&times;</span>
@@ -402,8 +402,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div 
-                            id="uploader" 
+                            <div
+                            id="uploader"
                             class="col-xs-12"
                             style="padding-top: 15px; padding-bottom: 15px; text-align: center; background: repeating-linear-gradient(45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px), linear-gradient( to bottom, #eee, #999); cursor: pointer;"
                             @mouseenter="dropzoneMaker()"
@@ -413,17 +413,17 @@
                         </div>
                         <hr>
                         <div class="modal-footer">
-                            <button 
-                            type="button" 
-                            class="btn btn-default" 
+                            <button
+                            type="button"
+                            class="btn btn-default"
                             data-dismiss="modal"
                             >
                                 Close
                             </button>
-                            <button 
-                            type="button" 
-                            class="btn btn-primary" 
-                            data-dismiss="modal" 
+                            <button
+                            type="button"
+                            class="btn btn-primary"
+                            data-dismiss="modal"
                             :loading="add_creative_button_loading"
                             @click="uploadCreative(), add_creative_button_loading = true"
                             >
@@ -509,11 +509,12 @@
 
             dropzoneMaker() {
                 if (this.dropzone !== false) return;
+
                 this.dropzone = new Dropzone("#uploader", {
                     url: this.$root.uri + '/creatives',
                     paramName: 'file',
                     maxFilesize: 2,
-                    acceptedFiles: 'image/*, application/zip',
+                    acceptedFiles: 'image/*, application/zip, text/html',
                     headers: {"Authorization": 'Bearer ' + this.token},
                     autoProcessQueue: false,
                     thumbnailWidth: 120,
@@ -574,8 +575,7 @@
             },
 
             previewLink() {
-                var result = this.creative.iurl;
-                return result;
+                return this.creative.html;
             },
 
             openCreativePreview() {
@@ -595,7 +595,7 @@
 
             getCreative() {
                 axios.get(
-                    this.$root.api + 'creatives/' + this.creative_id, 
+                    this.$root.api + 'creatives/' + this.creative_id,
                     this.$root.config
                 ).then(response => {
                         this.creative = response.data.data;
@@ -622,8 +622,8 @@
 
             editCreative() {
                 axios.put(
-                    this.$root.api + 'creatives/' + this.creative_id, 
-                    this.collectCreative(), 
+                    this.$root.api + 'creatives/' + this.creative_id,
+                    this.collectCreative(),
                     this.$root.config
                 ).then(response => {
                         this.editAttributes();
@@ -635,8 +635,8 @@
 
             editAttributes() {
                 axios.post(
-                    this.$root.api + 'creatives/' + this.creative_id + '/attr', 
-                    this.creative.attr.data, 
+                    this.$root.api + 'creatives/' + this.creative_id + '/attr',
+                    this.creative.attr.data,
                     this.$root.config
                 ).then(response => {
                         this.getCreative();
@@ -649,21 +649,21 @@
 
             editCreativeStatus() {
                 axios.put(
-                    this.$root.api + 'creatives/' + this.creative_id, 
-                    { status: this.creative.approved }, 
+                    this.$root.api + 'creatives/' + this.creative_id,
+                    { status: this.creative.approved },
                     this.$root.config
                 ).then(response => {
-                
+
                     }, error => {
 
                     }
                 );
             },
-            
+
             //CTRURL
             splitCtrurl() {
                 if(this.creative.ctrurl == null) return;
-                
+
                 var ctrurl = this.creative.ctrurl;
                 var split_ctrurl = ctrurl.split("?"); //split the ctrurl and put in an array
                 this.creative.ctrurl = split_ctrurl[0]; //assign the first value to ctrurl
@@ -676,20 +676,20 @@
                 var tags = this.tags;
                 return tags.filter(tag => tag !== '');
             },
-            
+
             //CAMPAIGNS
             getCampaigns() {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account_id + '/campaigns', 
+                    this.$root.api + 'accounts/' +  this.account_id + '/campaigns',
                     this.$root.config
                 ).then(response => {
                         var self = this;
                         var campaigns = response.data.data;
-                        this.campaigns = campaigns.filter(campaign => 
-                            campaign.creatives.data.map(creative => 
+                        this.campaigns = campaigns.filter(campaign =>
+                            campaign.creatives.data.map(creative =>
                                 creative.id).indexOf(self.creative_id) != -1
                         );
-                        this.campaigns_table_empty = this.campaigns == '' ? true : false; 
+                        this.campaigns_table_empty = this.campaigns == '' ? true : false;
                         this.campaigns_table_loading = false;
                     }, error => {
                         this.campaigns_table_loading = false;
