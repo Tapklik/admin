@@ -574,8 +574,7 @@
             },
 
             previewLink() {
-                var result = 'http://104.225.218.101:10015/paint/' + this.creative.id + '?type=html5&preview=1&ct=tapklik.com';
-                console.log(result);
+                var result = this.creative.iurl;
                 return result;
             },
 

@@ -2,7 +2,8 @@
 /storage
 /vendor
 /.idea
-/public/js/app.js
+/public/js
+/public/css
 Homestead.json
 Homestead.yaml
 .env
