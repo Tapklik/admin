@@ -13,8 +13,7 @@
 
         <!-- ACTION BAR START -->
         <div class="row">
-            <div class="col-xs-2"></div>
-            <div class="col-xs-2">
+            <div class="col-xs-2 col-xs-offset-2">
                 Actions
             </div>
         </div>
@@ -49,8 +48,10 @@
                     <button class="btn btn-default">Download HTML5</button>
                 </a>
                 <button v-show="creative_is_html5" class="btn btn-default" @click="openUpload('#_modal-add-creative')">
-                    <i class="fa fa-plus"></i>
                     Upload
+                </button>
+                <button @click="verifyCreative()" class="btn btn-default">
+                    Verify
                 </button>
             </div>
         </div>
@@ -302,7 +303,7 @@
                 </tr>
             </tbody>
         </table>
-        <!-- CAMPAIGNS END -->creati
+        <!-- CAMPAIGNS END -->
 
         <!-- INVOCATION CODE MODAL START -->
         <div class="modal fade" id="_modal-show-invocation" tabindex="-1" role="dialog">
@@ -355,21 +356,10 @@
                         <h4 class="modal-title">Preview</h4>
                     </div>
                     <div class="modal-body">
-                        <img v-if="creative.class != 'html5'" width="100%" :src="creative.iurl" />
-                        <iframe
-                        v-else-if="creative.class == 'html5' && campaigns == ''"
-                        :src="previewLink()"
-                        marginwidth='0'
-                        marginheight='0'
-                        align='top'
-                        scrolling='no'
-                        frameborder='0'
-                        hspace='0'
-                        vspace='0'
-                        :height='creative.h'
-                        :width='creative.w'
-                        ></iframe>
-                        <div v-else v-html="invocation_code_preview"></div>
+                        <div
+                        class="form-group"
+                        v-html="preview"
+                        ></div>
                     </div>
                     <div class="modal-footer">
                         <button
@@ -453,9 +443,12 @@
                 token: this.token,
                 creative_id: '',
                 account_id: '',
+                account_name: '',
                 adex: {},
                 dropzone: false,
                 thumbnail: '',
+                preview: '',
+                creative_validation: '',
 
                 //CREATIVE
                 new_creative: {},
@@ -507,35 +500,41 @@
                 this.account_id = ids[2];
             },
 
+            getAccountName() {
+                axios.get(
+                    this.$root.api + 'accounts/' + this.account_id,
+                    this.$root.config
+                ).then( response => {
+                    this.account_name = response.data.data.name;
+                }, error => {
+                    this.account_name = '';
+                });
+            },
+
             dropzoneMaker() {
                 if (this.dropzone !== false) return;
-
+                var self = this;
                 this.dropzone = new Dropzone("#uploader", {
-                    url: this.$root.uri + '/creatives',
+                    url: this.$root.api + 'creatives',
                     paramName: 'file',
                     maxFilesize: 2,
-                    acceptedFiles: 'image/*, application/zip, text/html',
+                    acceptedFiles: 'image/*, application/zip, text/html, .html',
                     headers: {"Authorization": 'Bearer ' + this.token},
                     autoProcessQueue: false,
                     thumbnailWidth: 120,
                     thumbnailHeight: 120,
                     clickable: ['#uploader', '#uploader-title']
                 });
-
                 this.dropzone.on("addedfile", function(file, thumb) {
+                    console.log(file);
                     var is_zip = file.type.indexOf('zip') != -1 ? true : false;
                     var sizeInterval = setInterval(function () {
-                        if(typeof file.width != 'undefined' || is_zip) {
-                            this.new_creative = {
-                                w: is_zip ? 0 : file.width,
-                                h: is_zip ? 0 : file.height,
-                                name: file.name.slice(0,file.name.lastIndexOf('.')),
-                                class: is_zip ? 'html5' : 'banner',
-                                url: '',
-                                responsive: 0
-                            };
-                            clearInterval(sizeInterval);
-                        }
+                        self.new_creative = {
+                            path: self.creative.html.substr(self.creative.html.indexOf('creatives')),
+                            name: file.name,
+                            nosave: 1
+                        };
+                        clearInterval(sizeInterval);
                     }.bind(this), 1000);
                 }.bind(this));
 
@@ -546,7 +545,9 @@
 
             uploadCreative() {
                 this.dropzone.options.params = {
-                    //SEND THE PARAMETERS HERE
+                    path: this.new_creative.path,
+                    name: this.new_creative.name,
+                    nosave: this.new_creative.nosave
                 };
                 this.dropzone.processQueue();
 
@@ -570,12 +571,44 @@
             },
 
             //CREATIVE
+            verifyCreative() {
+                var payload = this.verifyCreativePayload();
+                console.log(payload);
+                axios.post(
+                    this.$root.api + 'creatives/' + this.creative_id + '/verification',
+                    payload,
+                    this.$root.config
+                ).then(response => {
+
+                }, error => {
+
+                });
+            },
+
+            verifyCreativePayload() {
+                var ctrurls = [];
+                var verification_url = this.creative.ctrurl == null ? this.creative.adm_url : this.creative.ctrurl;
+                if (verification_url != null) ctrurls.push(verification_url);
+                else verification_url = '';
+                var snippet = this.creative_validation;
+                return {
+                    advertiserName: this.account_name,
+                    html: {
+                        height: this.creative.h,
+                        snippet: snippet,
+                        width: this.creative.w
+                    },
+                    creativeId: this.creative.id,
+                    clickThroughUrls: ctrurls
+                };
+            },
+
             openUpload(target) {
                 $(target).modal();
             },
 
             previewLink() {
-                return this.creative.html;
+                return this.creative.html + '?preview=1&ct=' + encodeURIComponent(this.creative.ctrurl) + '&type=html5';
             },
 
             openCreativePreview() {
@@ -716,6 +749,24 @@
                     this.invocation_code_preview = result;
                 }
             },
+
+            getPreview(validation) {
+                var creative = this.creative;
+                var html5 = creative.class != 'html5' ? false : true;
+                var validate = '';
+                if(html5) {
+                    validate = creative.adm_iframe;
+                    if(validation) validate = creative.adm_iframe.replace('?', '?%%CLICK_URL_ESC%%');
+                    var adm_url_replacement = 'ct=' + encodeURIComponent(creative.adm_url) + '?preview=1';
+                    var result = validate.replace('{{ADM_URL}}', adm_url_replacement);
+                    this.creative_validation = result;
+                } else {
+                    validate = creative.adm;
+                    if(validation) validate = creative.adm.replace('?', '?%%CLICK_URL_UNESC%%');
+                    var result = validate.replace('{{ADM_URL}}', creative.adm_url + '?preview=1');
+                    this.creative_validation = result;
+                }
+            }
         },
 
         computed: {
@@ -729,9 +780,12 @@
                 this.getCreative();
                 this.getCampaigns();
                 this.getAttributes();
+                this.getAccountName();
             },
             creative(value) {
                 this.splitCtrurl();
+                this.getPreview();
+                this.getPreview(true);
             }
         }
     }
