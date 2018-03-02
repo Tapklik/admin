@@ -513,7 +513,6 @@
 
             dropzoneMaker() {
                 if (this.dropzone !== false) return;
-                var self = this;
                 this.dropzone = new Dropzone("#uploader", {
                     url: this.$root.api + 'creatives',
                     paramName: 'file',
@@ -526,11 +525,10 @@
                     clickable: ['#uploader', '#uploader-title']
                 });
                 this.dropzone.on("addedfile", function(file, thumb) {
-                    console.log(file);
                     var is_zip = file.type.indexOf('zip') != -1 ? true : false;
                     var sizeInterval = setInterval(function () {
-                        self.new_creative = {
-                            path: self.creative.html.substr(self.creative.html.indexOf('creatives')),
+                        this.new_creative = {
+                            path: this.creative.html.substr(this.creative.html.indexOf('creatives')),
                             name: file.name,
                             nosave: 1
                         };
@@ -573,7 +571,6 @@
             //CREATIVE
             verifyCreative() {
                 var payload = this.verifyCreativePayload();
-                console.log(payload);
                 axios.post(
                     this.$root.api + 'creatives/' + this.creative_id + '/verification',
                     payload,
