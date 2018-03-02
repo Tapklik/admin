@@ -448,7 +448,7 @@
                 dropzone: false,
                 thumbnail: '',
                 preview: '',
-                creative_validation: '',
+                preview_validation: '',
 
                 //CREATIVE
                 new_creative: {},
@@ -587,7 +587,7 @@
                 var verification_url = this.creative.ctrurl == null ? this.creative.adm_url : this.creative.ctrurl;
                 if (verification_url != null) ctrurls.push(verification_url);
                 else verification_url = '';
-                var snippet = this.preview;
+                var snippet = this.preview_validation;
                 return {
                     advertiserName: this.account_name,
                     html: {
@@ -602,10 +602,6 @@
 
             openUpload(target) {
                 $(target).modal();
-            },
-
-            previewLink() {
-                return this.creative.html + '?preview=1&ct=' + encodeURIComponent(this.creative.ctrurl) + '&type=html5';
             },
 
             openCreativePreview() {
@@ -751,15 +747,21 @@
                 var creative = this.creative;
                 var html5 = creative.class != 'html5' ? false : true;
                 var validate = '';
+                var result = '';
+                var validation = '';
                 if(html5) {
                     validate = creative.adm_iframe;
-                    var adm_url_replacement = 'ct=' + encodeURIComponent(creative.adm_url) + '?preview=1';
-                    var result = validate.replace('{{ADM_URL}}', adm_url_replacement);
+                    adm_url_replacement = 'ct=' + encodeURIComponent(creative.adm_url) + '?preview=1';
+                    result = validate.replace('{{ADM_URL}}', adm_url_replacement);
                     this.preview = result;
+                    validation = result.replace('?preview=1', '');
+                    this.preview_validation = validation;
                 } else {
                     validate = creative.adm;
-                    var result = validate.replace('{{ADM_URL}}', creative.adm_url + '?preview=1');
+                    result = validate.replace('{{ADM_URL}}', creative.adm_url + '?preview=1');
                     this.preview = result;
+                    validation = result.replace('?preview=1', '');
+                    this.preview_validation = validation;
                 }
             }
         },
