@@ -749,16 +749,17 @@
                 var validate = '';
                 var result = '';
                 var validation = '';
+                var url = creative.ctrurl == null ? creative.adm_url : creative.ctrurl;
                 if(html5) {
                     validate = creative.adm_iframe;
-                    adm_url_replacement = 'ct=' + encodeURIComponent(creative.adm_url) + '?preview=1';
+                    adm_url_replacement = 'ct=' + encodeURIComponent(url) + '?preview=1';
                     result = validate.replace('{{ADM_URL}}', adm_url_replacement);
                     this.preview = result;
                     validation = result.replace('?preview=1', '');
                     this.preview_validation = validation;
                 } else {
                     validate = creative.adm;
-                    result = validate.replace('{{ADM_URL}}', creative.adm_url + '?preview=1');
+                    result = validate.replace('{{ADM_URL}}', url + '?preview=1');
                     this.preview = result;
                     validation = result.replace('?preview=1', '');
                     this.preview_validation = validation;
