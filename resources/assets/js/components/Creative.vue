@@ -596,7 +596,7 @@
                         width: this.creative.w
                     },
                     creativeId: this.creative.id,
-                    clickThroughUrls: ctrurls
+                    clickThroughUrls: verification_url
                 };
             },
 
