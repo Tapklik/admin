@@ -38,11 +38,7 @@ const app = new Vue({
         path: '//api.tapklik.com/',
         token: false,
         config: {},
-        account: {
-            id: null,
-            creativeId: null,
-            campaignId: null
-        }
+        user: {}
     },
 
     mounted () {
@@ -50,6 +46,37 @@ const app = new Vue({
     },
 
     methods: {
+        getUserInfo() {
+            axios.get(
+                this.api + 'accounts/info', 
+                this.config
+            ).then(response => {
+                    this.user = response.data;
+                }, error => {
+                    this.showAlertPopUp('error', 'Something went wrong');
+                }
+            );
+        },
+
+        createNotification(notification_message, users) {
+            var today = new Date();
+            var created_at = today.getTime() / 1000;
+            var payload = {
+                service: ['onead'],
+                message: notification_message,
+                users: users,
+                created_at: created_at.toString()
+            }
+            axios.post(
+                this.api + 'core/notifications',
+                {config: payload},
+                this.$root.config
+            ).then(response => {
+                
+            }, error => {
+
+            });
+        },
 
         getApiToken() {
             axios.get('/core/token').then(response => {
@@ -78,6 +105,7 @@ const app = new Vue({
             if(value == false) return;
             this.$children[0].token = value;
             this.config = {headers: {'Authorization': "Bearer " + this.token}};
+            this.getUserInfo();
         }
     },
 });

@@ -212,7 +212,7 @@
                     </td>
                     <td>
                         <select  
-                        @change="toggleCampaignStatus(campaign.id, campaign.status)" 
+                        @change="toggleCampaignStatus(campaign)" 
                         v-model="campaign.status">
                             <option v-for="status in statuses" :value="status">{{ status }}</option>
                         </select>
@@ -290,7 +290,7 @@
                         :ref="creative.id"
                         id="toggle"
                         :class="creative.approved == 'approved' ? 'btn btn-success': 'btn btn-danger'" 
-                        @click="toggleCreativeStatus(creative.id, creative.approved)"
+                        @click="toggleCreativeStatus(creative)"
                         >
                             <i class="fa fa-check-circle-o"></i>
                         </button>
@@ -701,13 +701,16 @@
                 );
             },
 
-            toggleCampaignStatus(id, status) {
+            toggleCampaignStatus(campaign) {
+                var additional_message = status == 'active' ? 'Go get \'em!' : '';
+                var users = this.users.map(user => user.id);
                 axios.put(
-                    this.$root.api + 'campaigns/' + id, 
-                    {status: status}, 
+                    this.$root.api + 'campaigns/' + campaign.id, 
+                    {status: campaign.status}, 
                     this.$root.config
                 ).then(response => {
                         this.getCampaigns();
+                        this.$root.createNotification('Campaign ' + campaign.name + ' (id: ' + campaign.id + ') is ' + campaign.status + '.' + additional_message, users);
                     }, error => {
                         this.getCampaigns();
                     }
@@ -750,22 +753,24 @@
                 this.creatives_table_loading = false;
             },
 
-            toggleCreativeStatus(id, status) {
+            toggleCreativeStatus(creative) {
                 var toggle_statuses = {
                     approved: 'declined',
                     declined: 'approved',
                     pending: 'approved'
                 };
-                this.buttonLoading('toggle', true, id);
-
+                this.buttonLoading('toggle', true, creative.id);
+                var users = this.users.map(user => user.id);
+                var additional_message = toggle_statuses[creative.status] == 'approved' ? 'Happy campaigning!' : '';
                 axios.put(
-                    this.$root.api + 'creatives/' + id, 
-                    {status: toggle_statuses[status]}, 
+                    this.$root.api + 'creatives/' + creative.id, 
+                    {status: toggle_statuses[creative.status]}, 
                     this.$root.config
                 ).then(response => {
-                        this.getCreatives(id);
+                        this.$root.createNotification('Creative ' + creative.name + ' (id: ' + creative.id + ') is ' + toggle_statuses[creative.status] + '.' + additional_message, users);
+                        this.getCreatives(creative.id);
                     }, error => {
-                        this.getCreatives(id);
+                        this.getCreatives(creative.id);
                     }
                 );
             },

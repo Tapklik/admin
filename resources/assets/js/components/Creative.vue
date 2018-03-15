@@ -53,6 +53,9 @@
                 <button @click="verifyCreative()" class="btn btn-default">
                     Verify
                 </button>
+                <button @click="checkCreativeStatus()" class="btn btn-default">
+                    Check Status
+                </button>
             </div>
         </div>
         <!-- ACTION BAR END -->
@@ -569,6 +572,20 @@
             },
 
             //CREATIVE
+            checkCreativeStatus() {
+                axios.get(
+                    this.$root.api + 'creatives/' + this.creative_id + '/status',
+                    this.$root.config
+                ).then(response => {
+                        console.log(response);
+                        var status = response.data.status;
+                        alert('This creative is: ' + status);
+                    }, error => {
+                        alert('Could not retrieve creative status.');
+                    }
+                );
+            },
+
             verifyCreative() {
                 var payload = this.verifyCreativePayload();
                 axios.post(
@@ -749,19 +766,20 @@
                 var validate = '';
                 var result = '';
                 var validation = '';
+                var adm_url_replacement;
                 var url = creative.ctrurl == null ? creative.adm_url : creative.ctrurl;
                 if(html5) {
                     validate = creative.adm_iframe;
-                    adm_url_replacement = 'ct=' + encodeURIComponent(url) + '?preview=1';
+                    adm_url_replacement = 'preview=1&ct=' + encodeURIComponent(url);
                     result = validate.replace('{{ADM_URL}}', adm_url_replacement);
                     this.preview = result;
-                    validation = result.replace('?preview=1', '');
+                    validation = result.replace('&preview=1&ct=', '&ct=%%CLICK_URL_ESC%%');
                     this.preview_validation = validation;
                 } else {
                     validate = creative.adm;
                     result = validate.replace('{{ADM_URL}}', url + '?preview=1');
                     this.preview = result;
-                    validation = result.replace('?preview=1', '');
+                    validation = result.replace(url + '?preview=1', '%%CLICK_URL_UNESC%%' + url);
                     this.preview_validation = validation;
                 }
             }
