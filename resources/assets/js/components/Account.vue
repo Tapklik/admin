@@ -703,7 +703,7 @@
 
             toggleCampaignStatus(campaign) {
                 var additional_message = status == 'active' ? 'Go get \'em!' : '';
-                var users = this.users.map(user => user.id);
+                var users = this.users.map(user => user.internalId);
                 axios.put(
                     this.$root.api + 'campaigns/' + campaign.id, 
                     {status: campaign.status}, 
@@ -760,7 +760,7 @@
                     pending: 'approved'
                 };
                 this.buttonLoading('toggle', true, creative.id);
-                var users = this.users.map(user => user.id);
+                var users = this.users.map(user => user.internalId);
                 var additional_message = toggle_statuses[creative.status] == 'approved' ? 'Happy campaigning!' : '';
                 axios.put(
                     this.$root.api + 'creatives/' + creative.id, 

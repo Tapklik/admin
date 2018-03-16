@@ -185,7 +185,7 @@
                     this.$root.api + 'accounts/' + this.account_id + '/users', 
                     this.$root.config
                 ).then(response => { 
-                        this.users = response.data.data.map(user => user.id);
+                        this.users = response.data.data.map(user => user.internalId);
                     }, error => {
 
                     }
