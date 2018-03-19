@@ -732,6 +732,7 @@
 
             getCreatives(id) {
                 var folders = this.folders;
+                this.creatives = [];
                 if (folders == '') this.creatives_table_empty = true;
                 for (var folder in folders) {
                     axios.get(
@@ -759,15 +760,16 @@
                     declined: 'approved',
                     pending: 'approved'
                 };
+                var new_status = toggle_statuses[creative.approved];
                 this.buttonLoading('toggle', true, creative.id);
                 var users = this.users.map(user => user.internalId);
-                var additional_message = toggle_statuses[creative.status] == 'approved' ? 'Happy campaigning!' : '';
+                var additional_message = new_status == 'approved' ? ' Happy campaigning!' : '';
                 axios.put(
                     this.$root.api + 'creatives/' + creative.id, 
-                    {status: toggle_statuses[creative.status]}, 
+                    {status: new_status}, 
                     this.$root.config
                 ).then(response => {
-                        this.$root.createNotification('Creative ' + creative.name + ' (id: ' + creative.id + ') is ' + toggle_statuses[creative.status] + '.' + additional_message, users);
+                        this.$root.createNotification('Creative ' + creative.name + ' (id: ' + creative.id + ') is ' + new_status + '.' + additional_message, users);
                         this.getCreatives(creative.id);
                     }, error => {
                         this.getCreatives(creative.id);

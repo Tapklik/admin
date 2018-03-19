@@ -46,18 +46,6 @@ const app = new Vue({
     },
 
     methods: {
-        getUserInfo() {
-            axios.get(
-                this.api + 'accounts/info', 
-                this.config
-            ).then(response => {
-                    this.user = response.data;
-                }, error => {
-                    this.showAlertPopUp('error', 'Something went wrong');
-                }
-            );
-        },
-
         createNotification(notification_message, users) {
             var today = new Date();
             var created_at = today.getTime() / 1000;
@@ -105,7 +93,6 @@ const app = new Vue({
             if(value == false) return;
             this.$children[0].token = value;
             this.config = {headers: {'Authorization': "Bearer " + this.token}};
-            this.getUserInfo();
         }
     },
 });
