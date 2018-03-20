@@ -162,6 +162,7 @@
                 token: this.token,
                 search_bills: '',
                 account_id: this.getAccountId(),
+                users: [],
 
                 //BILLS
                 bills: [],
@@ -179,6 +180,18 @@
         methods: {
 
             //OVERALL
+            getUsers(id) {
+                axios.get(
+                    this.$root.api + 'accounts/' + this.account_id + '/users', 
+                    this.$root.config
+                ).then(response => { 
+                        this.users = response.data.data.map(user => user.internalId);
+                    }, error => {
+
+                    }
+                );
+            },
+
             getAccountId() {
                 var pathname = window.location.pathname;
                 var result = pathname.split("/");
@@ -227,6 +240,7 @@
                     this.collectNewBill(), 
                     this.$root.config
                 ).then(response => {
+                        this.$root.createNotification('Your account has been successfully topped up with $' + this.new_bill.credit, this.users);
                         this.clearNewBill();
                         this.getBills();
                     }, error => {
@@ -252,7 +266,8 @@
 
         watch: {
             token(value) {
-                this.getBills()
+                this.getBills();
+                this.getUsers();
             }
         }
     }
