@@ -1,7 +1,12 @@
-<?php namespace App\Packages\Tasker\Contracts;
+<?php namespace Tapklik\Tasker\Contracts;
 
 
-abstract class AbstractService
+abstract class AbstractService implements ServiceInterface
 {
+	protected $service;
 
+	public function __construct()
+	{
+
+	}
 }

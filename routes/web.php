@@ -2,8 +2,9 @@
 
 use App\Http\Middleware\Authenticate;
 use Illuminate\Http\Request;
+	use Tapklik\Exceptions\TapklikException;
 
-Route::get('/', function () {
+	Route::get('/', function () {
 
     return redirect('/auth');
 });
@@ -120,6 +121,8 @@ Route::get(
 		return redirect('/auth');
 	}
 );
+
+
 
 Route::get('data/countries', function () {
 

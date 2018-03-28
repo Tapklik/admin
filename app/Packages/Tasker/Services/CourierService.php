@@ -2,7 +2,11 @@
 
 use Tapklik\Tasker\Contracts\AbstractService;
 
-class TapklikPostmaster extends AbstractService
+class CourierService extends AbstractService
 {
 
+	public function getService()
+	{
+		
+	}
 }

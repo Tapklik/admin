@@ -1,29 +1,28 @@
 <?php namespace App\Packages\Tasker\Contracts;
 
 use Tapklik\Tasker\Contracts\RecipeInterface;
-use Tapklik\Tasker\Handlers\GuzzleHandler;
+use Tapklik\Tasker\Services\CourierService;
+use Tapklik\Tasker\Services\HttpClientService;
 
 abstract class AbstractRecipe implements RecipeInterface
 {
-	protected $client;
+	protected $http;
+	protected $courier;
 	protected $message;
 
-	public function __construct() {
+	public function __construct()
+	{
+		$this->http = (new HttpClientService())->getService(); // Provide HTTP functionality to all recipes
+		$this->courier = (new CourierService())->getService(); // Provide notification functionality to all recipes
 
-		$config = [
-			'base_uri' => 'https://api.tapklik.com',
-			'version' => 'v1',
-			'headers' => [
-				'User-Agent' => 'TKTasker/v1.0.0',
-				'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIiwianRpIjoiMTIzNDUifQ.eyJpc3MiOiJodHRwczpcL1wvYXBpLnRhcGtsaWsuY29tIiwiYXVkIjoiaHR0cHM6XC9cL2FwaS50YXBrbGlrLmNvbSIsImp0aSI6IjEyMzQ1IiwiaWF0IjoxNTE4MDgwNzY4LCJleHAiOjE1MjA2NzI3NjgsImVtYWlsIjoiaW5mb0B0YXBrbGlrLmNvbSIsImlkIjo1LCJ1dWlkIjoiZDZiYzMwIiwiYWNjb3VudElkIjo2LCJhY2NvdW50VXVJZCI6ImQ2NDM0MyIsIm5hbWUiOiJIYWxpZCBNb3VzYSIsInJvbGUiOiJ1c2VyIiwidHV0b3JpYWwiOjEsImNhbXBhaWducyI6WyIzZjE3YzZjZDhkIiwiYzY3Y2QyZTQ0NiJdfQ.'
-			]
-		];
-
-		$this->client = (new GuzzleHandler($config))->getHandler();
+		$this->boot(); // Boot class if we need any additional processing prior to execution
 	}
 
 	protected function setMessage(string $message)
 	{
 		$this->message = $message;
 	}
+
+	abstract function boot();
+
 }
