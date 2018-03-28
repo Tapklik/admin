@@ -30,10 +30,13 @@ Route::get('/user', function (Request $request) {
 
 			$class = "\\Tapklik\\Tasker\\Recipes\\{$task}";
 
-			return response([
-				'error' => true,
-				'message' => sprintf('Recipe %s does not exist.', $task)
-			]);
+			if(!class_exists($class))
+			{
+				return response([
+					'error' => true,
+					'message' => sprintf('Recipe %s does not exist.', $task)
+				]);
+			}
 
 			try {
 				$tasker = (new $class)->handle();
