@@ -29,13 +29,38 @@ Vue.component('support-graphs', require('./components/SupportGraphs.vue'));
 /*LOGIN COMPONENT*/
 Vue.component('auth', require('./components/Auth.vue'));
 
+
+// ** PRODUCTION
+var envUri = 'https://api.tapklik.com/v1'; 
+var reportUri = 'https://reports.tapklik.com/api/query';
+var erlangtUri = 'https://boss.services.tapklik.com/api/v1';
+
+
+// ** LOCAL
+if(window.location.hostname.search('local') > -1 || window.location.hostname.search('127')  > -1) {
+    envUri = '//local.api.tapklik.com/v1';
+    reportUri: '//104.225.218.101:10002/api/query';
+    erlangtUri = '//104.225.218.109:2301/api/v1';
+}
+
+// ** DEVELOPMENT
+if(window.location.hostname.search('alpha') > -1) {
+    envUri = '//104.225.218.101:10006/v1';
+    reportUri: '//104.225.218.101:10002/api/query';
+    erlangtUri = '//104.225.218.109:2301/api/v1';
+
+}
+if(window.location.hostname.search('local.onead.tapklik.com') > -1) envUri = '//104.225.218.101:10006/v1';
+
+
+
 const app = new Vue({
     el: '#app',
     data: {
-        version: 'v0.3.1-ALPHA',
-        erlang_api: 'http://104.225.218.109:2301/api/v1/',
-        api : 'http://104.225.218.101:10006/v1/',
-        path: '//api.tapklik.com/',
+        version: 'v0.3.2',
+        erlang_api: erlangUri,
+        api : envApi,
+        path: envUri,
         token: false,
         config: {},
         user: {}
