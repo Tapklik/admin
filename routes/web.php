@@ -109,6 +109,11 @@ Route::group(
                 return response()->json(['token' => true]);
             }
         );
+
+         Route::get('/health', [
+            'as' => 'health',
+            'uses' => 'HealthCheckController@index'
+        ]);
     }
 );
 
