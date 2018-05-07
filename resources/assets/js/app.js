@@ -61,6 +61,7 @@ const app = new Vue({
         erlang_api: erlangUri,
         api : envApi,
         path: envUri,
+
         token: false,
         config: {},
         user: {}
