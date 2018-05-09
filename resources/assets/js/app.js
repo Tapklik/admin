@@ -59,7 +59,7 @@ const app = new Vue({
     data: {
         version: 'v0.3.2',
         erlang_api: erlangUri,
-        api : envApi,
+        api : envUri,
         path: envUri,
 
         token: false,
