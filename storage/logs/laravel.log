@@ -1,0 +1,8 @@
+[2017-08-11 15:37:30] local.ERROR: Symfony\Component\Console\Exception\CommandNotFoundException: There are no commands defined in the "clear" namespace. in /var/www/admin.tapklik.com/vendor/symfony/console/Application.php:538
+Stack trace:
+#0 /var/www/admin.tapklik.com/vendor/symfony/console/Application.php(570): Symfony\Component\Console\Application->findNamespace('clear')
+#1 /var/www/admin.tapklik.com/vendor/symfony/console/Application.php(209): Symfony\Component\Console\Application->find('clear:cache')
+#2 /var/www/admin.tapklik.com/vendor/symfony/console/Application.php(130): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#3 /var/www/admin.tapklik.com/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(122): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 /var/www/admin.tapklik.com/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 {main}  
