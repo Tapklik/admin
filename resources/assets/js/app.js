@@ -82,7 +82,7 @@ const app = new Vue({
                 created_at: created_at.toString()
             }
             axios.post(
-                this.api + 'core/notifications',
+                this.api + '/core/notifications',
                 {config: payload},
                 this.$root.config
             ).then(response => {
