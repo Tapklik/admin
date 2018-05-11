@@ -67,7 +67,7 @@
                 this.login_button_loading = true;
                 
                 axios.post(
-                    this.$root.api + 'auth', 
+                    this.$root.api + '/auth', 
                     this.credentials
                 ).then(response => {
                         this.token = atob(response.data.token);
