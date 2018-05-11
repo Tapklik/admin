@@ -129,7 +129,7 @@
             //CAMPAIGN CREATIVES 
             getCampaignCreatives() {
                 axios.get(
-                    this.$root.api + 'campaigns/' + this.campaign_id, 
+                    this.$root.api + '/campaigns/' + this.campaign_id, 
                     this.$root.config
                 ).then(response => {
                         this.campaign_creatives = response.data.data.creatives.data;
@@ -149,7 +149,7 @@
                 this.buttonLoading('toggle', true, id);
 
                 axios.put(
-                    this.$root.api + 'creatives/' + id, 
+                    this.$root.api + '/creatives/' + id, 
                     { status: toggleBag[status] }, 
                     this.$root.config
                 ).then(response => {
@@ -166,7 +166,7 @@
                 this.buttonLoading('delete', true, id);
 
                 axios.delete(
-                    this.$root.api + 'creatives/' + id, 
+                    this.$root.api + '/creatives/' + id, 
                     this.$root.config
                 ).then(response => {
                         this.buttonLoading('delete', false, id);

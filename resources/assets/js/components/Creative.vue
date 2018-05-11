@@ -505,7 +505,7 @@
 
             getAccountName() {
                 axios.get(
-                    this.$root.api + 'accounts/' + this.account_id,
+                    this.$root.api + '/accounts/' + this.account_id,
                     this.$root.config
                 ).then( response => {
                     this.account_name = response.data.data.name;
@@ -517,7 +517,7 @@
             dropzoneMaker() {
                 if (this.dropzone !== false) return;
                 this.dropzone = new Dropzone("#uploader", {
-                    url: this.$root.api + 'creatives',
+                    url: this.$root.api + '/creatives',
                     paramName: 'file',
                     maxFilesize: 2,
                     acceptedFiles: 'image/*, application/zip, text/html, .html',
@@ -574,7 +574,7 @@
             //CREATIVE
             checkCreativeStatus() {
                 axios.get(
-                    this.$root.api + 'creatives/' + this.creative_id + '/status',
+                    this.$root.api + '/creatives/' + this.creative_id + '/status',
                     this.$root.config
                 ).then(response => {
                         console.log(response);
@@ -589,7 +589,7 @@
             verifyCreative() {
                 var payload = this.verifyCreativePayload();
                 axios.post(
-                    this.$root.api + 'creatives/' + this.creative_id + '/verification',
+                    this.$root.api + '/creatives/' + this.creative_id + '/verification',
                     payload,
                     this.$root.config
                 ).then(response => {
@@ -638,7 +638,7 @@
 
             getCreative() {
                 axios.get(
-                    this.$root.api + 'creatives/' + this.creative_id,
+                    this.$root.api + '/creatives/' + this.creative_id,
                     this.$root.config
                 ).then(response => {
                         this.creative = response.data.data;
@@ -665,7 +665,7 @@
 
             editCreative() {
                 axios.put(
-                    this.$root.api + 'creatives/' + this.creative_id,
+                    this.$root.api + '/creatives/' + this.creative_id,
                     this.collectCreative(),
                     this.$root.config
                 ).then(response => {
@@ -678,7 +678,7 @@
 
             editAttributes() {
                 axios.post(
-                    this.$root.api + 'creatives/' + this.creative_id + '/attr',
+                    this.$root.api + '/creatives/' + this.creative_id + '/attr',
                     this.creative.attr.data,
                     this.$root.config
                 ).then(response => {
@@ -692,7 +692,7 @@
 
             editCreativeStatus() {
                 axios.put(
-                    this.$root.api + 'creatives/' + this.creative_id,
+                    this.$root.api + '/creatives/' + this.creative_id,
                     { status: this.creative.approved },
                     this.$root.config
                 ).then(response => {
@@ -723,7 +723,7 @@
             //CAMPAIGNS
             getCampaigns() {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account_id + '/campaigns',
+                    this.$root.api + '/accounts/' +  this.account_id + '/campaigns',
                     this.$root.config
                 ).then(response => {
                         var self = this;

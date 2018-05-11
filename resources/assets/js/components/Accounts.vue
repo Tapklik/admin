@@ -361,7 +361,7 @@
             //ACCOUNTS
             getAccounts(id) {
                 axios.get(
-                    this.$root.api + 'accounts',
+                    this.$root.api + '/accounts',
                     this.$root.config
                 ).then(response => {
                         this.accounts_table_empty = response.data.data == '' ? true : false;
@@ -382,7 +382,7 @@
                 this.buttonLoading('toggle', true, id);
 
                 axios.put(
-                    this.$root.api + 'accounts/' + id,
+                    this.$root.api + '/accounts/' + id,
                     { status: status },
                     this.$root.config
                 ).then(response => {
@@ -397,7 +397,7 @@
                 this.buttonLoading('delete', true, id);
 
                 axios.delete(
-                    this.$root.api + 'accounts/' + id, 
+                    this.$root.api + '/accounts/' + id, 
                     this.$root.config
                 ).then(response => {
                         this.getAccounts(id);
@@ -463,7 +463,7 @@
                 this.accounts_table_loading = true;
 
                 axios.post(
-                    this.$root.api + 'accounts', 
+                    this.$root.api + '/accounts', 
                     this.new_account, 
                     this.$root.config
                 ).then(response => {
@@ -482,7 +482,7 @@
                     fee_variable: fees.variable
                 };
                 axios.put(
-                    this.$root.api + 'accounts/' + id + '/fees',
+                    this.$root.api + '/accounts/' + id + '/fees',
                     payload,
                     this.$root.config
                 ).then(response => {

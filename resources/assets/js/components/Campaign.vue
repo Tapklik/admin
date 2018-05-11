@@ -473,7 +473,7 @@
 
             getGeo() {
                 axios.get(
-                    this.$root.api + 'core/search/geo?key=' + this.search_geo, 
+                    this.$root.api + '/core/search/geo?key=' + this.search_geo, 
                     this.$root.config
                 ).then(response => {
                         this.geo = response.data.data;
@@ -490,7 +490,7 @@
 
             getFolders() {
                 axios.get(
-                    this.$root.api + 'creatives/' + this.account_id + '/folders', 
+                    this.$root.api + '/creatives/' + this.account_id + '/folders', 
                     this.$root.config
                 ).then(response => {
                         this.folders = response.data.data;
@@ -505,7 +505,7 @@
 
                 for (var folder in folders) {
                     axios.get(
-                        this.$root.api + 'creatives/' + this.account_id + '/folders/' + folders[folder].id, 
+                        this.$root.api + '/creatives/' + this.account_id + '/folders/' + folders[folder].id, 
                         this.$root.config
                     ).then(response => {
                             this.creatives.push(response.data.data);
@@ -520,7 +520,7 @@
             //CAMPAIGN
             getCampaign() {
                 axios.get(
-                    this.$root.api + 'campaigns/' + this.campaign_id, 
+                    this.$root.api + '/campaigns/' + this.campaign_id, 
                     this.$root.config
                 ).then(response => {
                         this.campaign = response.data.data;
@@ -582,7 +582,7 @@
             updateCampaignPartly(method,extension, payload) {
                 if(method=='put')
                     axios.put(
-                        this.$root.api + 'campaigns/' + this.campaign.id + extension, 
+                        this.$root.api + '/campaigns/' + this.campaign.id + extension, 
                         payload, 
                         this.$root.config
                     ).then(response => {
@@ -593,7 +593,7 @@
                     );
                 else if(method == 'post') {
                     axios.post(
-                        this.$root.api + 'campaigns/' + this.campaign.id + extension, 
+                        this.$root.api + '/campaigns/' + this.campaign.id + extension, 
                         payload, 
                         this.$root.config
                     ).then(response => {

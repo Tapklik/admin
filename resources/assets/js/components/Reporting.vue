@@ -128,7 +128,7 @@
         },
         methods: {
             fetchAllCampaigns() {    
-                axios.get(this.$root.api + 'campaigns', this.$root.config).then(response => {
+                axios.get(this.$root.api + '/campaigns', this.$root.config).then(response => {
                     this.allCampaigns = response.data;
                 }, error => {
                     swal('Error', error, 'error');

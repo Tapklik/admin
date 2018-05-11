@@ -197,7 +197,7 @@
 
             getAccounts() {
                 axios.get(
-                    this.$root.api + 'accounts',
+                    this.$root.api + '/accounts',
                     this.$root.config
                 ).then(response => {
                         this.accounts = response.data.data;
@@ -209,7 +209,7 @@
 
             getCampaigns() {
                 axios.get(
-                    this.$root.api + 'campaigns', 
+                    this.$root.api + '/campaigns', 
                     this.$root.config
                 ).then(response => {
                         this.campaigns = response.data.data;

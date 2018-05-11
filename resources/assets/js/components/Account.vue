@@ -584,7 +584,7 @@
             createNewUser() {
                 this.users_table_loading = true;
                 axios.post(
-                    this.$root.api + 'accounts/' + this.account.id + '/users', 
+                    this.$root.api + '/accounts/' + this.account.id + '/users', 
                     this.new_user,
                     this.$root.config
                 ).then(response => {
@@ -612,7 +612,7 @@
                 var self = this;
 
                 axios.get(
-                    this.$root.api + 'accounts/' + this.account_id, 
+                    this.$root.api + '/accounts/' + this.account_id, 
                     this.$root.config
                 ).then(response => {
                         this.account = response.data.data;
@@ -625,7 +625,7 @@
             //USERS
             getUsers(id) {
                 axios.get(
-                    this.$root.api + 'accounts/' + this.account.id + '/users', 
+                    this.$root.api + '/accounts/' + this.account.id + '/users', 
                     this.$root.config
                 ).then(response => {
                         this.users_table_empty = response.data.data == '' ? true : false; 
@@ -645,7 +645,7 @@
                 this.buttonLoading('delete', true, id);
 
                 axios.delete(
-                    this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, 
+                    this.$root.api + '/accounts/' +  this.account.id + '/users/' + id, 
                     this.$root.config
                 ).then(response => {
                         this.getUsers(id);
@@ -660,7 +660,7 @@
                 var status = status ? 0 : 1; 
 
                 axios.put(
-                    this.$root.api + 'accounts/' +  this.account.id + '/users/' + id, 
+                    this.$root.api + '/accounts/' +  this.account.id + '/users/' + id, 
                     {status: status}, 
                     this.$root.config
                 ).then(response => {
@@ -674,7 +674,7 @@
             //CAMPAIGNS
             getCampaigns(id) {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account.id + '/campaigns', 
+                    this.$root.api + '/accounts/' +  this.account.id + '/campaigns', 
                     this.$root.config
                 ).then(response => {
                         this.campaigns_table_empty = response.data.data == '' ? true : false;
@@ -691,7 +691,7 @@
                 this.buttonLoading('delete', true, id);
 
                 axios.delete(
-                    this.$root.api + 'campaigns/' + id, 
+                    this.$root.api + '/campaigns/' + id, 
                     this.$root.config
                 ).then(response => {
                         this.getCampaigns(id);        
@@ -705,7 +705,7 @@
                 var additional_message = status == 'active' ? 'Go get \'em!' : '';
                 var users = this.users.map(user => user.internalId);
                 axios.put(
-                    this.$root.api + 'campaigns/' + campaign.id, 
+                    this.$root.api + '/campaigns/' + campaign.id, 
                     {status: campaign.status}, 
                     this.$root.config
                 ).then(response => {
@@ -720,7 +720,7 @@
             //CREATIVES
             getFolders() {
                 axios.get(
-                    this.$root.api + 'creatives/' +  this.account.id + '/folders', 
+                    this.$root.api + '/creatives/' +  this.account.id + '/folders', 
                     this.$root.config
                 ).then(response => {
                         this.folders = response.data.data;
@@ -736,7 +736,7 @@
                 if (folders == '') this.creatives_table_empty = true;
                 for (var folder in folders) {
                     axios.get(
-                        this.$root.api + 'creatives/' +  this.account.id + '/folders/' + folders[folder].id, 
+                        this.$root.api + '/creatives/' +  this.account.id + '/folders/' + folders[folder].id, 
                         this.$root.config
                     ).then(response => {
                             this.creatives.push(response.data.data);
@@ -765,7 +765,7 @@
                 var users = this.users.map(user => user.internalId);
                 var additional_message = new_status == 'approved' ? ' Happy campaigning!' : '';
                 axios.put(
-                    this.$root.api + 'creatives/' + creative.id, 
+                    this.$root.api + '/creatives/' + creative.id, 
                     {status: new_status}, 
                     this.$root.config
                 ).then(response => {
@@ -781,7 +781,7 @@
                 this.buttonLoading('delete', true, id);
 
                 axios.delete(
-                    this.$root.api + 'creatives/' + id, 
+                    this.$root.api + '/creatives/' + id, 
                     this.$root.config
                 ).then(response => {
                         this.getCreatives(id);
@@ -794,7 +794,7 @@
             //BILLING
             getMain() {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account_id + '/banker/main?query=balance', 
+                    this.$root.api + '/accounts/' +  this.account_id + '/banker/main?query=balance', 
                     this.$root.config
                 ).then(response => {
                         this.banker.main = response.data.data.balance;
@@ -806,7 +806,7 @@
 
             getFlight() {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account_id + '/banker/flight?query=balance', 
+                    this.$root.api + '/accounts/' +  this.account_id + '/banker/flight?query=balance', 
                     this.$root.config
                 ).then(response => {
                         this.banker.flight = response.data.data.balance;
@@ -818,7 +818,7 @@
 
             getSpend() {
                 axios.get(
-                    this.$root.api + 'accounts/' +  this.account_id + '/banker/spend?query=balance', 
+                    this.$root.api + '/accounts/' +  this.account_id + '/banker/spend?query=balance', 
                     this.$root.config
                 ).then(response => {
                         this.banker.spend = response.data.data.balance

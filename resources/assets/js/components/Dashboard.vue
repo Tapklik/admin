@@ -272,7 +272,7 @@
             //ACCOUNTS
             getAccounts(id) {
                 axios.get(
-                    this.$root.api + 'accounts',
+                    this.$root.api + '/accounts',
                     this.$root.config
                 ).then(response => {
                         this.accounts_table_empty = response.data.data == '' ? true : false;
@@ -290,7 +290,7 @@
                 this.buttonLoading('toggle', true, id);
 
                 axios.put(
-                    this.$root.api + 'accounts/' + id,
+                    this.$root.api + '/accounts/' + id,
                     { status: status },
                     this.$root.config
                 ).then(reponse => {
@@ -305,7 +305,7 @@
                 this.buttonLoading('delete', true, id);
 
                 axios.delete(
-                    this.$root.api + 'accounts/' + id, 
+                    this.$root.api + '/accounts/' + id, 
                     this.$root.config
                 ).then(response => {
                         this.getAccounts(id);
@@ -318,7 +318,7 @@
             //CAMPAIGNS
             getCampaigns(id) {
                 axios.get(
-                    this.$root.api + 'campaigns?include=account', 
+                    this.$root.api + '/campaigns?include=account', 
                     this.$root.config
                 ).then(response => {
                         this.campaigns_table_empty = response.data.data == '' ? true : false;
@@ -335,7 +335,7 @@
                 this.buttonLoading('delete', true, id);
 
                 axios.delete(
-                    this.$root.api + 'campaigns/' + id, 
+                    this.$root.api + '/campaigns/' + id, 
                     this.$root.config
                 ).then(response => {
                         this.getCampaigns(id);        
@@ -347,7 +347,7 @@
 
             toggleCampaignStatus(id, status) {
                 axios.put(
-                    this.$root.api + 'campaigns/' + id, 
+                    this.$root.api + '/campaigns/' + id, 
                     {status: status}, 
                     this.$root.config
                 ).then(response => {

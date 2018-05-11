@@ -182,7 +182,7 @@
             //OVERALL
             getUsers(id) {
                 axios.get(
-                    this.$root.api + 'accounts/' + this.account_id + '/users', 
+                    this.$root.api + '/accounts/' + this.account_id + '/users', 
                     this.$root.config
                 ).then(response => { 
                         this.users = response.data.data.map(user => user.internalId);
@@ -201,7 +201,7 @@
             //BILLS
             getBills() {            
                 axios.get(
-                    this.$root.api + 'accounts/' + this.account_id + '/banker/main?type=billing', 
+                    this.$root.api + '/accounts/' + this.account_id + '/banker/main?type=billing', 
                     this.$root.config
                 ).then(response => {
                         this.bills_table_empty = response.data.data == '' ? true : false;
@@ -236,7 +236,7 @@
                 this.bills_table_loading = true;
 
                 axios.post(
-                    this.$root.api + 'accounts/' + this.account_id + '/banker/main', 
+                    this.$root.api + '/accounts/' + this.account_id + '/banker/main', 
                     this.collectNewBill(), 
                     this.$root.config
                 ).then(response => {
