@@ -50,14 +50,14 @@ if(window.location.hostname.search('alpha') > -1) {
     erlangUri = '//104.225.218.109:2301/api/v1';
 
 }
-if(window.location.hostname.search('local.onead.tapklik.com') > -1) envUri = '//api.alpha.tapklik.com/v1';
+if(window.location.hostname.search('local.admin.tapklik.com') > -1) envUri = '//api.alpha.tapklik.com/v1';
 
 
 
 const app = new Vue({
     el: '#app',
     data: {
-        version: 'v0.3.2',
+        version: 'v0.3.3',
         erlang_api: erlangUri,
         api : envUri,
         path: envUri,
