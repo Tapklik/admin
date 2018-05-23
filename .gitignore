@@ -4,6 +4,7 @@
 /public/fonts
 /storage/*.key
 /storage/framework/sessions/*
+/storage/framework/views/*
 /vendor
 /.idea
 /.vagrant
