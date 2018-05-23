@@ -32,21 +32,18 @@ Vue.component('auth', require('./components/Auth.vue'));
 
 // ** PRODUCTION
 var envUri = 'https://api.tapklik.com/v1'; 
-var reportUri = 'https://reports.tapklik.com/api/query';
 var erlangUri = 'https://boss.services.tapklik.com/api/v1';
 
 
 // ** LOCAL
 if(window.location.hostname.search('local') > -1 || window.location.hostname.search('127')  > -1) {
     envUri = '//local.api.tapklik.com/v1';
-    reportUri: '//104.225.218.101:10002/api/query';
     erlangUri = '//104.225.218.109:2301/api/v1';
 }
 
 // ** DEVELOPMENT
 if(window.location.hostname.search('alpha') > -1) {
     envUri = '//api.alpha.tapklik.com/v1';
-    reportUri: '//104.225.218.101:10002/api/query';
     erlangUri = '//104.225.218.109:2301/api/v1';
 
 }
