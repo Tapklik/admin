@@ -29,6 +29,9 @@
             <img src="//tapklik.com/assets/images/logo.png" alt="Logo" />
         </h1>
     </div>
+    <div class="col-md-1 pull-right">
+        <small class="pull-right" style="font-size: 14px; color: #fff; margin-top: 25px; "> <?php echo file_get_contents( base_path() . '/VERSION'); ?> </small>
+    </div>
 </header>
 
     <main id="app">

@@ -2,9 +2,12 @@
 /public/hot
 /public/storage
 /public/fonts
+/bootstrap/cache/*
 /storage/*.key
 /storage/framework/sessions/*
 /storage/framework/views/*
+/storage/framework/cache/*
+/storage/logs/*
 /vendor
 /.idea
 /.vagrant

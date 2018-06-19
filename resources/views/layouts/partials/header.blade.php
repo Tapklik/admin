@@ -5,8 +5,9 @@
         </h1>
     </div>
     <div class="col-md-1">
-        <small class="pull-right" style="font-size: 14px; color: #fff; margin-top: 25px; ">v0.3.3</small>
+        <small class="pull-right" style="font-size: 14px; color: #fff; margin-top: 25px; "> <?php echo file_get_contents( base_path() . '/VERSION'); ?> </small>
     </div>
+    <dashboard></dashboard>
     <div class="col-md-9">
         <nav>
             <ul>

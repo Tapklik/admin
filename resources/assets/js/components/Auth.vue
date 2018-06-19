@@ -31,7 +31,7 @@
 
             <div class="form-group">
                 <div class="row clearfix">
-                    <button class="btn btn-primary pull-right" @click="login()">
+                    <button class="btn btn-primary pull-right" @click="login()" autofocus>
                         <i class="fa fa-lock" v-show="!login_button_loading"></i>
                         <i class="fa fa-refresh fa-spin" v-show="login_button_loading"></i>
                         Login

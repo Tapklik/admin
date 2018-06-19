@@ -54,7 +54,6 @@ if(window.location.hostname.search('local.admin.tapklik.com') > -1) envUri = '//
 const app = new Vue({
     el: '#app',
     data: {
-        version: 'v0.3.3',
         erlang_api: erlangUri,
         api : envUri,
         path: envUri,
