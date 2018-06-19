@@ -89,6 +89,11 @@ const app = new Vue({
             });
         },
 
+        
+        clickedButton(event) {
+            return event.target.nodeName == "I" ? event.target : event.target.firstChild;
+        },
+
         getApiToken() {
             axios.get('/core/token').then(response => {
                 this.token = response.data.token;

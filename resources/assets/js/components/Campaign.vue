@@ -1,183 +1,194 @@
 <template>
     <div>
-        <!-- HEADER START -->
-        <div class="row">
-            <div class="col-md-12">
-                <h2 class="title pull-left">
-                    Edit Campaign {{campaign_id}}
-                </h2>
-                <button 
-                class="btn btn-primary pull-right" 
-                @click="updateCampaign()"
-                >
-                    Edit
-                </button>
-            </div>
-        </div>
-        <!-- HEADER END -->
-        
-        <hr />
-        
-        <!-- DETAILS START -->
-        <div class="row">
-            <div class="col-md-12">
-                <h4 class="title pull-left">Details</h4>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Name</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign.name" 
-                        />
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Click-Through URL</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign.ctrurl"
-                        />
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row" style="display: flex; align-items: center;">
+                        <div class="col-xs-4">
+                            Details
+                        </div>
+                        <div class="col-xs-8">
+                            <button 
+                            class="btn btn-primary pull-right" 
+                            @click="updateCampaign()"
+                            >
+                                Edit
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Advertiser Domain</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign.adomain" 
-                        />
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Budget Type</label>
-                        <br/>
-                        <select 
-                        class="form-control" 
-                        v-model="campaign.budget.data.type"
-                        >
-                            <option value="daily">Daily</option>
-                            <option value="campaign">Campaign</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Date From</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign.start_time" 
-                        />
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Date To</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign.end_time"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Budget</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign_budget" 
-                        />
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Bid</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign_bid"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
-                        <label for="label-city">Pacing</label>
-                        <br/>
-                        <input 
-                        type="text" 
-                        class="form-control" 
-                        id="label-city" 
-                        v-model="campaign.budget.data.pacing" 
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- DETAILS END -->
-        
-        <hr>
-        
-        <!-- CATEGORIES START -->
-        <div class="row">
-            <div class="col-md-12">
-                <h4 class="title pull-left">Categories</h4>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <label for="label-city">Selected Categories</label>
-                        <br/>
-                        <div v-for="category in categories">
-                            <div class="col-xs-12 col-md-3">
-                                <input 
-                                type="checkbox" 
-                                :value="category.code" 
-                                v-model="campaign.cat.data"
-                                >
-                                <a 
-                                class="btn btn-link" 
-                                data-toggle="collapse" 
-                                :href="'#' + category.code" 
-                                role="button" 
-                                aria-expanded="false"
-                                :aria-controls="category.code"
-                                >
-                                    {{ category.type }}
-                                </a>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Name</label>
+                                    <br/>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="label-city" 
+                                    v-model="campaign.name" 
+                                    />
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Click-Through URL</label>
+                                    <br/>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="label-city" 
+                                    v-model="campaign.ctrurl"
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div v-for="category in categories">
-                            <div class="collapse" :id="category.code">
-                                <div class="well col-xs-12">
-                                    <div v-for="subcategory in category.sub" class="col-xs-3">
-                                        <input type="checkbox" :value="subcategory.code" v-model="campaign.cat.data">
-                                        {{subcategory.type}} ({{subcategory.code}})
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Advertiser Domain</label>
+                                    <br/>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="label-city" 
+                                    v-model="campaign.adomain" 
+                                    />
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Budget Type</label>
+                                    <br/>
+                                    <select 
+                                    class="form-control" 
+                                    v-model="campaign.budget.data.type"
+                                    >
+                                        <option value="daily">Daily</option>
+                                        <option value="campaign">Campaign</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Date From</label>
+                                    <br/>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="label-city" 
+                                    v-model="campaign.start_time" 
+                                    />
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Date To</label>
+                                    <br/>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="label-city" 
+                                    v-model="campaign.end_time"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Budget</label>
+                                    <br/>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="label-city" 
+                                    v-model="campaign_budget" 
+                                    />
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Bid</label>
+                                    <br/>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="label-city" 
+                                    v-model="campaign_bid"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <label for="label-city">Pacing</label>
+                                    <br/>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="label-city" 
+                                    v-model="campaign.budget.data.pacing" 
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row" style="display: flex; align-items: center;">
+                        <div class="col-xs-4">
+                            Categories
+                        </div>
+                        <div class="col-xs-8">
+                            <button 
+                            class="btn btn-primary pull-right" 
+                            @click="updateCampaign()"
+                            >
+                                Edit
+                            </button>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-12">
+                                    <label for="label-city">Selected Categories</label>
+                                    <br/>
+                                    <div v-for="category in lists.categories">
+                                        <div class="col-xs-12 col-md-3">
+                                            <input 
+                                            type="checkbox" 
+                                            :value="category.code" 
+                                            v-model="campaign.cat.data"
+                                            >
+                                            <a 
+                                            class="btn btn-link" 
+                                            data-toggle="collapse" 
+                                            :href="'#' + category.code" 
+                                            role="button" 
+                                            aria-expanded="false"
+                                            :aria-controls="category.code"
+                                            >
+                                                {{ category.type }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div v-for="category in lists.categories">
+                                        <div class="collapse" :id="category.code">
+                                            <div class="well col-xs-12">
+                                                <div v-for="subcategory in category.sub" class="col-xs-3">
+                                                    <input type="checkbox" :value="subcategory.code" v-model="campaign.cat.data">
+                                                    {{subcategory.type}} ({{subcategory.code}})
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -186,194 +197,208 @@
                 </div>
             </div>
         </div>
-        <!-- CATEGORIES END -->
 
         <hr />
 
-        <!-- CREATIVES START -->
-        <div class="row">
-            <div class="col-md-12">
-                <h4 class="title pull-left">Creatives</h4>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <label for="label-city">Selected Creatives</label>
-                        <br/>
-                        <div v-for="creative in creatives" class="col-xs-12 col-md-4">
-                            <input 
-                            type="checkbox" 
-                            :value="creative" 
-                            v-model="campaign.creatives.data"
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row" style="display: flex; align-items: center;">
+                        <div class="col-xs-4">
+                            Creatives
+                        </div>
+                        <div class="col-xs-8">
+                            <button 
+                            class="btn btn-primary pull-right" 
+                            @click="updateCampaign()"
                             >
-                            <span>
-                                <b> {{creative.name}} </b>({{creative.id}})
-                            </span>
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-12">
+                                    <label for="label-city">Selected Creatives</label>
+                                    <br/>
+                                    <div v-for="creative in lists.creatives" class="col-xs-12 col-md-4">
+                                        <input 
+                                        type="checkbox" 
+                                        :value="creative" 
+                                        v-model="campaign.creatives.data"
+                                        >
+                                        <span>
+                                            <b> {{creative.name}} </b>({{creative.id}})
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- CREATIVES END -->
 
-        <hr/>
+        <hr />
 
-        <!-- TARGETTING START -->
-        <div class="row">
-            <div class="col-md-12">
-                <h4 class="title pull-left">Targetting</h4>
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">                    
+                    <div class="row" style="display: flex; align-items: center;">
+                        <div class="col-xs-4">
+                            Targetting
+                        </div>
+                        <div class="col-xs-8">
+                            <button 
+                            class="btn btn-primary pull-right" 
+                            @click="updateCampaign()"
+                            >
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-4">
+                                    <label for="label-city">Devices</label>
+                                    <br/>
+                                    <div v-for="type in lists.types">
+                                        <input 
+                                        type="checkbox" 
+                                        :value="type.device_id" 
+                                        v-model="campaign.device.data.type"
+                                        >
+                                        {{type.type}}
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-4">
+                                    <label for="label-city">Browsers</label>
+                                    <br/>
+                                    <div v-for="u in lists.ua">
+                                        <input 
+                                        type="checkbox" 
+                                        :value="u.device_id" 
+                                        v-model="campaign.device.data.ua"
+                                        >
+                                        {{u.type}}
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-4">
+                                    <label for="label-city">Operating Systems</label>
+                                    <br/>
+                                    <div v-for="o in lists.os">
+                                        <input 
+                                        type="checkbox" 
+                                        :value="o.device_id" 
+                                        v-model="campaign.device.data.os"
+                                        >
+                                        {{o.type}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="title pull-left">User</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-3">
+                                    <label for="label-city">Age Group - From:</label>
+                                    <br/>
+                                    <select 
+                                    class="form-control" 
+                                    v-model="campaign.user.data.age.min"
+                                    >
+                                        <option v-for="age in lists.ages" :value="age">{{age}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <label for="label-city">To: </label>
+                                    <br/>
+                                    <select 
+                                    class="form-control" 
+                                    v-model="campaign.user.data.age.max"
+                                    >
+                                        <option v-for="age in lists.ages" :value="age">{{age}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <label for="label-city">Gender</label>
+                                    <br/>
+                                        <input type="checkbox" value="M" v-model="campaign.user.data.gender"> M
+                                        <input type="checkbox" value="F" v-model="campaign.user.data.gender"> F 
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="title pull-left">Geo</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <input 
+                                    type="text"
+                                    @keyup.enter="reloadGeo()"
+                                    class="form-control"
+                                    v-model="search_geo"
+                                    >
+                                </div>
+                                <button class="btn btn-primary" @click="reloadGeo()">Search Geo</button> 
+                            </div>
+                            <br />
+                            <div v-for="g in lists.geo" class="col-xs-12">
+                                <input 
+                                type="checkbox" 
+                                :value="g" 
+                                v-model="campaign.geo.data"
+                                />
+                                {{g}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-4">
-                        <label for="label-city">Devices</label>
-                        <br/>
-                        <div v-for="type in types">
-                            <input 
-                            type="checkbox" 
-                            :value="type.device_id" 
-                            v-model="campaign.device.data.type"
-                            >
-                            {{type.type}}
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-4">
-                        <label for="label-city">Browsers</label>
-                        <br/>
-                        <div v-for="u in ua">
-                            <input 
-                            type="checkbox" 
-                            :value="u.device_id" 
-                            v-model="campaign.device.data.ua"
-                            >
-                            {{u.type}}
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-4">
-                        <label for="label-city">Operating Systems</label>
-                        <br/>
-                        <div v-for="o in os">
-                            <input 
-                            type="checkbox" 
-                            :value="o.device_id" 
-                            v-model="campaign.device.data.os"
-                            >
-                            {{o.type}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="col-md-12">
-                    <h4 class="title pull-left">User</h4>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-12 col-md-3">
-                        <label for="label-city">Age Group - From:</label>
-                        <br/>
-                        <select 
-                        class="form-control" 
-                        v-model="campaign.user.data.age.min"
-                        >
-                            <option v-for="age in ages" :value="age">{{age}}</option>
-                        </select>
-                    </div>
-                    <div class="col-xs-12 col-md-3">
-                        <label for="label-city">To: </label>
-                        <br/>
-                        <select 
-                        class="form-control" 
-                        v-model="campaign.user.data.age.max"
-                        >
-                            <option v-for="age in ages" :value="age">{{age}}</option>
-                        </select>
-                    </div>
-                    <div class="col-xs-12 col-md-3">
-                        <label for="label-city">Gender</label>
-                        <br/>
-                            <input type="checkbox" value="M" v-model="campaign.user.data.gender"> M
-                            <input type="checkbox" value="F" v-model="campaign.user.data.gender"> F 
-                    </div>
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="col-md-12">
-                    <h4 class="title pull-left">Geo</h4>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <input 
-                        type="text"
-                        @keyup.enter="reloadGeo()"
-                        class="form-control"
-                        v-model="search_geo"
-                        >
-                    </div>
-                    <button class="btn btn-primary" @click="reloadGeo()">Search Geo</button> 
-                </div>
-                <br />
-                <div v-for="g in geo" class="col-xs-12">
-                    <input 
-                    type="checkbox" 
-                    :value="g" 
-                    v-model="campaign.geo.data"
-                    />
-                    {{g}}
-                </div>
-            </div>
-        </div>
-        <!-- TARGETTING END -->
-
+        <br> <br><br><br>
     </div>
 </template>
 
 <script>
     export default {
-        mounted() {
-            this.getCategories();
-            this.getTechnologies();
-            this.getIds();
-        },
-
         data() {
 
             return {
                 //ESSENTIALS
-                campaign_button_loading: false,
                 token: this.token,
                 campaign_id: '',
                 account_id: '',
-                updates_counter: 0,
-                ages: [1, 12, 18, 26, 40, 55, 65, 120],
+                
+                lists: {
+                    categories: [],
+                    types: [],
+                    ua: [],
+                    os: [],
+                    folders: [],
+                    creatives: [],
+                    gender: ['M', 'F'],
+                    geo: [],
+                    ages: [1, 12, 18, 26, 40, 55, 65, 120]
 
-                //CAMPAIGN LISTS
-                categories: [],
-                technologies: [],
-                types: [],
-                ua: [],
-                os: [],
-                folders: [],
-                creatives: [],
-                gender: ['M','F'],
-                geo: [],
-                subcategories: {
-                    IAB1 : [
-                        {
-                            code: 'IAB1-1',
-                            type: 'hello'
-                        }
-                    ]
                 },
+                campaign_button_loading: false,
+                updates_counter: 0,
 
                 //CAMPAIGN
                 search_geo: '',
@@ -429,7 +454,14 @@
         },
 
         methods: {
-            //OVERALL
+            //CAMPAIGN LISTS
+            getLists() {
+                this.getIds();
+                this.getCategories();
+                this.getTechnologies();
+                this.getFolders();
+            },
+
             getIds() {
                 var idDraft = window.location.pathname;
                 var res = idDraft.split("/");
@@ -438,22 +470,11 @@
                 this.account_id = res[2];
             },
 
-            splitPacingInDaysAndTimes(pacing) {
-                var pacing_array = this.campaign.budget.data.pacing.split(' ');
-                var days = pacing_array.map(day => day != '0000000' ? true : false);
-                var index_of_day = pacing_array.findIndex(function() { return true });
-                var chosen_day = pacing_array[index_of_day];
-                var chosen_day_array = chosen_day.split('');
-                var times = chosen_day_array.map(time => parseInt(time) == 1 ? true : false);
-                console.log({days: days, times: times});
-            },
-
-            //CAMPAIGN LISTS
             getCategories() {
                 axios.get(
                     '/data/categories.json'
                 ).then(response => {
-                        this.categories = response.data;
+                        this.lists.categories = response.data;
                     }, error => {
 
                     }
@@ -464,11 +485,43 @@
                 axios.get(
                     '/data/technologies.json'
                 ).then(response => {
-                        this.technologies = response.data;
+                        this.lists.types = response.data.devices; 
+                        this.lists.ua = response.data.browsers;
+                        this.lists.os = response.data.operatingsystems;
                     }, error => {
 
                     }
                 );
+            },
+
+            getFolders() {
+                axios.get(
+                    this.$root.api + '/creatives/' + this.account_id + '/folders', 
+                    this.$root.config
+                ).then(response => {
+                        this.lists.folders = response.data.data;
+                        this.getCreatives();
+                    }, error => {
+                        alert(error);
+                    }
+                );
+            },
+
+            getCreatives() {
+                var folders = this.lists.folders;
+
+                for (var folder in folders) {
+                    axios.get(
+                        this.$root.api + '/creatives/' + this.account_id + '/folders/' + folders[folder].id, 
+                        this.$root.config
+                    ).then(response => {
+                            this.lists.creatives.push(response.data.data);
+                            this.lists.creatives = [].concat.apply([], this.lists.creatives);
+                        }, error => {
+
+                        }
+                    );
+                }
             },
 
             getGeo() {
@@ -476,7 +529,7 @@
                     this.$root.api + '/core/search/geo?key=' + this.search_geo, 
                     this.$root.config
                 ).then(response => {
-                        this.geo = response.data.data;
+                        this.lists.geo = response.data.data;
                     }, error => {
                         this.$root.showAlertPopUp('error', 'Something went wrong');
                     }
@@ -488,35 +541,6 @@
                 else this.getGeo();
             },
 
-            getFolders() {
-                axios.get(
-                    this.$root.api + '/creatives/' + this.account_id + '/folders', 
-                    this.$root.config
-                ).then(response => {
-                        this.folders = response.data.data;
-                    }, error => {
-                        alert(error);
-                    }
-                );
-            },
-
-            getCreatives() {
-                var folders = this.folders;
-
-                for (var folder in folders) {
-                    axios.get(
-                        this.$root.api + '/creatives/' + this.account_id + '/folders/' + folders[folder].id, 
-                        this.$root.config
-                    ).then(response => {
-                            this.creatives.push(response.data.data);
-                            this.creatives = [].concat.apply([], this.creatives);
-                        }, error => {
-
-                        }
-                    );
-                }
-            },
-
             //CAMPAIGN
             getCampaign() {
                 axios.get(
@@ -524,7 +548,7 @@
                     this.$root.config
                 ).then(response => {
                         this.campaign = response.data.data;
-                        this.geo = this.campaign.geo.data;
+                        this.lists.geo = this.campaign.geo.data;
                     }, error => {
 
                     }
@@ -562,7 +586,6 @@
             },
 
             collectDevices(key) {
-                
                 return {
                     types: this.campaign.device.data.type,
                     models: this.campaign.device.data.ua,
@@ -647,24 +670,9 @@
             },
 
             token(value) {
+                this.getLists();
                 this.getCampaign();
-                this.getFolders();
-            },
-            
-            folders(value) {
-                this.getCreatives();
-            },
-
-            technologies(value) {
-                this.types = value.devices; 
-                this.ua = value.browsers;
-                this.os = value.operatingsystems;
-            },
-            campaign(value) {
-                this.splitPacingInDaysAndTimes();
-                this.collectCreatives();
             }
-
         }
     }
 </script>

@@ -1,312 +1,141 @@
 <template>
     <div>
 
-        <!-- HEADER START -->
-        <div class="row">
-            <div class="col-md-8">
-                <h1 class="title pull-left">Edit</h1>
-            </div>
-        </div>
-        <!-- HEADER END -->
-
-        <hr />
-
-        <!-- ACTION BAR START -->
-        <div class="row">
-            <div class="col-xs-2 col-xs-offset-2">
-                Actions
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-2">
-                <select
-                class="form-control"
-                id="label-approved"
-                @change="editCreativeStatus()"
-                v-model="creative.approved"
-                >
-                    <option value="approved">Approved</option>
-                    <option value="pending">Pending</option>
-                    <option value="declined">Declined</option>
-                </select>
-            </div>
-            <div class="col-xs-2">
-                <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-print"></span>
-                </button>
-                <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-                <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-tags"></span>
-                </button>
-            </div>
-            <div class="col-xs-8">
-                <button @click="openCreativePreview()" class="btn btn-default">Preview</button>
-                <a :href="creative.iurl" v-show="!creative_is_html5" class="btn btn-default">Download Image</a>
-                <a :href="creative.asset" v-show="creative_is_html5">
-                    <button class="btn btn-default">Download HTML5</button>
-                </a>
-                <button v-show="creative_is_html5" class="btn btn-default" @click="openUpload('#_modal-add-creative')">
-                    Upload
-                </button>
-                <button @click="verifyCreative()" class="btn btn-default">
-                    Verify
-                </button>
-                <button @click="checkCreativeStatus()" class="btn btn-default">
-                    Check Status
-                </button>
-            </div>
-        </div>
-        <!-- ACTION BAR END -->
-
-        <hr />
-
-        <!-- ADEX TABLE START -->
-        <div class="well col-xs-3" v-for="(ad, index) in adex">
-            <div class="row">
-                <h4 class="col-xs-9">{{index}}</h4>
-                <span class="label label-success col-xs-3">
-                    Approved
-                </span>
-            </div><br>
-            <div class="row">
-                <div class="col-xs-4">
-                    <button>
-                        Hello
-                    </button>
-                    <br />
-                    <br />
-                    <button>
-                        There
-                    </button>
-                </div>
-                <p class="col-xs-8">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc porta aliquet sagittis.
-                </p>
-            </div>
-        </div>
-        <!-- ADEX TABLE END -->
-
-        <hr />
-
-        <!-- CREATIVE START -->
-        <div class="form-group">
-            <div class="row">
-                <div class="col-xs-8">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <label for="label-city">Name</label>
-                                <br/>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="label-city"
-                                v-model="creative.name"
-                                />
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <label for="label-approved">Class</label>
-                                <br/>
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-5" style="display: flex; align-items: center;">
+                            <div class="col-xs-8">
                                 <select
                                 class="form-control"
                                 id="label-approved"
-                                v-model="creative.class"
+                                @change="editCreativeStatus()"
+                                v-model="creative.approved"
                                 >
-                                    <option value="banner">Banner</option>
-                                    <option value="video">Video</option>
-                                    <option value="native">Native</option>
-                                    <option value="html5">HTML5</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="declined">Declined</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-3">
-                                <label for="label-approved">Width</label>
-                                <br/>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="label-city"
-                                v-model="creative.w"
-                                />
-                            </div>
-                            <div class="col-xs-12 col-md-3">
-                                <label for="label-approved">Height</label>
-                                <br/>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="label-city"
-                                v-model="creative.h"
-                                />
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <div class="row">
-                                    <label for="label-approved"></label><br />
-                                    <input
-                                    type="checkbox"
-                                    v-model="creative.responsive"
-                                    style="margin-left: 20px;"
-                                    /> Responsive
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-12">
-                                <label for="label-approved">Attributes</label>
-                                <br/>
-                                <select
-                                class="form-control"
-                                multiple
-                                id="label-approved"
-                                v-model="creative.attr.data"
-                                >
-                                    <option
-                                    v-for="attribute in attributes"
-                                    :value="attribute.value"
-                                    >
-                                        {{attribute.description}}
-                                    </option>
-                                </select>
+                        <div class="col-xs-7">
+                            <div class="pull-right">
+                                <button @click="openCreativePreview()" class="btn btn-default">Preview</button>
+                                <a :href="creative.iurl" v-show="!creative_is_html5" class="btn btn-default">Download Image</a>
+                                <a :href="creative.asset" v-show="creative_is_html5">
+                                    <button class="btn btn-default">Download HTML5</button>
+                                </a>
+                                <button v-show="creative_is_html5" class="btn btn-default" @click="openUpload('#_modal-add-creative')">
+                                    Upload
+                                </button>
+                                <button @click="verifyCreative()" class="btn btn-default">
+                                    Verify
+                                </button>
+                                <button @click="checkCreativeStatus()" class="btn btn-default">
+                                    Check Status
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <div class="well" style="margin-top: 50px">
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row" style="display: flex; align-items: center;">
+                        <div class="col-xs-8">
+                          Details  
+                        </div>
+                        <div class="col-xs-4">
+                            <button class="btn btn-default pull-right" @click="openEditCreative()">
+                                Edit Creative
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="creative.id.length == 0" class="panel-body" style="display: flex; justify-content: center;">
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                </div>
+                <div v-else class="panel-body" style="display: flex; align-items: center;">
+                    <div class="col-xs-6">
+                        <label>ID: </label> {{creative.id}} <br>
+                        <label>Name: </label> {{creative.name}} <br>
+                        <label>Class: </label> {{creative.class}} <br>
+                        <label>Size: </label> {{creative.w + 'x' + creative.h}} <br>
+                        <label>Responsive: </label> 
+                        <span class="label" :class="creative.responsive ? 'label-success' : 'label-danger'">
+                            {{ creative.responsive ? 'Yes' : 'No' }}
+                        </span> <br>
+                        <label>Attributes: </label> {{creative.attr.data.length > 0 ? creative.attr.data.join() : 'None'}} 
+                        <br>
+                        <label>Ctrurl: </label> {{creative.ctrurl != null ? creative.ctrurl : 'None'}}
+                    </div>
+                    <div class="col-xs-6">
                         <img
-                        style="display: block; margin:auto"
+                        style="display: block; margin:auto; max-width: 100%; height: auto;"
                         :src="creative.thumb"
                         />
                     </div>
-                    <button @click="editCreative()" class="btn btn-default">Edit Creative</button>
                 </div>
             </div>
         </div>
-        <!-- CREATIVE END -->
 
         <hr />
 
-        <!-- CTRURL START -->
-        <div class="form-group">
-            <div class="row">
-                <div class="col-xs-8">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <label for="label-city">CTR URL</label>
-                                <br/>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="label-city"
-                                v-model="creative.ctrurl"
-                                />
-                            </div>
-                            <div class="col-xs-12">
-                                <label for="label-city">Tag #1</label>
-                                <br/>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="label-city"
-                                v-model="tags[0]"
-                                />
-                            </div>
-                            <div class="col-xs-12">
-                                <label for="label-city">Tag #2</label>
-                                <br/>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="label-city"
-                                v-model="tags[1]"
-                                />
-                            </div>
-                            <div class="col-xs-12">
-                                <label for="label-city">Tag #3</label>
-                                <br/>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="label-city"
-                                v-model="tags[2]"
-                                />
-                            </div>
-                            <div class="col-xs-12">
-                                <label for="label-city">Tag #4</label>
-                                <br/>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="label-city"
-                                v-model="tags[3]"
-                                />
-                            </div>
-                        </div>
-                    </div>
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">Campaigns</div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>CTR URL</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="vcenter">
+
+                            <!-- TABLE LOADER START -->
+                            <tr v-if="campaigns_table_loading">
+                                <td colspan="11" class="loader text-center">
+                                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                                </td>
+                            </tr>
+                            <!-- TABLE LOADER END -->
+
+                            <!-- EMPTY TABLE MESSAGE START -->
+                            <tr v-else-if="campaigns_table_empty">
+                                <td colspan="11">
+                                    Sorry but theres nothing here... yet :)
+                                </td>
+                            </tr>
+                            <!-- EMPTY TABLE MESSAGE END -->
+
+                            <tr v-else v-for="campaign in campaigns">
+                                <td>{{ campaign.name }}</td>
+                                <td><a :href="campaign.ctrurl">{{campaign.ctrurl}}</a></td>
+                                <td>
+                                    <button
+                                    @click="openInvocationCodeModal(campaign)"
+                                    class="btn btn-primary"
+                                    >
+                                        Preview
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <!-- CTRURL END -->
-
+        
         <hr />
-
-        <!-- CAMPAIGNS START -->
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Campaigns</h2>
-            </div>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>CTR URL</th>
-                    <th>Empty</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody class="vcenter">
-
-                <!-- TABLE LOADER START -->
-                <tr v-if="campaigns_table_loading">
-                    <td colspan="11" class="loader text-center">
-                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                    </td>
-                </tr>
-                <!-- TABLE LOADER END -->
-
-                <!-- EMPTY TABLE MESSAGE START -->
-                <tr v-else-if="campaigns_table_empty">
-                    <td colspan="11">
-                        Sorry but theres nothing here... yet :)
-                    </td>
-                </tr>
-                <!-- EMPTY TABLE MESSAGE END -->
-
-                <tr v-else v-for="campaign in campaigns">
-                    <td>{{ campaign.name }}</td>
-                    <td>{{campaign.ctrurl}}</td>
-                    <td></td>
-                    <td>
-                        <button
-                        @click="openInvocationCodeModal(campaign)"
-                        class="btn btn-primary"
-                        >
-                            Preview
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- CAMPAIGNS END -->
 
         <!-- INVOCATION CODE MODAL START -->
         <div class="modal fade" id="_modal-show-invocation" tabindex="-1" role="dialog">
@@ -378,6 +207,123 @@
         </div>
         <!-- PREVIEW MODAL END -->
 
+        <!-- EDIT CREATIVE MODAL START -->
+        <div class="modal fade" id="_modal-edit-creative" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Edit Creative</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6">
+                                        <label for="label-city">Name</label>
+                                        <br/>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        id="label-city"
+                                        v-model="creative.name"
+                                        />
+                                    </div>
+                                    <div class="col-xs-12 col-md-6">
+                                        <label for="label-approved">Class</label>
+                                        <br/>
+                                        <select
+                                        class="form-control"
+                                        id="label-approved"
+                                        v-model="creative.class"
+                                        >
+                                            <option value="banner">Banner</option>
+                                            <option value="video">Video</option>
+                                            <option value="native">Native</option>
+                                            <option value="html5">HTML5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-3">
+                                        <label for="label-approved">Width</label>
+                                        <br/>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        id="label-city"
+                                        v-model="creative.w"
+                                        />
+                                    </div>
+                                    <div class="col-xs-12 col-md-3">
+                                        <label for="label-approved">Height</label>
+                                        <br/>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        id="label-city"
+                                        v-model="creative.h"
+                                        />
+                                    </div>
+                                    <div class="col-xs-12 col-md-6">
+                                        <div class="row">
+                                            <label for="label-approved"></label><br />
+                                            <input
+                                            type="checkbox"
+                                            v-model="creative.responsive"
+                                            style="margin-left: 20px;"
+                                            /> Responsive
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12">
+                                        <label for="label-approved">Attributes</label>
+                                        <br/>
+                                        <select
+                                        class="form-control"
+                                        multiple
+                                        id="label-approved"
+                                        v-model="creative.attr.data"
+                                        >
+                                            <option
+                                            v-for="attribute in attributes"
+                                            :value="attribute.value"
+                                            >
+                                                {{attribute.description}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                        type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="editCreative()">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- EDIT CREATIVE MODAL END -->
+
                 <!-- ADD CREATIVE START-->
         <div class="modal fade" id="_modal-add-creative" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -429,7 +375,7 @@
         </div>
         <!-- ADD CREATIVE END-->
 
-
+        <br><br><br><br>
     </div>
 </template>
 
@@ -488,6 +434,7 @@
                 campaigns: [],
                 campaigns_table_loading: true,
                 campaigns_table_empty: false,
+                add_creative_button_loading: false,
 
                 //INVOCATION CODE MODAL
                 invocation_code_preview: '',
@@ -683,7 +630,6 @@
                     this.$root.config
                 ).then(response => {
                         this.getCreative();
-                        window.location.pathname = 'accounts/' + this.account_id;
                     }, error => {
 
                     }
@@ -744,6 +690,10 @@
             openInvocationCodeModal(campaign) {
                 this.getInvocationCode(campaign);
                 $('#_modal-show-invocation').modal();
+            },
+            
+            openEditCreative() {
+                $('#_modal-edit-creative').modal();
             },
 
             getInvocationCode(campaign) {

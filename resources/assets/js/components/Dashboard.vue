@@ -7,21 +7,130 @@
             </div>
         </div>
         <hr />
-        <div id="first-chart" style="height: 300px"></div>
-        <div id="second-chart" style="height: 300px"></div>
-        
-        <hr />
-        <div class="row">
-            <div class="col-xs-12">
-                SUMMARY
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">Real-Time Graph</div>
+                <div class="panel-body">
+                    <div id="real-time-chart" style="height: 240px;"></div>
+                </div>
             </div>
         </div>
+        
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">Last 10 days</div>
+                <div class="panel-body">
+                    <div id="first-chart" class="col-xs-6" style="height: 240px"></div>
+                    <div id="second-chart" class="col-xs-6" style="height: 240px"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">Summary</div>
+                <div class="panel-body">
+                    <div class="col-xs-2" style="display: flex; align-items: center; justify-content: center; flex-direction: column; margin-bottom: 24px;" v-for="data in list.data_names">
+                        <h4>{{data}}</h4>
+                        <span>{{chart_summary[data]}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <hr />
 
         <div class="row">
-            <div class="col-xs-2" style="display: flex; align-items: center; justify-content: center; flex-direction: column; margin-bottom: 24px;" v-for="data in list.data_names">
-                <h4>{{data}}</h4>
-                <span>{{chart_summary[data]}}</span>
+            <div class="col-xs-12">
+                TABLES
+            </div>
+        </div>        
+        <hr />
+        <div class="row">
+            
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Accounts</div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Acc. Name</th>
+                                    <th>Acc. Id</th>
+                                </tr>
+                            </thead>
+                            <tbody class="vcenter">
+                                
+                                <!-- TABLE LOADER START -->
+                                <tr v-if="accounts.loading">
+                                    <td colspan="11" class="loader text-center">
+                                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                                    </td>
+                                </tr>
+                                <!-- TABLE LOADER END -->
+                                
+                                <!-- EMPTY TABLE MESSAGE START -->
+                                <tr v-else-if="accounts.empty">
+                                    <td colspan="11">
+                                        There are no accounts
+                                    </td>
+                                </tr>
+                                <!-- EMPTY TABLE MESSAGE END -->
+                                
+                                <tr v-else v-for="account in list.accounts" @click="onButtonClickListener(account ,$event)">
+                                    <td>
+                                        <a :href="'/accounts/' + account.id">
+                                            {{ account.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ account.id }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Campaigns</div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Camp. Name</th>
+                                    <th>Camp. Id</th>
+                                </tr>
+                            </thead>
+                            <tbody class="vcenter">
+                                
+                                <!-- TABLE LOADER START -->
+                                <tr v-if="campaigns.loading">
+                                    <td colspan="11" class="loader text-center">
+                                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                                    </td>
+                                </tr>
+                                <!-- TABLE LOADER END -->
+                                
+                                <!-- EMPTY TABLE MESSAGE START -->
+                                <tr v-else-if="campaigns.empty">
+                                    <td colspan="11">
+                                        There are no campaigns
+                                    </td>
+                                </tr>
+                                <!-- EMPTY TABLE MESSAGE END -->
+                                
+                                <tr v-else v-for="campaign in list.campaigns">
+                                    <td>
+                                        <a :href="'/accounts/' + campaign.account.data.id + '/campaigns/' + campaign.id">
+                                            {{ campaign.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ campaign.id }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
         <br><br><br><br>
@@ -39,6 +148,14 @@
                     campaigns: [],
                     statuses: ['active', 'paused', 'archived', 'draft', 'not started', 'expired'],
                     data_names: ['clicks', 'imps', 'spend', 'ctr', 'ecpc', 'ecpm', 'wins', 'win_price', 'profit', 'win_perc'] 
+                },
+                accounts: {
+                    loading: true,
+                    empty: false
+                },
+                campaigns: {
+                    loading: true,
+                    empty: false
                 },
                 chart_data: [],
                 chart_summary: {}
@@ -63,6 +180,8 @@
                     this.$root.config
                 ).then(response => {
                         this.list.accounts = response.data.data;
+                        this.accounts.empty = this.list.accounts.length > 0 ? false : true;
+                        this.accounts.loading = false;
                     }, error => {
 
                     }
@@ -75,6 +194,8 @@
                     this.$root.config
                 ).then(response => {
                         this.list.campaigns = response.data.data;
+                        this.campaigns.empty = this.list.campaigns.length > 0 ? false : true;
+                        this.campaigns.loading = false; 
                     }, error => {
 
                     }

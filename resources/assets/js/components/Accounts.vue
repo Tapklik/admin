@@ -1,111 +1,111 @@
 <template>
     <div>
 
-        <!-- HEADER START -->
-        <div class="row">
-            <div class="col-md-8">
-                <h1 class="title pull-left">Accounts</h1>
-                <button 
-                class="btn btn-default pull-right" 
-                @click="clearNewAccount(), openCreateNewAccount()"
-                >
-                    <i class="fa fa-plus"></i> Create new account
-                </button>
-            </div>
-            <div class="col-md-4">
-                <input 
-                type="search" 
-                class="form-control" 
-                placeholder="Search account name..." 
-                v-model="search_accounts"
-                />
+        <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row" style="display: flex; align-items: center;">
+                        <div class="col-md-4">
+                            Accounts
+                        </div>
+
+                        <div class="col-md-8">
+                            <button 
+                            class="btn btn-default pull-right" 
+                            @click="openCreateNewAccount()"
+                            >
+                                <i class="fa fa-plus"></i> Create new account
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <input 
+                            type="search" 
+                            class="form-control" 
+                            placeholder="Search account name..." 
+                            v-model="accounts.search"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Acc. Name</th>
+                                <th>Acc. Id</th>
+                                <th>F</th>
+                                <th>V</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="vcenter">
+                            
+                            <!-- TABLE LOADER START -->
+                            <tr v-if="accounts.loading">
+                                <td colspan="11" class="loader text-center">
+                                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                                </td>
+                            </tr>
+                            <!-- TABLE LOADER END -->
+                            
+                            <!-- EMPTY TABLE MESSAGE START -->
+                            <tr v-else-if="accounts.empty">
+                                <td colspan="11">
+                                    <span v-if="accounts.search.length === 0">There are no accounts</span>
+                                    <span v-else>Can't find anything related to <strong>{{ accounts.search }}</strong></span>
+                                </td>
+                            </tr>
+                            <!-- EMPTY TABLE MESSAGE END -->
+                            
+                            <tr v-else v-for="account in filtered_accounts">
+                                <td>
+                                    <a :href="'/accounts/' + account.id">
+                                        {{ account.name }}
+                                    </a>
+                                </td>
+                                <td>{{ account.id }}</td>
+                                <td> 
+                                    <input 
+                                    type="text" 
+                                    v-model="account.fees.fixed" 
+                                    @blur="updateFees(account.fees, account.id)" 
+                                    /> 
+                                </td>
+                                <td> 
+                                    <input 
+                                    type="text" 
+                                    v-model="account.fees.variable" 
+                                    @blur="updateFees(account.fees, account.id)"
+                                    /> 
+                                </td>
+                                <td>
+                                    <button 
+                                    class="btn" 
+                                    :class="account.status ? 'btn-success' : 'btn-danger'" 
+                                    @click="toggleAccountStatus(account.status, account.id, $event)" 
+                                    >
+                                        <i class="fa fa-check-circle-o"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+                                    <button 
+                                    class="btn btn-danger" 
+                                    @click="deleteAccount(account.id, $event)"
+                                    >
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <!-- HEADER END -->
-
-        <hr/>
-
-        <!-- ACCOUNTS START -->
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Acc. Name</th>
-                    <th>Acc. Id</th>
-                    <th>F</th>
-                    <th>V</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-
-                </tr>
-            </thead>
-            <tbody class="vcenter">
-                
-                <!-- TABLE LOADER START -->
-                <tr v-if="accounts_table_loading">
-                    <td colspan="11" class="loader text-center">
-                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                    </td>
-                </tr>
-                <!-- TABLE LOADER END -->
-                
-                <!-- EMPTY TABLE MESSAGE START -->
-                <tr v-else-if="accounts_table_empty">
-                    <td colspan="11">
-                        Sorry but I can't find anything relating to <strong>{{ search_accounts }}</strong>
-                    </td>
-                </tr>
-                <!-- EMPTY TABLE MESSAGE END -->
-                
-                <tr v-else v-for="account in filtered_accounts">
-                    <td>
-                        <a :href="'/accounts/' + account.id">
-                            {{ account.name }}
-                        </a>
-                    </td>
-                    <td>{{ account.id }}</td>
-                    <td> 
-                        <input 
-                        type="text" 
-                        v-model="account.fees.fixed" 
-                        @blur="updateFees(account.fees, account.id)" 
-                        /> 
-                    </td>
-                    <td> 
-                        <input 
-                        type="text" 
-                        v-model="account.fees.variable" 
-                        @blur="updateFees(account.fees, account.id)"
-                        /> 
-                    </td>
-                    <td></td>
-                    <td>
-                        <button 
-                        id="toggle"
-                        :ref="account.id"
-                        class="btn" 
-                        :class="account.status ? 'btn-success' : 'btn-danger'" 
-                        @click="toggleAccountStatus(account.status, account.id)" 
-                        >
-                            <i class="fa fa-check-circle-o"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button class="btn">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button 
-                        id="delete" 
-                        :ref="account.id" 
-                        class="btn btn-danger" 
-                        @click="deleteAccount(account.id)"
-                        >
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- ACCOUNTS END -->
 
         <!-- MODALS START -->
         <!-- CREATE NEW ACCOUNT START -->
@@ -148,7 +148,7 @@
                                         v-model="new_account.country"
                                         >
                                             <option 
-                                            v-for="country in countries" 
+                                            v-for="country in list.countries" 
                                             :value="country.country"
                                             >
                                                 {{ country.key }}
@@ -174,7 +174,7 @@
                                         v-model="new_account.timezone"
                                         >
                                             <option 
-                                            v-for="timezone in timezones.data" 
+                                            v-for="timezone in list.timezones" 
                                             :value="timezone.text">
                                                 {{ timezone.text }}
                                             </option>
@@ -189,7 +189,7 @@
                                         v-model="new_account.language"
                                         >
                                             <option 
-                                            v-for="language in languages.data" 
+                                            v-for="language in list.languages" 
                                             :value="language.abbr"
                                             >
                                                 {{ language.name }}
@@ -223,7 +223,7 @@
                                         v-model="new_account.billing_country"
                                         >
                                             <option 
-                                            v-for="country in countries" 
+                                            v-for="country in list.countries" 
                                             :value="country.country"
                                             >
                                                 {{ country.key }}
@@ -310,24 +310,25 @@
 
 <script>
     export default {
-        mounted() {
-            this.getCountries();
-            this.getTimezones();
-            this.getLanguages();
-        },
-
         data() {
             return {
                 //ESSENTIALS
                 token: '',     
-                search_accounts: '',           
-
+                
                 //ACCOUNTS
-                accounts: [],
-                accounts_table_loading: true,
-                accounts_table_empty: false,
+                accounts: {
+                    search: '',
+                    empty: false,
+                    loading: true
+                },
 
-                //CREATE NEW ACCOUNT
+                list: {
+                    countries: [],
+                    timezones: [],
+                    languages: [],
+                    accounts: []
+                },
+
                 new_account: {
                     name: '',
                     country: '',
@@ -341,82 +342,36 @@
                     billing_country: '',
                     billing_city: ''
                 },
-                countries: [],
-                timezones: [],
-                languages: [],
             }
         },
 
         methods: {
-
-            //OVERALL
-            buttonLoading(action, condition, id) {
-                for(var button in this.$refs[id]) {
-                    var targetted_button = this.$refs[id][button].id == action ? button : targetted_button;
-                }
-                condition ? this.$refs[id][targetted_button].children[0].className = 'fa fa-circle-o-notch fa-spin' : 
-                            this.$refs[id][targetted_button].children[0].className = 'fa fa-check-circle-o';
+            getLists() {
+                this.getAccounts();
+                this.getCountries();
+                this.getTimezones();
+                this.getLanguages();
             },
 
-            //ACCOUNTS
-            getAccounts(id) {
+            getAccounts() {
                 axios.get(
                     this.$root.api + '/accounts',
                     this.$root.config
                 ).then(response => {
-                        this.accounts_table_empty = response.data.data == '' ? true : false;
-                        this.accounts = response.data.data;
-                        this.accounts_table_loading = false;
-                        if(id) {
-                            this.buttonLoading('delete', false, id);
-                            this.buttonLoading('toggle', false, id);
-                        }
+                        this.list.accounts = response.data.data;
+                        this.accounts.empty = this.list.accounts.length > 0 ? false : true;
+                        this.accounts.loading = false;
                     }, error => {
-                        this.accounts_table_loading = false;
+                        this.accounts.loading = false;
                     }
                 );
-            },
-
-            toggleAccountStatus(status ,id) {
-                var status = status ? 0 : 1;
-                this.buttonLoading('toggle', true, id);
-
-                axios.put(
-                    this.$root.api + '/accounts/' + id,
-                    { status: status },
-                    this.$root.config
-                ).then(response => {
-                        this.getAccounts(id);
-                    }, error => {
-                        this.getAccounts(id);
-                    }
-                );
-            },
-
-            deleteAccount(id) {
-                this.buttonLoading('delete', true, id);
-
-                axios.delete(
-                    this.$root.api + '/accounts/' + id, 
-                    this.$root.config
-                ).then(response => {
-                        this.getAccounts(id);
-                    }, error => {
-                        this.getAccounts(id);
-                    }
-                );
-            },
-
-            //CREATE NEW ACCOUNT
-            openCreateNewAccount() {
-                $('#_modal-create-new-account').modal();
             },
 
             getCountries() {
                 axios.get(
                     '/data/countries.json'
                 ).then(response => {
-                        this.countries = response.data;
+                        this.list.countries = response.data;
                     }, error => {
 
                     }
@@ -427,7 +382,7 @@
                 axios.get(
                     '/data/timezones.json'
                 ).then(response => {
-                        this.timezones = response;
+                        this.list.timezones = response.data;
                     }, error => {
 
                     }
@@ -438,40 +393,61 @@
                 axios.get(
                     '/data/languages.json'
                 ).then(response => {
-                        this.languages = response;
+                        this.list.languages = response.data;
                     }, error => {
 
                     }
                 );
             },
 
-            clearNewAccount() {
-                this.new_account.name = '',
-                this.new_account.country = '',
-                this.new_account.city = '',
-                this.new_account.language = '',
-                this.new_account.status = 1,
-                this.new_account.company = '',
-                this.new_account.billing_email = '',
-                this.new_account.billing_address = '',
-                this.new_account.billing_country = '',
-                this.new_account.billing_city = '',
-                this.new_account.timezone = ''
-            },
-
             createNewAccount() {
-                this.accounts_table_loading = true;
-
+                this.accounts.loading = true;
                 axios.post(
                     this.$root.api + '/accounts', 
                     this.new_account, 
                     this.$root.config
                 ).then(response => {
-                        this.clearNewAccount();
                         this.getAccounts();
                     }, error => {
-                        this.clearNewAccount();
                         this.getAccounts();
+                    }
+                );
+            },
+
+            deleteAccount(id, event) {
+                var image = this.$root.clickedButton(event);
+                image.className = 'fa fa-circle-o-notch fa-spin';
+
+                axios.delete(
+                    this.$root.api + '/accounts/' + id, 
+                    this.$root.config
+                ).then(response => {
+                        this.getAccounts();
+                        image.className = "fa fa-trash";
+                    }, error => {
+                        this.getAccounts();
+                        image.className = "fa fa-trash";
+                    }
+                );
+            },
+
+            toggleAccountStatus(status ,id, event) {
+                var payload = {
+                    status: status ? 0 : 1
+                };
+                var image = this.$root.clickedButton(event);
+                image.className = 'fa fa-circle-o-notch fa-spin';
+
+                axios.put(
+                    this.$root.api + '/accounts/' + id,
+                    payload,
+                    this.$root.config
+                ).then(response => {
+                        this.getAccounts();
+                        image.className = "fa fa-check-circle-o";
+                    }, error => {
+                        this.getAccounts();
+                        image.className ="fa fa-check-circle-o";
                     }
                 );
             },
@@ -491,6 +467,10 @@
                         this.getAccounts();
                     }
                 );
+            },
+
+            openCreateNewAccount() {
+                $('#_modal-create-new-account').modal();
             }
         },
 
@@ -498,19 +478,22 @@
             filtered_accounts() {
                 var self = this;
 
-                var results = this.accounts.filter(account => 
-                    account.name.toLowerCase().indexOf(self.search_accounts) != -1
+                var results = this.list.accounts.filter(account => 
+                    account.name.toLowerCase().indexOf(self.accounts.search) != -1
                 );
-                this.accounts_table_empty = results == '' ? true : false;
+
                 return results;
             }
         },
 
         watch: {
             token(value) {
-                this.getAccounts();
+                this.getLists();
+            },
+
+            filtered_accounts(value) {
+                this.accounts.empty = value.length > 0 ? false : true;
             }
         }
     }
-
 </script>
