@@ -25,6 +25,7 @@
                     class="form-control" 
                     placeholder="password" 
                     v-model="credentials.password" 
+                    @keydown.enter="login"
                     />
                 </div>
             </div>
