@@ -71,9 +71,15 @@
                         <span class="label" :class="creative.responsive ? 'label-success' : 'label-danger'">
                             {{ creative.responsive ? 'Yes' : 'No' }}
                         </span> <br>
+                        <hr>
+                        <label>Click-through URL: </label> {{creative.ctrurl != null ? creative.ctrurl : 'None'}} <br>
+                        <label>HTML: </label> {{creative.html != null ? creative.html : 'None'}} <br>
+                        <label>Path: </label> {{creative.path != null ? creative.path : 'None'}} <br>
+                        <hr>
                         <label>Attributes: </label> {{creative.attr.data.length > 0 ? creative.attr.data.join() : 'None'}} 
                         <br>
-                        <label>Ctrurl: </label> {{creative.ctrurl != null ? creative.ctrurl : 'None'}}
+                        <hr>
+                        <label>Additional/Debug Params: </label> <br> {{creative.params != null ? creative.params : 'None'}}
                     </div>
                     <div class="col-xs-6">
                         <img
@@ -286,6 +292,20 @@
                                     </div>
                                 </div>
                             </div>
+                             <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12">
+                                        <label for="label-approved">Click-through URL</label>
+                                        <br/>
+                                        <textarea
+                                            rows="2"
+                                            class="form-control"
+                                            id="label-city"
+                                            v-model="creative.ctrurl"
+                                        /></textarea>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-xs-12 col-md-12">
@@ -304,6 +324,20 @@
                                                 {{attribute.description}}
                                             </option>
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12">
+                                        <label for="label-approved">Additional/Debug Params</label>
+                                        <br/>
+                                        <textarea
+                                            rows="3"
+                                            class="form-control"
+                                            id="label-city"
+                                            v-model="creative.params"
+                                        /></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -410,6 +444,7 @@
                     },
                     class: '',
                     ctrurl: '',
+                    params: '',
                     expdir: 0,
                     folder: {
                         key: 0,
@@ -417,6 +452,7 @@
                     },
                     h: 0,
                     html: '',
+                    path: '',
                     iurl: '',
                     id: '',
                     name: '',
@@ -604,7 +640,8 @@
                     status: this.creative.approved,
                     name: this.creative.name,
                     responsive: this.creative.responsive,
-                    ctrurl: this.creative.ctrurl + '?' + this.getFilledTags().join("?"),
+                    ctrurl: this.creative.ctrurl,
+                    params: this.creative.params,
                     thumb: this.creative.thumb,
                     folder_id: this.creative.folder.key
                 }
