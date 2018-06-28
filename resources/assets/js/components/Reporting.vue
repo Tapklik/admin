@@ -1,421 +1,319 @@
 <template>
     <div>
-
-        <!-- HEADER START -->
-        <div class="row">
-            <div class="col-md-8">
-                <h1 class="title pull-left">Reports</h1>
-            </div>
-        </div>
-        <!-- HEADER END -->
-
-        <hr />
-        
-        <!-- CHART START -->
-        <div class="row">
-            <div class="col-md-3">
-                <h4>Nodes</h4>
-                <span v-for="node in nodes">
-                    <input 
-                    type="checkbox" 
-                    :value="node" 
-                    v-model="selectedNodes"
-                    /> 
-                    {{ node }} 
-                    <br />
-                </span>
-            </div>
-            <div class="col-md-3">
-                <h4>Selections</h4>
-                Cmp: <span v-for="c in selectedCampaigns">{{ c }}, </span> <br>
-                Status: <span>{{ check }}</span>
-            </div>
-            <div class="col-md-6">
-                <div class="col-md-12 panel panel-default">
-                    <h4>Total </h4>
-                    <div id="chartdiv" style="height: 160px;"></div>
-                </div>
-            </div>
-        </div>
-        <!-- CHART END -->
-
-        <hr />
-
-        <!-- CAMPAIGNS CHART DATA START -->
-        <div class="row">
-            <div class="col-md-3">
-                <h4>Campaigns</h4>
-                <button class="btn btn-default btn-sm" style="float:right;" @click="drawCharts()">Generate</button>
-                <span v-for="c in campaigns">
-                    <input type="checkbox" :value="c" v-model="selectedCampaigns"> {{c}}<br>
-                </span>
-            </div>
-            <div class="col-md-9">
-                <div class="col-md-6" v-for="(n, index) in something">  
-                    <div class="col-md-12 panel panel-default">
-                        <h4>{{n.cmp}} </h4>
-                        <div :id="n.name" style="height: 160px;"></div>
+         <div class="row" style="padding-left: 16px; padding-right: 16px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row" style="display: flex; align-items: center;">
+                        <div class="col-md-5">
+                            Reporting
+                        </div>
+                        <div class="col-md-7" style="display: flex; align-items: center;">
+                            <div class="dropdown" style="margin-right: 4px;">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Accounts
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <ul style="list-style-type: none; padding: 5px; margin: 0px;">
+                                        <li v-for="account in list.accounts" :key="account.id">
+                                            <input type="checkbox" :value="account.id" v-model="selected.accounts">
+                                            {{account.id}} 
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="dropdown" style="margin-right: 4px;">
+                                <button :disabled="disableCampaigns" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Campaigns
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <ul style="list-style-type: none; padding: 5px; margin: 0px;">
+                                        <li v-for="campaign in filteredCampaigns()" :key="campaign.id">
+                                            <input type="checkbox" :value="campaign.id" v-model="selected.campaigns">
+                                            {{campaign.name}} 
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="dropdown" style="margin-right: 4px;">
+                                <button :disabled="disableCreatives" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Creatives
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <ul style="list-style-type: none; padding: 5px; margin: 0px;">
+                                        <li v-for="creative in list.creatives" :key="creative.id">
+                                            <input type="checkbox" :value="creative.id" v-model="selected.creatives">
+                                            {{creative.name}} 
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <select
+                            style="margin-right: 4px;"
+                            class="form-control"
+                            id="label-approved"
+                            v-model="selected.line_one"
+                            >
+                                <option v-for="stat in list.stats" :key="stat" :value="stat">{{stat}}</option>
+                            </select>
+                            <select
+                            style="margin-right: 4px;"
+                            class="form-control"
+                            id="label-approved"
+                            v-model="selected.line_two"
+                            >
+                                <option v-for="stat in list.stats" :key="stat" :value="stat">{{stat}}</option>
+                            </select>
+                            <select
+                            style="margin-right: 4px;"
+                            class="form-control"
+                            id="label-approved"
+                            v-model="selected.range"
+                            >
+                                <option v-for="r in list.range" :key="r" :value="r">{{`Last ${r} days`}}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
+                <div class="panel-body">
+                    <div id="chart" style="height: 320px;"></div>
+                </div>
             </div>
         </div>
-        <!-- CAMPAIGNS CHART DATA END -->
-       
-        <hr/>
-       
-        <!-- BIDS START -->
-        <div class="row">
-            <div class="col-md-8">
-                <h1 class="title pull-left">Table</h1>
-            </div>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Time</th>
-                </tr>
-            </thead>
-            <tbody class="vcenter">
-                <tr v-show="loading == true">
-                    <td colspan="11" class="loader text-center">
-                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                    </td>
-                </tr>
-                <tr v-show="noresult">
-                    <td colspan="11">
-                        Sorry but theres nothing here... yet :)
-                    </td>
-                </tr>
-                <tr v-for="b in bids">
-                    <td>
-                        <a :href="'reports/' + b.id">
-                            {{ b.id }}
-                        </a>
-                    </td>
-                    <td>
-                        {{ b.time }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- BIDS END -->
     </div>
 </template>
 <script>
    export default {
-        mounted() {
-            this.getData();
-            this.createChartStats('chartdiv', this.emptyData(), 'all'); 
-
+       data() {
+           return {
+               token: '',
+               list: {
+                   accounts: [],
+                   campaigns: [],
+                   creatives: [],
+                   stats: ['imps', 'clicks', 'ecpc', 'ecpm', 'spend', 'ctr'],
+                   range: [0, 1, 7, 15, 30]
+               },
+               selected: {
+                   accounts: [],
+                   campaigns: [],
+                   creatives: [],
+                   range: 0,
+                   line_one: 'imps',
+                   line_two: 'clicks'
+               },
+               chart_data: [],
+               loading_chart: true
+           }
         },
-        data() {
-            return {
-                allCampaigns: [],
-                token: this.token,
-                stats: [],     
-                bids: [],
-                loading: false,
-                noresult: false,
-                nodes: [],
-                campaigns: [],
-                selectedCampaigns: [],
-                selectedNodes: [],
-                check: true,
-                numberOfGraphs: [],
-                something: [],
+
+        computed: {
+            selected_campaigns() {
+                return this.selected.campaigns;
+            },
+
+            chartQuery() {
+                var accounts = ''; 
+                var campaigns = '';
+                var creatives = ''; 
+                if(this.selected.accounts.length > 0) accounts += 'acc=' + this.selected.accounts.join(',') + '&';
+                if(this.selected.campaigns.length > 0) campaigns += 'cmp=' + this.selected.campaigns.join(',') + '&';
+                if(this.selected.creatives.length > 0) creatives += 'cr=' + this.selected.creatives.join(',') + '&';
+                return '/reports/overall?' + accounts + campaigns + creatives + 'from=' + this.getDate(0 - this.selected.range) + '%2000:00:00&to=' + this.getDate(0) + '%2023:59:59&fields=imps,clicks,spend,wins,win_price&scale=dd';
+            },
+            
+            lines() {
+                return [this.selected.line_one, this.selected.line_two];
+            },
+            
+            disableCampaigns() {
+                if(this.selected.accounts.length > 0) return false;
+                else return true;
+            },
+            
+            disableCreatives() {
+                if(this.selected.campaigns.length > 0) return false;
+                else return true;
             }
         },
+        
         methods: {
-            fetchAllCampaigns() {    
-                axios.get(this.$root.api + '/campaigns', this.$root.config).then(response => {
-                    this.allCampaigns = response.data;
-                }, error => {
-                    swal('Error', error, 'error');
-                })
+            getLists() {
+                this.getCampaigns();
+                this.getAccounts();
             },
-             getData() {
-                var self = this
-                setInterval(function(){
-                    self.getStatsData();
-                }, 10000); 
+
+            getAccounts() {
+                axios.get(
+                    this.$root.api + '/accounts',
+                    this.$root.config
+                ).then(response => {
+                        this.list.accounts = response.data.data;
+                        this.selected.accounts = this.list.accounts.map(acc => acc.id);
+                    }, error => {
+
+                    }
+                );
             },
-            getStatsData(){
-                var campaigns = this.selectedCampaigns;
-                var nodes = this.selectedNodes;
-                var self = this;
-                var time = new Date();
-                axios.get(this.$root.erlang_api + 'stats', this.$root.config).then( response => {
-                    if(campaigns=='' || nodes == ''){
-                        self.stats = response.data
+
+            getCampaigns() {
+                axios.get(
+                    this.$root.api + '/campaigns?include=account', 
+                    this.$root.config
+                ).then(response => {
+                        this.list.campaigns = response.data.data;
+                    }, error => {
+
                     }
-                    else {
-                        var count = 0;
-                        var stats = response.data;
-                        var realStats = [];
-                        for(var s in stats) {
-                            for(var c in campaigns) {
-                                for(var n in nodes) {
-                                    if(stats[s].node == nodes[n] && stats[s].cmp == campaigns[c]){
-                                        count++;
-                                    }
-                                }
-                            }
-                            if (count > 0) {
-                                realStats.push(stats[s])
-                                count = 0;
-                            }
-                            else {
-                                count = 0;
-                            }
-                        }
-                        self.stats = realStats;
+                );
+            },
+
+            getDate(days) {
+                const toTwoDigits = num => num < 10 ? '0' + num : num;
+                let today =  new Date();
+                let date = new Date();
+                date.setDate(today.getDate() + days);
+                let year = date.getFullYear();
+                let month = toTwoDigits(date.getMonth() + 1);
+                let day = toTwoDigits(date.getDate()); 
+                return `${year}-${month}-${day}`;
+            },
+
+            filteredCampaigns() {
+                var result = [];
+                var campaigns = this.list.campaigns;
+                var selection = this.selected.accounts;
+                var campaigns_by_acc_id = campaigns.map(cmp => cmp.account.data.id);
+                for(var i = 0; i < selection.length; i++) {
+                    var index = campaigns_by_acc_id.indexOf(selection[i]);
+                    while (index != -1) {
+                        result.push(campaigns[index]);
+                        index = campaigns_by_acc_id.indexOf(selection[i], index + 1);
                     }
-                
-                }, 
-                error => {
-                    console.log(error);
-                });
+                }
+                return result;
+            },
+
+            getCreatives() {
+                this.list.creatives = [];
+                var campaigns = this.selected.campaigns;
+                for(var i = 0; i < campaigns.length; i++) {
+                    var campaign_id = campaigns[i];
+                    var index = this.list.campaigns.map(cmp => cmp.id).indexOf(campaign_id);
+                    var campaign = this.list.campaigns[index];
+                    for(var j = 0; j < campaign.creatives.data.length; j++) {
+                        var creative = campaign.creatives.data[j];
+                        this.list.creatives.push(creative);
+                    }
+                }
+            },
+
+            getChartData() {
+                axios.get(
+                    this.$root.api + this.chartQuery + '&op=sum', 
+                    this.$root.config
+                ).then(response => {
+                        this.chart_data = response.data;
+                        this.createLinesChart('chart', this.chart_data, this.lines);
+                    }, error => {
+
+                    }
+                );
             },
             
-            createChartStats(target, dataset, cmp) {
-                console.log(target)
-                var self = this; 
-                var chart = [];
-                chart[cmp] = AmCharts.makeChart( target, {
-                  "type": "serial",
-                  "theme": "light",
-                  "zoomOutButton": {
-                    "backgroundColor": '#000000',
-                    "backgroundAlpha": 0.15
-                    },
-                    "dataProvider": self.emptyData(),
-                    "categoryField": "date",
+            createLinesChart(target, dataset, lines) {
+                var obj = this;
+                var colors = ["#ff0000", "#000000", "#0000ff"];
+                var graphs = [];
+                var balloonText = "[[time]] <br> " + lines.reduce((html, current) => html + "<br>" + current.charAt(0).toUpperCase() + current.slice(1) + " : [[" + current + "]]", "");
+                for(var i = 0; i < lines.length; i++) {
+                    var line = lines[i];
+                    var payload = {
+                        "valueAxis": "v" + (i + 1),
+                        "id": "g" + (i + 1),
+                        "type" : "line",
+                        "lineColor": colors[i],
+                        "fillColors": colors[i],
+                        "balloonText": balloonText,
+                        "bullet": "round",
+                        "bulletBorderAlpha": 1,
+                        "useLineColorForBulletBorder": true,
+                        "bulletColor": "#FFFFFF",
+                        "lineThickness": 2,
+                        "title": line.charAt(0).toUpperCase() + line.slice(1),
+                        "valueField": line
+                    }
+                    graphs.push(payload);
+                }
+                var chart = AmCharts.makeChart(target, {
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 40,
+                    "marginLeft": 40,
+                    "marginTop": 20,
+                    "autoMarginOffset": 20,
+                    "mouseWheelZoomEnabled":false,
+                    "dataDateFormat": "YYYY-MM-DD HH",
+                    "graphs": graphs,
+                    "categoryField": "time",
                     "categoryAxis": {
                         "parseDates": true,
-                        "minPeriod": "ss",
-                        "dashLength": 1,
-                        "gridAlpha": 0.15,
-                        "axisColor": "#DADADA"
+                        "dashLength": 0,
+                        "axisAlpha": 0.1,
+                        "gridAlpha": 0,
+                        "minPeriod": "hh",
+                        "minorGridEnabled": false
                     },
-                    "graphs": [ {
-                        "id": "bid_requests",
-                        "valueField": "bid_requests",
-                        "lineThickness": 2,
-                        "lineColor": "red",
-                        "hideBulletsCount": 50
-                    }, {
-                        "id": "bids",
-                        "valueField": "bids",
-                        "lineThickness": 2,
-                        "lineColor": "orange",
-                        "hideBulletsCount": 50
-                    }, {
-                        "id": "imps",
-                        "valueField": "imps",
-                        "lineThickness": 2,
-                        "lineColor": "yellow",
-                        "hideBulletsCount": 50
-                    }, {
-                        "id": "clicks",
-                        "valueField": "clicks",
-                        "lineThickness": 2,
-                        "lineColor": "green",
-                        "hideBulletsCount": 50
-                    } ]
-                } )
-
-                setInterval(function() {
-                    chart[cmp].dataProvider.shift();
-                    var time = new Date();
-                    var data = self.getTotals(cmp);
-                    chart[cmp].dataProvider.push({
-                        "date": time,
-                        "bid_requests": data.bid_requests,
-                        "bids": data.bids,
-                        "imps": data.imps,
-                        "clicks": data.clicks
-                    });
-                    chart[cmp].validateData();
-                }, 5000);
-            },
-            
-            drawCharts() {
-                var numbers = this.something;
-                for(var n in numbers) {
-                    this.createChartStats('chartdiv' + n, this.emptyData, n);
-                }
-            },
-
-            getTotals(cmp) {
-                var something = this.something;
-                if(cmp == 'all') {
-                    var totalBR = 0;
-                    var totalBids = 0;
-                    var totalImps = 0;
-                    var totalClicks = 0;
-                    for (var n in this.stats) {
-                        totalBR += this.stats[n].stats.bid_requests;
-                        totalBids += this.stats[n].stats.bids; 
-                        totalImps += this.stats[n].stats.imps; 
-                        totalClicks += this.stats[n].stats.clicks;
-                    }
-
-                    return {
-                        "bid_requests" : totalBR,
-                        "bids" : totalBids,
-                        "imps" : totalImps,
-                        "clicks" : totalClicks
-                    }
-                } else {
-                    return something[cmp].stats
-                }
-                
-            },
-            
-            emptyData() {
-                var emptyData = []
-                var time = new Date();
-                var data = 0;
-                for (var i = 40; i >= 0; i--) {
-                    var d = {
-                        "date" : time - (i * 5000),
-                        "bids": data
-                    }
-                    emptyData.push(d)
-                }
-                return emptyData
-            },
-
-            fetchBids() {
-                var self = this;
-                axios.get(this.$root.erlang_api + 'bids', this.$root.config).then( response => {
-                    self.bids = response.data;
-                }, error => {
-                    console.log(error);
+                    "balloon": {
+                        "borderColor": "#222",
+                        "borderAlpha": 0,
+                        "borderThickness": 0,
+                        "shadowAlpha": 0,
+                        "color": "#ffffff",
+                        "drop": false,
+                        "cornerRadius": 5,
+                        "fillColor": "#222",
+                        "fillAlpha": 1,
+                    },
+                    "chartCursor": {
+                        "categoryBalloonDateFormat": "DD MM",
+                        "cursorAlpha": 0.1,
+                        "cursorColor":"#000000",
+                        "fullWidth":true,
+                        "valueBalloonsEnabled": false,
+                        "zoomable": false
+                    },
+                    "legend": {
+                        "useGraphSettings": true
+                    },
+                    "export": {
+                        "enabled": true
+                    },
+                    "dataProvider": dataset, // Here you need to add the dataset
                 });
-            },
 
-            fetchNodes() {
-                var nodesPackage = this.stats;
-                var nodes = [];
-                var duplicate = 0;
-                var realNodes = [];
-                for (var n in nodesPackage) {
-                    nodes.push(nodesPackage[n].node);
-                }
-                realNodes.push(nodes[0]);
-                for(var a in nodes) {
-                    for(var b in nodes) {
-                        if(nodes[a] == nodes[b]){
-                            duplicate++;
-                        }
-                    }    
-                    if(duplicate < 2 && a != 0){
-                        realNodes.push(nodes[a]);
-                        duplicate = 0;
-                    }
-                    else {
-                        duplicate = 0;
-                    }
-                } 
-                this.nodes = realNodes;
-            },        
+                chart.addListener("rendered", removeLogo);
 
-            fetchCampaigns() {
-                var campaignsPackage = this.stats;
-                var campaigns = [];
-                var duplicate = 0;
-                var realCampaigns = [];
-                for (var n in campaignsPackage) {
-                    campaigns.push(campaignsPackage[n].cmp);
+                function removeLogo() {
+                    $('.amcharts-chart-div').find('a').each(function(index, item) {
+                        $(item).hide();
+                    });
                 }
-                realCampaigns.push(campaigns[0]);
-                for(var a in campaigns) {
-                    for(var b in campaigns) {
-                        if(campaigns[a] == campaigns[b]){
-                            duplicate++;
-                        }
-                    }    
-                    if(duplicate < 2 && a != 0){
-                        realCampaigns.push(campaigns[a]);
-                        duplicate = 0;
-                    }
-                    else {
-                        duplicate = 0;
-                    }
-                } 
-                this.campaigns = realCampaigns;
-            },
-
-            largestArray() {
-                var campaigns = this.selectedCampaigns; 
-                var numbers = [];
-                for(var c in campaigns) {
-                    numbers.push('chartdiv'+c);
-                }
-                this.numberOfGraphs = numbers;
-                
-            },
-
-            checkCombination() {
-                var a = 0;
-                var campaigns = this.selectedCampaigns;
-                var nodes = this.selectedNodes;
-                var object = this.stats; 
-                for (var p in object) {
-                    for(var n in nodes) {
-                        for(var c in campaigns) {
-                            if(object[p].node == nodes[n] && object[p].cmp == campaigns[c]){
-                                a++;
-                            }
-                        }
-                    }
-                }
-
-                if(a > 0) {
-                    this.check = true;
-                }
-                
-                else {
-                    this.check = false;
-                }
-            },
-            createObject() {
-                var campaigns = this.selectedCampaigns;
-                var stats = this.stats;
-                var result = [];
-                var a = [];
-                for (var c in campaigns) {
-                    for(var s in stats) {
-                        if(stats[s].cmp == campaigns[c]) {
-                            a = stats[s].stats
-                        }
-                    }
-                    result.push({cmp: campaigns[c], stats: a, name: 'chartdiv'+c})
-                }
-                this.something = result;
-            },
-
-
-        },
-        computed: {
-            
+            }
         },
         watch: {
             token(value) {
-                this.fetchBids();
+               this.getLists();
+               this.getChartData();
             },
             
-            stats(value) {
-                this.fetchNodes();
-                this.fetchCampaigns();
-                this.fetchAllCampaigns();
-                this.checkCombination();
-                this.largestArray();
-                this.createObject();
-
+            chartQuery(value) {
+                this.getChartData();
+                if(this.selected.campaigns.length > 0) this.getCreatives();
             },
+            
+            lines(value) {
+                this.createLinesChart('chart', this.chart_data, value)
+            }
         }
     }
 </script>
