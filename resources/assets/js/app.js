@@ -25,6 +25,7 @@ Vue.component('dashboard', require('./components/Dashboard.vue'));
 Vue.component('reporting', require('./components/Reporting.vue'));
 Vue.component('support', require('./components/Support.vue'));
 Vue.component('support-graphs', require('./components/SupportGraphs.vue'));
+Vue.component('creative-show', require('./components/CreativeShow.vue'));
 
 /*LOGIN COMPONENT*/
 Vue.component('auth', require('./components/Auth.vue'));

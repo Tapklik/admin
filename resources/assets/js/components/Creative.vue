@@ -21,6 +21,7 @@
                         </div>
                         <div class="col-xs-7">
                             <div class="pull-right">
+                                <a :href="goToCreativesShow()" class="btn btn-default">TASK</a>
                                 <button @click="openCreativePreview()" class="btn btn-default">Preview</button>
                                 <a :href="creative.iurl" v-show="!creative_is_html5" class="btn btn-default">Download Image</a>
                                 <a :href="creative.asset" v-show="creative_is_html5">
@@ -409,6 +410,62 @@
         </div>
         <!-- ADD CREATIVE END-->
 
+
+                <!-- ADD CREATIVE START-->
+        <div class="modal fade" id="_modal-show-creative" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Show Creative</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input
+                                type="text"
+                                class="form-control"
+                                placeholder="ctrurl"
+                                v-model="show_creative_ctrurl"><br>
+                                <input
+                                type="text"
+                                class="form-control"
+                                placeholder="tags"
+                                v-model="show_creative_ctrurl">
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-default" @click="showCreativeRefresh()">Refresh Creative</button>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="modal-footer">
+                            <button
+                            type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal"
+                            >
+                                Close
+                            </button>
+                            <button
+                            type="button"
+                            class="btn btn-primary"
+                            data-dismiss="modal"
+                            >
+                                Create
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <br><br><br><br>
     </div>
 </template>
@@ -486,6 +543,10 @@
                 this.account_id = ids[2];
             },
 
+            goToCreativesShow() {
+                return window.location.pathname + '/show';
+            },
+
             getAccountName() {
                 axios.get(
                     this.$root.api + '/accounts/' + this.account_id,
@@ -495,6 +556,11 @@
                 }, error => {
                     this.account_name = '';
                 });
+            },
+
+            showCreative() {
+                return {"http_code":200,"response":"\n\t\t\t\t\t\t  \t\t<script type='text\/javascript' src='https:\/\/cdn.tapklik.com\/js\/tapklik.basic.js'><\/script>\n\t\t\t\t\t\t  \t\t<iframe id='tapklik-ad' src='about:blank;' frameborder='0' scrolling='no'><\/iframe>\n\t\t\t\t\t\t  \t\t<script type='text\/javascript'>\n\t\t\t\t\t\t  \t\t\tvar banner_url = 'http:\/\/s3.eu-central-1.amazonaws.com\/tapklik-creatives-alpha\/creatives\/h\/d90da31d8c8815b9893fcccb51ee2d1ed255d339.zip\/holiday_300x250_cc_tk.html';\n\t\t\t\t\t\t  \t\t\tvar width = 300;\n\t\t\t\t\t\t  \t\t\tvar height = 250;\n\t\t\t\t\t\t  \t\t\tvar ct = 'http:\/\/wins.alpha.tapklik.com:2250\/link\/h\/8035cc7e-790f-11e8-8832-5a00017e23f6\/47d612468f?b=15302-c715-412a-a6f7-6b7c36f6ff12&x=3&adr=b1&ts=1530275100';\n\t\t\t\t\t\t  \t\t\tvar gc = '';\n\t\t\t\t\t\t  \t\t\tvar c = '47d612468f';\n\t\t\t\t\t\t  \t\t\tvar cr = '8035cc7e-790f-11e8-8832-5a00017e23f6';\n\t\t\t\t\t\t  \t\t\tvar b = '15302-c715-412a-a6f7-6b7c36f6ff12';\n\t\t\t\t\t\t  \t\t\tvar ts = '1530275100';\n\t\t\t\t\t\t  \t\t\tvar loader_obj = {};\n\t\t\t\t\t\t\t\t\t\t  loader_obj['width'] = width;\n\t\t\t\t\t\t\t\t\t\t  loader_obj['height'] = height;\n\t\t\t\t\t\t\t\t\t\t  loader_obj['1pclick_url'] = gc || '';\n\t\t\t\t\t\t\t\t\t\t  loader_obj['click_urls'] = {};\n\t\t\t\t\t\t\t\t\t\t  loader_obj['click_urls']['clickTag'] = ct;\n\t\t\t\t\t\t\t\t\t\t  loader_obj['1poobclick_url'] = 'http:\/\/80.240.20.129:2301\/d\/b\/g\/echo1p?b=' + b + '&ct=' + encodeURIComponent(ct) + '&gc=' + encodeURIComponent(gc);\n      \t\t\t\t\t\t\t\tTK.html5.basicLoader('tapklik-ad', banner_url, loader_obj);\n\t\t\t\t\t\t  \t\t<\/script>\n\t\t\t\t\t\t  \t\t<img  width='1' height='1' style='border:0; visibility: hidden;' src='http:\/\/wins.alpha.tapklik.com:2250\/butler\/h\/8035cc7e-790f-11e8-8832-5a00017e23f6\/47d612468f?b=15302-c715-412a-a6f7-6b7c36f6ff12&x=3&adr=b1&ts=1530275100'>\n\t\t\t\t\t\t  "};
+                
             },
 
             dropzoneMaker() {
@@ -560,7 +626,6 @@
                     this.$root.api + '/creatives/' + this.creative_id + '/status',
                     this.$root.config
                 ).then(response => {
-                        console.log(response);
                         var status = response.data.status;
                         alert('This creative is: ' + status);
                     }, error => {
@@ -731,6 +796,10 @@
             
             openEditCreative() {
                 $('#_modal-edit-creative').modal();
+            },
+
+            openShowCreative() {
+                $('#_modal-show-creative').modal();
             },
 
             getInvocationCode(campaign) {

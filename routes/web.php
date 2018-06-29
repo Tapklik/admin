@@ -46,6 +46,11 @@ Route::get('accounts/{id}', [
 
 Route::get('accounts/{id}/creatives/{creativeId}', [
     'as'   => 'accounts.campaigns.creatives.index',
+    'uses' => 'AccountCreativesController@index'
+]);
+
+Route::get('accounts/{id}/creatives/{creativeId}/show', [
+    'as'   => 'accounts.campaigns.creatives.show',
     'uses' => 'AccountCreativesController@show'
 ]);
 
